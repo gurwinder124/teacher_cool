@@ -12,6 +12,11 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    public const IS_ACTIVE = 1;
+    public const NOT_ACTIVE = 0;
+
+    protected $guard = 'api';
+
     /**
      * The attributes that are mass assignable.
      *
