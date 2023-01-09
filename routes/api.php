@@ -32,7 +32,7 @@ Route::prefix('v1')->group(function () {
     Route::post('update-new-password', [ForgetPasswordController::class, 'updateNewPassword']);
     //PROTDECTED ROUTE
     Route::middleware(['auth:api', 'scopes:user'])->group(function (){
-        Route::get('test', [UserController::class, 'index']);
+        Route::get('/profile', [UserController::class, 'index']);
     });
 });
 
@@ -45,7 +45,7 @@ Route::prefix('admin')->group(function (){
     Route::post('update-new-password', [AdminForgetPasswordController::class, 'updateNewPassword']);
     //protected route
     Route::middleware(['auth:admin-api','scopes:admin'])->group(function () {
-
-        Route::get('test', [AdminController::class, 'index']);
+        Route::get('users', [AdminController::class, 'index']);
+        Route::get('sub-admin', [AdminController::class, 'addSubAdmin']);
    });
 });

@@ -44,9 +44,9 @@ class LoginController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                'email' => 'required| email',
+                'email' => 'required|email|unique:users',
                 'password' => 'required',
-                'name' => 'required',
+                'name' => 'required|min:3',
             ]);
             if ($validator->fails()) {
                 return response()->json(['code' => '302', 'error' => $validator->errors()]);
