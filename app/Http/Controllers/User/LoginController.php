@@ -18,7 +18,7 @@ class LoginController extends Controller
                 'password' => 'required'
             ]);
 
-            if ($validator->fails()) return response()->json( ['error' => $validator->errors(), 'code'=>'401']); 
+            if ($validator->fails()) return sendError('Validation Error.', $validator->errors(), 422);
 
             $credentials = $request->only('email', 'password');
             if (Auth::attempt($credentials)) {
@@ -40,7 +40,5 @@ class LoginController extends Controller
         }
     }
 
-    public function test(){
-        dd("User Route");
-    }
+    
 }

@@ -32,7 +32,7 @@ Route::prefix('v1')->group(function () {
     Route::post('update-new-password', [ForgetPasswordController::class, 'updateNewPassword']);
     //PROTDECTED ROUTE
     Route::middleware(['auth:api', 'scopes:user'])->group(function (){
-        Route::get('test', [UserController::class, 'test']);
+        Route::get('test', [UserController::class, 'index']);
     });
 });
 
