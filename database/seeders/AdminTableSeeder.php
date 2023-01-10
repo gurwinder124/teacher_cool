@@ -21,6 +21,7 @@ class AdminTableSeeder extends Seeder
             'email' => 'superadmin@email.com',
             'password' => Hash::make('mind@123'),
             'role' => 0,
+            'is_active'=>1,
             'created_at'=>date('Y-m-d H:i:s', rand(1662100000, 1662113343)),
            
         ]);
