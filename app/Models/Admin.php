@@ -12,6 +12,13 @@ class Admin extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    protected $guard = 'admin-api';
+
+    public const IS_ACTIVE = 1;
+    public const NOT_ACTIVE = 0;
+
+    public const SUB_ADMIN = 1;
+
     /**
      * The attributes that are mass assignable.
      *

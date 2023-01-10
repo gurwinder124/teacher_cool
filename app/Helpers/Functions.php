@@ -7,7 +7,7 @@
  * @param $message
  * @return \Illuminate\Http\JsonResponse
  */
-function sendResponse($result, $message)
+function sendResponse($result, $message='Success')
 {
     $response = [
         'success' => true,

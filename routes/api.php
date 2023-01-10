@@ -39,13 +39,16 @@ Route::prefix('v1')->group(function () {
 //ADMIN ROUTE
 Route::prefix('admin')->group(function (){
     Route::post('login', [AdminLoginController::class, 'login']);
-    Route::post('register', [AdminLoginController::class, 'register']);
     Route::post('forget_password', [AdminForgetPasswordController::class, 'forgetPassword']);
     Route::get('reset_password', [AdminForgetPasswordController::class, 'resetPassword']);
     Route::post('update-new-password', [AdminForgetPasswordController::class, 'updateNewPassword']);
     //protected route
     Route::middleware(['auth:admin-api','scopes:admin'])->group(function () {
-        Route::get('users', [AdminController::class, 'index']);
-        Route::get('sub-admin', [AdminController::class, 'addSubAdmin']);
-   });
+        //Users 
+        Route::get('users', [AdminController::class, 'getUsers']);
+
+        // Sub Admins
+        Route::post('sub-admin', [AdminController::class, 'addSubAdmin']);
+        Route::get('sub-admin', [AdminController::class, 'getSubAdmin']);
+    });
 });
