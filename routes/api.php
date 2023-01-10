@@ -5,10 +5,12 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminLoginController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AdminForgetPasswordController;
+use App\Http\Controllers\Admin\SubscriptionController;
 
 use App\Http\Controllers\User\LoginController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\User\ForgetPasswordController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -45,10 +47,17 @@ Route::prefix('admin')->group(function (){
     //protected route
     Route::middleware(['auth:admin-api','scopes:admin'])->group(function () {
         //Users 
+        Route::get('', [AdminController::class, 'index']);
         Route::get('users', [AdminController::class, 'getUsers']);
 
         // Sub Admins
         Route::post('sub-admin', [AdminController::class, 'addSubAdmin']);
+        Route::post('edit-sub-admin', [AdminController::class, 'editSubAdmin']);
         Route::get('sub-admin', [AdminController::class, 'getSubAdmin']);
+
+        // Subscription
+        Route::get('subscription', [SubscriptionController::class, 'index']);
+        Route::post('add-subscription', [SubscriptionController::class, 'addSubscription']);
+        Route::post('edit-subscription', [SubscriptionController::class, 'editSubscription']);
     });
 });

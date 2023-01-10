@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('slug')->unique();
-            $table->tinyInteger('is_call_available')->default(0);
+            $table->tinyInteger('is_platinum')->default(0);
             $table->timestamps();
         });
     }

@@ -15,6 +15,9 @@ class User extends Authenticatable
     public const IS_ACTIVE = 1;
     public const NOT_ACTIVE = 0;
 
+    public const TEACHER_TYPE = 1;
+    public const STUDENT_TYPE = 2;
+
     protected $guard = 'api';
 
     /**

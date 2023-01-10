@@ -18,7 +18,8 @@ return new class extends Migration
             $table->foreignId('subscription_id');
             $table->string('name');
             $table->string('duration')->comment('In Days');
-            $table->integer('word_count');
+            $table->integer('assignment_request');
+            $table->integer('file_download');
             $table->tinyInteger('is_active')->default(1);
             $table->timestamps();
         });

@@ -29,11 +29,13 @@ class AuthServiceProvider extends ServiceProvider
         Passport::tokensCan([
             'user' => 'User scope',
             'admin' => 'Admin scope',
+            'sub-admin' => 'SubAdmin scope',
         ]);
          
         Passport::setDefaultScope([
             'user',
             'admin',
+            'sub-admin',
         ]);
         //
     }

@@ -21,9 +21,13 @@ class AdminLoginController extends Controller
             $credentials = $request->only('email', 'password');
             if (Auth::guard('admin')->attempt($credentials)) {
                 $user = Auth::guard('admin')->user();
-                
                 $success['name']  = $user->name;
-                $success['token'] = $user->createToken('accessToken', ['admin'])->accessToken;
+                if($user->role == 0){
+                    $success['token'] = $user->createToken('accessToken', ['admin'])->accessToken;
+                }else{
+                    $success['token'] = $user->createToken('accessToken', ['sub-admin'])->accessToken;
+                }
+                
 
                 return response()->json(['status' => 'success', 'code' => '200', 'data' => $success]);
             } else {

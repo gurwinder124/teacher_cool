@@ -56,6 +56,7 @@ class LoginController extends Controller
             $user->name = $request->name;
             $user->email = $request->email;
             $user->password = Hash::make($request->password);
+            $user->user_type = User::STUDENT_TYPE;
             $user->is_active = User::IS_ACTIVE;
             $user->save();
             // $admin=Admin::select('name','email')->where('id','=',1)->first();
