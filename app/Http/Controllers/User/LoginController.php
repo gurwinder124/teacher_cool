@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Hash;
+use App\Models\UserDetails;
 class LoginController extends Controller
 {
     public function login(Request $request)
@@ -47,18 +48,46 @@ class LoginController extends Controller
                 'email' => 'required|email|unique:users',
                 'password' => 'required',
                 'name' => 'required|min:3',
+                'is_teacher_request' => 'required',
+                'contact' => 'required',
+                'city' => 'required',
+                'state' => 'required',
+                'country' => 'required',
+                'qualification' => 'required',
+                'university' => 'required'
             ]);
             if ($validator->fails()) {
                 return response()->json(['code' => '302', 'error' => $validator->errors()]);
             }
 
+            
+            /* Save User Data*/
             $user = new User;
             $user->name = $request->name;
             $user->email = $request->email;
             $user->password = Hash::make($request->password);
             $user->user_type = User::STUDENT_TYPE;
             $user->is_active = User::IS_ACTIVE;
+            if($request->is_teacher_request){
+                $user->teacher_status = User::TEACHER_STATUS_PENDING;
+                $user->requested_for_teacher = 1;
+            }
+            
             $user->save();
+
+            /* Save User Details*/
+            $userDetails = new UserDetails;
+            $userDetails->user_id = $user->id;
+            $userDetails->contact = $request->contact;
+            $userDetails->city =  $request->city;
+            $userDetails->state = $request->state;
+            $userDetails->country = $request->country;
+            $userDetails->qualification = $request->qualification;
+            $userDetails->university = $request->university; 
+            
+            $userDetails->save();
+            
+            
             // $admin=Admin::select('name','email')->where('id','=',1)->first();
             // $email=$admin->email;
             // $name=$admin->name;
