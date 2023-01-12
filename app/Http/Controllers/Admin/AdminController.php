@@ -10,7 +10,8 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Hash;
-
+use Exception;
+use Illuminate\Support\Facades\DB;
 class AdminController extends Controller
 {
     public function index(Request $request)
@@ -29,15 +30,30 @@ class AdminController extends Controller
 
     public function getUsers(Request $request){
         try{
-            $keyword = $request->keyword;
+            $name = $request->name;
+            $email = $request->email;
             $user_type = $request->user_type;
+            $gender = $request->gender;
+            $age = $request->age;
             
-            $data = new User();
-            if($keyword && $keyword != ''){
-                $data = $data->where('name', 'like', '%'.$keyword.'%');
+            
+            $data = DB::table('users')
+                ->join('user_details', 'users.id', '=', 'user_details.user_id')
+                ->select('users.*', 'user_details.*');
+            if($name && $name != ''){
+                $data = $data->where('name', 'like', '%'.$name.'%');
+            }
+            if($email && $email != ''){
+                $data = $data->where('email', 'like', '%'.$email.'%');
             }
             if($user_type){
-                $data = $data->where('user_type', $user_type);
+                $data = $data->where('users.user_type', $user_type);
+            }
+            if($gender){
+                $data = $data->where('user_details.gender', $gender);
+            }
+            if($age){
+                $data = $data->where('user_details.age','<=', $age);
             }
             $data = $data->paginate(10);
     

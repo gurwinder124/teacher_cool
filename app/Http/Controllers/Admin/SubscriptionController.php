@@ -8,7 +8,7 @@ use App\Models\SubscriptionPlan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Admin;
-
+use Exception;
 class SubscriptionController extends Controller
 {
 

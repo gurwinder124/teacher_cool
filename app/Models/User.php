@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
+use App\Models\UserDetails;
 
 class User extends Authenticatable
 {
@@ -53,4 +54,18 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function user_details()
+    {
+        return $this->hasOne(UserDetails::class);
+    }
+
+    public static function teacherRequestStatus()
+    {
+        return [
+            ['value'=>static::TEACHER_STATUS_PENDING, 'name' => "Pending"],
+            ['value'=>static::TEACHER_STATUS_APPROVED, 'name' =>  "Approved"],
+            ['value'=>static::TEACHER_STATUS_DISAPPROVED, 'name' =>  "Disapproved"],
+        ];
+    }
 }

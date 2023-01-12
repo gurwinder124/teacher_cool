@@ -3,16 +3,16 @@
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
-use Validator;
+use Illuminate\Support\Facades\Validator;
 use App\Models\Admin;
 use App\Models\PasswordReset;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
 use Str;
-use DB;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-
+use Exception;
 class AdminForgetPasswordController extends Controller
 {
     public function forgetPassword(Request $request)

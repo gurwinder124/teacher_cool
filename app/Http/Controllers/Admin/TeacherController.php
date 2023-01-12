@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
-
+use Exception;
 class TeacherController extends Controller
 {
     public function index(Request $request)
@@ -20,8 +20,16 @@ class TeacherController extends Controller
             }
             
             $data = $data->paginate(10);
-    
-            return sendResponse($data);
+
+            $response = [
+                'success' => true,
+                'data'    => $data,
+                'teacher_status' => User::teacherRequestStatus(),
+                'message' => 'Success',
+            ];
+        
+            return response()->json($response, 200);
+            
         }catch (Exception $e){
             return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
         }

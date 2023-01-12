@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('contents', function (Blueprint $table) {
             $table->id();
+            $table->integer('user_id')->default(0);
             $table->foreignId('content_types_id');
             $table->integer('content_category');
             $table->string('name');

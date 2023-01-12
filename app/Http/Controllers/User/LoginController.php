@@ -24,14 +24,22 @@ class LoginController extends Controller
             $credentials = $request->only('email', 'password');
             if (Auth::attempt($credentials)) {
                 $user= Auth::user();
-                if (true) {
+                
+                if($user->is_active && $user->email_verified_at != null){
+                    
                     $success['user']  = $user;
-                    $success['token'] = $user->createToken('accessToken', ['user'])->accessToken;
+                    if ($user->teacher_status == User::TEACHER_STATUS_APPROVED) {
+                        $success['user_type']  = 'teacher';
+                        $success['token'] = $user->createToken('accessToken', ['teacher'])->accessToken;
+                    }
+                    else{
+                        $success['user_type']  = 'student';
+                        $success['token'] = $user->createToken('accessToken', ['user'])->accessToken;
+                    }
                     return response()->json([$success, "msg"=> 'You are successfully logged in.']);
                 }
-                else{
-                    return response()->json(['status' => 'error', 'code' => '401', 'msg' => 'You  are not approved by admin']);
-                }
+                return sendError('Account not Activated');
+                
                
             }else {
                 return response()->json( ['error' => 'invalid credentials', 'code'=>'401']);

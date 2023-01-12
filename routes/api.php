@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AdminForgetPasswordController;
 use App\Http\Controllers\Admin\SubscriptionController;
 use App\Http\Controllers\Admin\TeacherController;
+use App\Http\Controllers\Admin\ContentController;
 
 use App\Http\Controllers\User\LoginController;
 use App\Http\Controllers\User\UserController;
@@ -63,6 +64,10 @@ Route::prefix('admin')->group(function (){
 
         // Teacher
         Route::get('teacher-request', [TeacherController::class, 'index']);
-        Route::post('teacher-request', [TeacherController::class, 'changeStatus']);
+        Route::post('teacher-request-status', [TeacherController::class, 'changeStatus']);
+
+        // Content
+        Route::get('content', [ContentController::class, 'index']);
+        Route::post('content', [ContentController::class, 'uploade']);
     });
 });
