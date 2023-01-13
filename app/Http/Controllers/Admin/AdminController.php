@@ -150,13 +150,18 @@ class AdminController extends Controller
     public function getSubAdmin(Request $request){
         try{
             $keyword = $request->keyword;
-        
-            $data = Admin::whereNot('role','=',0);
-            if($keyword && $keyword != ''){
-                $data = $data->where('name', 'like', '%'.$keyword.'%');
+            $id = $request->id;
+
+            if($id){
+                $data = Admin::where('id', $id)
+                        ->whereNot('role','=',0)->first();
+            }else{
+                $data = Admin::whereNot('role','=',0);
+                if($keyword && $keyword != ''){
+                    $data = $data->where('name', 'like', '%'.$keyword.'%');
+                }
+                $data = $data->paginate(10);
             }
-            
-            $data = $data->paginate(10);
     
             return sendResponse($data);
         }catch (Exception $e){

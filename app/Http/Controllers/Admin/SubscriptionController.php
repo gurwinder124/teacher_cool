@@ -40,7 +40,7 @@ class SubscriptionController extends Controller
             $data = new SubscriptionPlan;
             $data->subscription_id = $request->subscription_id;
             $data->name = $request->name;
-            $data->duration = $request->duration;
+            $data->duration = $request->duration*30;
             $data->assignment_request = $request->assignment_request;
             $data->file_download =$request->file_download;
             $data->is_active = Admin::IS_ACTIVE;
@@ -68,7 +68,7 @@ class SubscriptionController extends Controller
 
             $data = SubscriptionPlan::find($request->id);
             $data->name = $request->name;
-            $data->duration = $request->duration;
+            $data->duration = $request->duration*30;
             $data->assignment_request = $request->assignment_request;
             $data->file_download = $request->file_download;
             $data->is_active = $request->is_active;

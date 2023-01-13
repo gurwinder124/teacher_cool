@@ -23,6 +23,7 @@ return new class extends Migration
             $table->tinyInteger('is_active')->default(0);
             $table->tinyInteger('teacher_status')->default(0);
             $table->tinyInteger('requested_for_teacher')->default(0);
+            $table->tinyInteger('is_newsletter_subscriber')->default(0);
             $table->rememberToken();
             $table->timestamps();
         });

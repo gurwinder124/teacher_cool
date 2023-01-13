@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\AdminForgetPasswordController;
 use App\Http\Controllers\Admin\SubscriptionController;
 use App\Http\Controllers\Admin\TeacherController;
 use App\Http\Controllers\Admin\ContentController;
+use App\Http\Controllers\Admin\NewsLetterController;
 
 use App\Http\Controllers\User\LoginController;
 use App\Http\Controllers\User\UserController;
@@ -71,5 +72,10 @@ Route::prefix('admin')->group(function (){
         // Content
         Route::get('content', [ContentController::class, 'index']);
         Route::post('content', [ContentController::class, 'uploade']);
+
+        // NewsLetter
+        Route::get('news-letter', [NewsLetterController::class, 'index']);
+        Route::get('news-letter-history', [NewsLetterController::class, 'newsletterHistory']);
+        Route::post('news-letter', [NewsLetterController::class, 'sendNewsletterNotification']);
     });
 });

@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Hash;
 use App\Models\UserDetails;
+use App\Jobs\SendWelcomeEmail;
+
 class LoginController extends Controller
 {
     public function login(Request $request)
@@ -110,12 +112,12 @@ class LoginController extends Controller
             //     'data' => "Thanks ",
             //     'subject' => "Regarding Register new User"
             // ];
-            // $welcomedata=[
-            //     'to'=>$request->email,
-            //     'name'=>$request->first_name,
-            //     'data' => "Thanks ",
-            //     'subject' => "Regarding Welcome"
-            // ];
+            $welcomedata=[
+                'to'=>$request->email,
+                'name'=>$request->name,
+                'data' => "Thanks ",
+                'subject' => "Regarding Welcome"
+            ];
             // dispatch(new SendNewRegisterEmail($data))->afterResponse();
             // dispatch(new SendWelcomeEmail($welcomedata))->afterResponse();
             return response()->json(['status' => 'Success', 'code' => 200, 'user' => $user]);
