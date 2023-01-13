@@ -61,8 +61,27 @@ class AdminController extends Controller
         }catch (Exception $e){
             return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
         }
-        
 
+    }
+
+    public function deleteUsers(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'id' => 'required',
+            ]);
+            if ($validator->fails()) {
+                return response()->json(['code' => '302', 'error' => $validator->errors()]);
+            }
+            
+            User::destroy($request->id);
+            DB::table('user_details')->where('user_id',$request->id)->delete();
+
+            return sendResponse("User Deleted successfully.");
+
+        } catch(\Exception $e) {
+            return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
+        }
     }
 
     public function addSubAdmin(Request $request)
@@ -144,5 +163,27 @@ class AdminController extends Controller
             return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
         }
 
+    }
+
+    public function deleteSubAdmin(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'id' => 'required',
+            ]);
+            if ($validator->fails()) {
+                return response()->json(['code' => '302', 'error' => $validator->errors()]);
+            }
+            if($request->id == 1){
+                return sendError('Cannot Perform the Action');
+            }
+
+            User::destroy($request->id);
+            
+            return sendResponse("Sub-Admin Deleted successfully.");
+
+        } catch(\Exception $e) {
+            return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
+        }
     }
 }

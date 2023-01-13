@@ -51,11 +51,13 @@ Route::prefix('admin')->group(function (){
         //Users 
         Route::get('', [AdminController::class, 'index']);
         Route::get('users', [AdminController::class, 'getUsers']);
+        Route::delete('users', [AdminController::class, 'deleteUsers']);
 
         // Sub Admins
         Route::post('sub-admin', [AdminController::class, 'addSubAdmin']);
         Route::post('edit-sub-admin', [AdminController::class, 'editSubAdmin']);
         Route::get('sub-admin', [AdminController::class, 'getSubAdmin']);
+        Route::delete('sub-admin', [AdminController::class, 'deleteSubAdmin']);
 
         // Subscription
         Route::get('subscription', [SubscriptionController::class, 'index']);
