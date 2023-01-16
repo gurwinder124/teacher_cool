@@ -134,7 +134,10 @@ class LoginController extends Controller
             $userDetails->age = $request->age; 
             $userDetails->id_proof = $id_proof_path;
             $userDetails->document_path = $document_path; 
-            
+            if($request->is_teacher_request){
+                $user->working_hours = $request->working_hours;
+                $user->expected_income = $request->expected_income;
+            }
             $userDetails->save();
             
             
