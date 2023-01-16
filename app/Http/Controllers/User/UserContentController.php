@@ -70,6 +70,7 @@ class UserContentController extends Controller
                 $attchObj->content_category = $request->content_category;
                 $attchObj->path = $path;
                 $attchObj->uploaded_by_admin = 0;
+                $attchObj->is_approved = 0;
                 $attchObj->save();
 
                 return sendResponse([], "Content Uploaded Successfully");

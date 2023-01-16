@@ -76,6 +76,7 @@ Route::prefix('admin')->group(function (){
         // Content
         Route::get('content', [ContentController::class, 'index']);
         Route::post('content', [ContentController::class, 'uploade']);
+        Route::post('content-request', [ContentController::class, 'contentRequest']);
 
         // NewsLetter
         Route::get('news-letter', [NewsLetterController::class, 'index']);

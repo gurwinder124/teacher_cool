@@ -11,12 +11,23 @@ class Content extends Model
 
     public const CONTENT_CATEGORY_IT = 1;
     public const CONTENT_CATEGORY_NON_IT = 2;
+
+    public const CONTENT_APPROVE = 1;
+    public const CONTENT_DISAPPROVE = 2;
     
     public static function getContentCategory()
     {
         return [
             ['value'=>static::CONTENT_CATEGORY_IT, 'name' => "IT"],
             ['value'=>static::CONTENT_CATEGORY_NON_IT, 'name' =>  "Non-IT"],
+        ];
+    }
+
+    public static function getContentStatus()
+    {
+        return [
+            ['value'=>static::CONTENT_APPROVE, 'name' => "Approve"],
+            ['value'=>static::CONTENT_DISAPPROVE, 'name' =>  "disapprove"],
         ];
     }
 }

@@ -27,6 +27,7 @@ class ContentController extends Controller
                 'data'    => $data,
                 'message' => 'Success',
                 'content_category' => Content::getContentCategory(),
+                'content_status' => Content::getContentStatus(),
             ];
         
             return response()->json($response, 200);
@@ -36,7 +37,8 @@ class ContentController extends Controller
         }
     }
 
-    public function uploade(Request $request){
+    public function uploade(Request $request)
+    {
         try{
             $validator = Validator::make($request->all(), [
                 'content_types_id' => 'required',
@@ -63,6 +65,7 @@ class ContentController extends Controller
                 $attchObj->content_category = $request->content_category;
                 $attchObj->path = $path;
                 $attchObj->uploaded_by_admin = 1;
+                $attchObj->is_approved = 1;
                 $attchObj->save();
 
                 return sendResponse([], "Content Uploaded Successfully");
@@ -72,5 +75,26 @@ class ContentController extends Controller
         }catch (Exception $e){
             return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
         }
+    }
+
+    public function contentRequest(Request $request)
+    {
+        try{
+            $validator = Validator::make($request->all(), [
+                'id'    => 'required',
+                'status' => 'required'
+            ]);
+            if ($validator->fails()) return response()->json( ['error' => $validator->errors(), 'code'=>'401']); 
+
+            $data = Content::find($request->id);
+            $data->is_approved = $request->status;
+            $data->save();
+        
+            return sendResponse([], 'Status Update Successfully');
+            
+        }catch (Exception $e){
+            return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
+        }
+
     }
 }
