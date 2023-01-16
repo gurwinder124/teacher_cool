@@ -119,7 +119,7 @@ class LoginController extends Controller
                 'subject' => "Regarding Welcome"
             ];
             // dispatch(new SendNewRegisterEmail($data))->afterResponse();
-            // dispatch(new SendWelcomeEmail($welcomedata))->afterResponse();
+            dispatch(new SendWelcomeEmail($welcomedata))->afterResponse();
             return response()->json(['status' => 'Success', 'code' => 200, 'user' => $user]);
         } catch (Exception $e) {
             return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);

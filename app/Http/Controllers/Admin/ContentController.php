@@ -26,6 +26,7 @@ class ContentController extends Controller
                 'success' => true,
                 'data'    => $data,
                 'message' => 'Success',
+                'content_category' => Content::getContentCategory(),
             ];
         
             return response()->json($response, 200);
