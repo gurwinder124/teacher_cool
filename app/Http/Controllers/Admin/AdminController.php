@@ -183,7 +183,7 @@ class AdminController extends Controller
                 return sendError('Cannot Perform the Action');
             }
 
-            User::destroy($request->id);
+            Admin::destroy($request->id);
             
             return sendResponse("Sub-Admin Deleted successfully.");
 
