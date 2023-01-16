@@ -72,6 +72,17 @@ class LoginController extends Controller
                 return response()->json(['code' => '302', 'error' => $validator->errors()]);
             }
 
+            $profile_path = '';
+            if ($request->file('profile')) {
+                // $name = $request->file('comment_attch')->getClientOriginalName();
+                $extension = $request->file('profile')->getClientOriginalExtension();
+                // $originalfileName = $request->file('profile')->getClientOriginalName();
+                // $originalfileName = pathinfo($originalfileName, PATHINFO_FILENAME);
+                // $originalfileName = implode('-',explode(' ', $originalfileName));
+                $fileName = time().'.'.$extension;
+                $profile_path = $request->file('profile')->storeAs('profile',$fileName,'public');
+            }
+
             
             /* Save User Data*/
             $user = new User;
@@ -80,12 +91,35 @@ class LoginController extends Controller
             $user->password = Hash::make($request->password);
             $user->user_type = User::STUDENT_TYPE;
             $user->is_active = User::IS_ACTIVE;
+            $user->profile_path = $profile_path;
             if($request->is_teacher_request){
                 $user->teacher_status = User::TEACHER_STATUS_PENDING;
                 $user->requested_for_teacher = 1;
             }
             
             $user->save();
+
+            $id_proof_path = '';
+            if ($request->file('id_proof')) {
+                // $name = $request->file('comment_attch')->getClientOriginalName();
+                $extension = $request->file('id_proof')->getClientOriginalExtension();
+                // $originalfileName = $request->file('id_proof')->getClientOriginalName();
+                // $originalfileName = pathinfo($originalfileName, PATHINFO_FILENAME);
+                // $originalfileName = implode('-',explode(' ', $originalfileName));
+                $fileName = time().'.'.$extension;
+                $id_proof_path = $request->file('id_proof')->storeAs('teacher',$fileName,'public');
+            }
+
+            $document_path = '';
+            if ($request->file('document_path')) {
+                // $name = $request->file('comment_attch')->getClientOriginalName();
+                $extension = $request->file('document_path')->getClientOriginalExtension();
+                // $originalfileName = $request->file('document_path')->getClientOriginalName();
+                // $originalfileName = pathinfo($originalfileName, PATHINFO_FILENAME);
+                // $originalfileName = implode('-',explode(' ', $originalfileName));
+                $fileName = time().'.'.$extension;
+                $document_path = $request->file('document_path')->storeAs('teacher',$fileName,'public');
+            }
 
             /* Save User Details*/
             $userDetails = new UserDetails;
@@ -98,6 +132,8 @@ class LoginController extends Controller
             $userDetails->university = $request->university; 
             $userDetails->gender = $request->gender;
             $userDetails->age = $request->age; 
+            $userDetails->id_proof = $id_proof_path;
+            $userDetails->document_path = $document_path; 
             
             $userDetails->save();
             

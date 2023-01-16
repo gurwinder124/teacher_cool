@@ -16,6 +16,8 @@ return new class extends Migration
         Schema::create('user_details', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->unique();
+            $table->string('id_proof')->nullable();
+            $table->string('document_path')->nullable();
             $table->string('gender');
             $table->integer('age');
             $table->string('contact');

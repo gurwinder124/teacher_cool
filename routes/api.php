@@ -13,7 +13,7 @@ use App\Http\Controllers\Admin\NewsLetterController;
 use App\Http\Controllers\User\LoginController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\User\ForgetPasswordController;
-
+use App\Http\Controllers\User\UserContentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,6 +38,10 @@ Route::prefix('v1')->group(function () {
     //PROTDECTED ROUTE
     Route::middleware(['auth:api', 'scopes:user'])->group(function (){
         Route::get('/profile', [UserController::class, 'index']);
+
+        // Content
+        Route::get('content', [UserContentController::class, 'index']);
+        Route::post('request-content', [UserContentController::class, 'uploade']);
     });
 });
 
