@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Admin;
 use Exception;
+use App\Models\Subscription;
+
+
 class SubscriptionController extends Controller
 {
 
@@ -16,7 +19,15 @@ class SubscriptionController extends Controller
     {
         try{
             $data = SubscriptionPlan::get();
-            return sendResponse($data);
+            
+            $response = [
+                'success' => true,
+                'data'    => $data,
+                'message' => 'Success',
+                'subscriptions_category' => Subscription::get(),
+            ];
+        
+            return response()->json($response, 200);
         }catch (Exception $e){
             return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
         }

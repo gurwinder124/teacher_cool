@@ -38,8 +38,9 @@ class AdminController extends Controller
             
             
             $data = DB::table('users')
-                ->join('user_details', 'users.id', '=', 'user_details.user_id')
-                ->select('users.*', 'user_details.*');
+                ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
+                ->leftJoin('subscribed_users', 'users.id', '=', 'subscribed_users.user_id')
+                ->select('users.*', 'user_details.*','subscribed_users.name as subscription_name','subscribed_users.expire_date');
             if($name && $name != ''){
                 $data = $data->where('name', 'like', '%'.$name.'%');
             }

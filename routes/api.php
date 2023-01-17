@@ -14,6 +14,7 @@ use App\Http\Controllers\User\LoginController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\User\ForgetPasswordController;
 use App\Http\Controllers\User\UserContentController;
+use App\Http\Controllers\User\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,6 +36,9 @@ Route::prefix('v1')->group(function () {
     Route::post('forget_password', [ForgetPasswordController::class, 'forgetPassword']);
     Route::get('reset_password', [ForgetPasswordController::class, 'resetPassword']);
     Route::post('update-new-password', [ForgetPasswordController::class, 'updateNewPassword']);
+
+    Route::get('order-status', [OrderController::class, 'changeOrderStatus']);
+
     //PROTDECTED ROUTE
     Route::middleware(['auth:api', 'scopes:user'])->group(function (){
         Route::get('/profile', [UserController::class, 'index']);
@@ -42,6 +46,9 @@ Route::prefix('v1')->group(function () {
         // Content
         Route::get('content', [UserContentController::class, 'index']);
         Route::post('request-content', [UserContentController::class, 'uploade']);
+
+        // Order
+        Route::post('place-order', [OrderController::class, 'placeOrder']);
     });
 });
 

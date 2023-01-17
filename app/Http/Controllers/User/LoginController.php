@@ -26,9 +26,9 @@ class LoginController extends Controller
             $credentials = $request->only('email', 'password');
             if (Auth::attempt($credentials)) {
                 $user= Auth::user();
-                
+               
                 if($user->is_active && $user->email_verified_at != null){
-                    
+                    // dd("test");
                     $success['user']  = $user;
                     if ($user->teacher_status == User::TEACHER_STATUS_APPROVED) {
                         $success['user_type']  = 'teacher';
