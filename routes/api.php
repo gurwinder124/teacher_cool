@@ -37,7 +37,8 @@ Route::prefix('v1')->group(function () {
     Route::get('reset_password', [ForgetPasswordController::class, 'resetPassword']);
     Route::post('update-new-password', [ForgetPasswordController::class, 'updateNewPassword']);
 
-    Route::get('order-status', [OrderController::class, 'changeOrderStatus']);
+    // Order Callback
+    Route::get('order-callback', [OrderController::class, 'changeOrderStatus']);
 
     //PROTDECTED ROUTE
     Route::middleware(['auth:api', 'scopes:user'])->group(function (){

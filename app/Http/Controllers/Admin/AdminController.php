@@ -35,7 +35,7 @@ class AdminController extends Controller
             $user_type = $request->user_type;
             $gender = $request->gender;
             $age = $request->age;
-            
+            $sort = $request->sort;
             
             $data = DB::table('users')
                 ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
@@ -55,6 +55,11 @@ class AdminController extends Controller
             }
             if($age){
                 $data = $data->where('user_details.age','<=', $age);
+            }
+            if($sort == 'asc'){
+                $data = $data->orderBy('created_at');
+            }else{
+                $data = $data->orderByDesc('created_at');
             }
             $data = $data->paginate(10);
     
@@ -152,6 +157,7 @@ class AdminController extends Controller
         try{
             $keyword = $request->keyword;
             $id = $request->id;
+            $sort = $request->sort;
 
             if($id){
                 $data = Admin::where('id', $id)
@@ -159,8 +165,16 @@ class AdminController extends Controller
             }else{
                 $data = Admin::whereNot('role','=',0);
                 if($keyword && $keyword != ''){
-                    $data = $data->where('name', 'like', '%'.$keyword.'%');
+                    $data = $data->where('name', 'like', '%'.$keyword.'%')
+                                ->orWhere('email', 'like', '%'.$keyword.'%');
                 }
+
+                if($sort == 'asc'){
+                    $data = $data->orderBy('created_at');
+                }else{
+                    $data = $data->orderByDesc('created_at');
+                }
+                
                 $data = $data->paginate(10);
             }
     
