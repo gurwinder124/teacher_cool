@@ -57,9 +57,9 @@ class AdminController extends Controller
                 $data = $data->where('user_details.age','<=', $age);
             }
             if($sort == 'asc'){
-                $data = $data->orderBy('created_at');
+                $data = $data->orderBy('users.created_at');
             }else{
-                $data = $data->orderByDesc('created_at');
+                $data = $data->orderByDesc('users.created_at');
             }
             $data = $data->paginate(10);
     
