@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Admin;
 use App\Models\User;
+use App\Models\Order;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -19,7 +20,7 @@ class AdminController extends Controller
         try{
             $user['teachers'] = User::where('user_type', User::TEACHER_TYPE)->count();
             $user['students'] = User::where('user_type', User::STUDENT_TYPE)->count();
-            $user['orders'] = 0; // Code Pending 
+            $user['orders'] = Order::where('is_paid', 1)->count();
             $user['earning'] = 0; // Code Pending
             return sendResponse($user);
         }catch (Exception $e){
