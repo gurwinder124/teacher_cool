@@ -31,8 +31,7 @@ class AdminController extends Controller
 
     public function getUsers(Request $request){
         try{
-            $name = $request->name;
-            $email = $request->email;
+            $keyword = $request->keyword;
             $user_type = $request->user_type;
             $gender = $request->gender;
             $age = $request->age;
@@ -42,12 +41,15 @@ class AdminController extends Controller
                 ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
                 ->leftJoin('subscribed_users', 'users.id', '=', 'subscribed_users.user_id')
                 ->select('users.*', 'user_details.*','subscribed_users.name as subscription_name','subscribed_users.expire_date');
-            if($name && $name != ''){
-                $data = $data->where('name', 'like', '%'.$name.'%');
+            if($keyword && $keyword != ''){
+                $data = $data->where(function($query) use ($keyword){
+                            $query->where('users.name', 'like', '%'.$keyword.'%')
+                            ->orWhere('users.email', 'like', '%'.$keyword.'%')
+                            ->orWhere('user_details.contact', 'like', '%'.$keyword.'%');
+                        });
+                
             }
-            if($email && $email != ''){
-                $data = $data->where('email', 'like', '%'.$email.'%');
-            }
+            
             if($user_type){
                 $data = $data->where('users.user_type', $user_type);
             }
