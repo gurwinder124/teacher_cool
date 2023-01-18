@@ -14,7 +14,8 @@ class TeacherController extends Controller
         try{
             $keyword = $request->keyword;
             
-            $data = User::where('teacher_status', User::TEACHER_STATUS_PENDING);
+            $data = User::where('teacher_status', User::TEACHER_STATUS_PENDING)
+                        ->where('requested_for_teacher', 1);
             if($keyword && $keyword != ''){
                 $data = $data->where('name', 'like', '%'.$keyword.'%');
             }
