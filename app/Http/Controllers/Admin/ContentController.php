@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Content;
+use App\Models\ContentType;
 use Exception;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class ContentController extends Controller
 {
@@ -15,9 +17,11 @@ class ContentController extends Controller
         try{
             $keyword = $request->keyword;
             
-            $data = new Content;
+            $data = DB::table('contents')
+                    ->leftJoin('users','users.id', '=', 'contents.user_id')
+                    ->select('contents.*', 'users.name as teacher_name');
             if($keyword && $keyword != ''){
-                $data = $data->where('name', 'like', '%'.$keyword.'%');
+                $data = $data->where('contents.name', 'like', '%'.$keyword.'%');
             }
             
             $data = $data->paginate(10);
@@ -27,6 +31,7 @@ class ContentController extends Controller
                 'data'    => $data,
                 'message' => 'Success',
                 'content_category' => Content::getContentCategory(),
+                'content_type' => ContentType::select('id','name')->get(),
                 'content_status' => Content::getContentStatus(),
             ];
         
