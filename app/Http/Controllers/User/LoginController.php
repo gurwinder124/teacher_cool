@@ -83,6 +83,14 @@ class LoginController extends Controller
                 $profile_path = $request->file('profile')->storeAs('profile',$fileName,'public');
             }
 
+            $reffer_id = null;
+            if($request->reffer_code){
+                $refferUser = User::where('reffer_code','=',$request->reffer_code)->first();
+                if($refferUser){
+                    $reffer_id = $refferUser->id;
+                }
+            }
+
             
             /* Save User Data*/
             $user = new User;
@@ -92,6 +100,7 @@ class LoginController extends Controller
             $user->user_type = User::STUDENT_TYPE;
             $user->is_active = User::IS_ACTIVE;
             $user->profile_path = $profile_path;
+            $user->reffer_user_id = $reffer_id;
             if($request->is_teacher_request){
                 $user->teacher_status = User::TEACHER_STATUS_PENDING;
                 $user->requested_for_teacher = 1;

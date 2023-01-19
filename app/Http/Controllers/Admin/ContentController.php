@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Content;
 use App\Models\ContentType;
+use App\Models\Reward;
 use Exception;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
@@ -100,6 +101,15 @@ class ContentController extends Controller
             $data = Content::find($request->id);
             $data->is_approved = $request->status;
             $data->save();
+
+            if($request->status == Content::CONTENT_APPROVE){
+                $obj = new Reward;
+                $obj->user_id = $data->user_id;
+                $obj->points = 1;
+                $obj->transection_type = Reward::REWARD_CREDIT;
+                $obj->reward_type = Reward::CONTENT_REWARD_TYPE;
+                $obj->save();
+            }
         
             return sendResponse([], 'Status Update Successfully');
             

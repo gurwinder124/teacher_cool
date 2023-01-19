@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\SubscriptionPlan;
 use App\Models\SubscribedUser;
+use App\Models\User;
+use App\Models\Reward;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
@@ -71,7 +73,7 @@ class OrderController extends Controller
     public function changeOrderStatus(Request $request)
     {
         $data = Order::find($request->order_id);
-        if(empty($data)){
+        if(empty($data) || $data->is_paid == 1){
             return response()->json(['code' => '302', 'error' => 'Invalid Order']);
         }
 
@@ -92,13 +94,27 @@ class OrderController extends Controller
                 $obj->subscription_plan_id = $data->subscription_plan_id;
                 $obj->expire_date = $expireDate;
                 $obj->save();
+
+                $user = User::find($data->user_id);
+                if($user->reffer_user_id != null && $user->reffer_user_id != 0){
+                    $rewardObj = new Reward;
+                    $rewardObj->user_id = $user->reffer_user_id;
+                    $rewardObj->points = 1;
+                    $rewardObj->transection_type = Reward::REWARD_CREDIT;
+                    $rewardObj->reward_type = Reward::REFFER_REWARD_TYPE;
+                    $rewardObj->save();
+
+                    $user->reffer_user_id = null;
+                    $user->save();
+                }
                 return sendResponse([], "Order Successfull");
             }
         }
         return sendResponse([], "Order Not Successfull");
     }
-
-    public function calculateExpireDate($days){
+    
+    public function calculateExpireDate($days)
+    {
         // Declare a date
         $date = date("Y-m-d");
         // Display the added date

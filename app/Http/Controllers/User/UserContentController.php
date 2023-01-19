@@ -9,6 +9,7 @@ use Exception;
 use Illuminate\Support\Facades\Validator;
 
 use App\Models\Content;
+use App\Models\User;
 
 class UserContentController extends Controller
 {
@@ -54,6 +55,10 @@ class UserContentController extends Controller
 
             $user = Auth::user();
 
+            if($user->user_type == User::TEACHER_TYPE){
+                return response()->json(['code' => '302', 'error' => 'Teacher Can not upload Content']);
+            }
+
             if ($request->file('file')) {
                 // $name = $request->file('comment_attch')->getClientOriginalName();
                 $extension = $request->file('file')->getClientOriginalExtension();
@@ -81,4 +86,5 @@ class UserContentController extends Controller
             return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
         }
     }
+
 }

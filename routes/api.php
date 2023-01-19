@@ -44,6 +44,7 @@ Route::prefix('v1')->group(function () {
     //PROTDECTED ROUTE
     Route::middleware(['auth:api', 'scopes:user'])->group(function (){
         Route::get('/profile', [UserController::class, 'index']);
+        Route::get('/reffral', [UserController::class, 'genrateReaffral']);
 
         // Content
         Route::get('content', [UserContentController::class, 'index']);
