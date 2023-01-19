@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Validator;
 use Hash;
 use App\Models\UserDetails;
 use App\Jobs\SendWelcomeEmail;
+use App\Models\TeacherSetting;
 
 class LoginController extends Controller
 {
@@ -141,13 +142,19 @@ class LoginController extends Controller
             $userDetails->university = $request->university; 
             $userDetails->gender = $request->gender;
             $userDetails->age = $request->age; 
-            $userDetails->id_proof = $id_proof_path;
-            $userDetails->document_path = $document_path; 
-            if($request->is_teacher_request){
-                $user->working_hours = $request->working_hours;
-                $user->expected_income = $request->expected_income;
-            }
+            
             $userDetails->save();
+
+            if($request->is_teacher_request){
+                $teacherSetting = new TeacherSetting;
+                $teacherSetting->user_id = $user->id;
+                $teacherSetting->id_proof = $id_proof_path;
+                $teacherSetting->document_path = $document_path; 
+                $teacherSetting->working_hours = $request->working_hours;
+                $teacherSetting->expected_income = $request->expected_income;
+                $teacherSetting->preferred_currency = $request->preferred_currency;
+                $teacherSetting->save();
+            }
             
             
             // $admin=Admin::select('name','email')->where('id','=',1)->first();

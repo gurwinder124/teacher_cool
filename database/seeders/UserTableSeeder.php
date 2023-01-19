@@ -32,5 +32,15 @@ class UserTableSeeder extends Seeder
                 'created_at'=>date('Y-m-d H:i:s', rand(1662100000, 1662113343)),
             ]);
         }
+
+        for($i = 0; $i< 10; $i++){
+            DB::table('teacher_settings')->insert([
+                'id' => $i+1,
+                'user_id' => $i+1,
+                'working_hours' => rand(4, 8),
+                'expected_income' => rand(8, 20),
+                'preferred_currency' => 'USD',
+            ]);
+        }
     }
 }
