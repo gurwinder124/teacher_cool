@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Exception;
 use Illuminate\Support\Facades\DB;
+
 class AdminController extends Controller
 {
     public function index(Request $request)
@@ -29,13 +30,15 @@ class AdminController extends Controller
         
     }
 
-    public function getUsers(Request $request){
+    public function getUsers(Request $request)
+    {
         try{
             $keyword = $request->keyword;
             $user_type = $request->user_type;
             $gender = $request->gender;
             $age = $request->age;
             $sort = $request->sort;
+            $page_size = ($request->page_size)? $request->page_size : 10;
             
             $data = DB::table('users')
                 ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
@@ -64,7 +67,7 @@ class AdminController extends Controller
             }else{
                 $data = $data->orderByDesc('users.created_at');
             }
-            $data = $data->paginate(10);
+            $data = $data->paginate($page_size);
     
             return sendResponse($data);
         }catch (Exception $e){
@@ -73,25 +76,25 @@ class AdminController extends Controller
 
     }
 
-    public function deleteUsers(Request $request)
-    {
-        try {
-            $validator = Validator::make($request->all(), [
-                'id' => 'required',
-            ]);
-            if ($validator->fails()) {
-                return response()->json(['code' => '302', 'error' => $validator->errors()]);
-            }
+    // public function deleteUsers(Request $request)
+    // {
+    //     try {
+    //         $validator = Validator::make($request->all(), [
+    //             'id' => 'required',
+    //         ]);
+    //         if ($validator->fails()) {
+    //             return response()->json(['code' => '302', 'error' => $validator->errors()]);
+    //         }
             
-            User::destroy($request->id);
-            DB::table('user_details')->where('user_id',$request->id)->delete();
+    //         User::destroy($request->id);
+    //         DB::table('user_details')->where('user_id',$request->id)->delete();
 
-            return sendResponse("User Deleted successfully.");
+    //         return sendResponse("User Deleted successfully.");
 
-        } catch(\Exception $e) {
-            return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
-        }
-    }
+    //     } catch(\Exception $e) {
+    //         return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
+    //     }
+    // }
 
     public function addSubAdmin(Request $request)
     {
@@ -161,6 +164,7 @@ class AdminController extends Controller
             $keyword = $request->keyword;
             $id = $request->id;
             $sort = $request->sort;
+            $page_size = ($request->page_size)? $request->page_size : 10;
 
             if($id){
                 $data = Admin::where('id', $id)
@@ -178,7 +182,7 @@ class AdminController extends Controller
                     $data = $data->orderByDesc('created_at');
                 }
                 
-                $data = $data->paginate(10);
+                $data = $data->paginate($page_size);
             }
     
             return sendResponse($data);
@@ -188,25 +192,25 @@ class AdminController extends Controller
 
     }
 
-    public function deleteSubAdmin(Request $request)
-    {
-        try {
-            $validator = Validator::make($request->all(), [
-                'id' => 'required',
-            ]);
-            if ($validator->fails()) {
-                return response()->json(['code' => '302', 'error' => $validator->errors()]);
-            }
-            if($request->id == 1){
-                return sendError('Cannot Perform the Action');
-            }
+    // public function deleteSubAdmin(Request $request)
+    // {
+    //     try {
+    //         $validator = Validator::make($request->all(), [
+    //             'id' => 'required',
+    //         ]);
+    //         if ($validator->fails()) {
+    //             return response()->json(['code' => '302', 'error' => $validator->errors()]);
+    //         }
+    //         if($request->id == 1){
+    //             return sendError('Cannot Perform the Action');
+    //         }
 
-            Admin::destroy($request->id);
+    //         Admin::destroy($request->id);
             
-            return sendResponse("Sub-Admin Deleted successfully.");
+    //         return sendResponse("Sub-Admin Deleted successfully.");
 
-        } catch(\Exception $e) {
-            return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
-        }
-    }
+    //     } catch(\Exception $e) {
+    //         return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
+    //     }
+    // }
 }

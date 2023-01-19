@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\SubscriptionController;
 use App\Http\Controllers\Admin\TeacherController;
 use App\Http\Controllers\Admin\ContentController;
 use App\Http\Controllers\Admin\NewsLetterController;
+use App\Http\Controllers\Admin\AdminOrderController;
 
 use App\Http\Controllers\User\LoginController;
 use App\Http\Controllers\User\UserController;
@@ -90,5 +91,9 @@ Route::prefix('admin')->group(function (){
         Route::get('news-letter', [NewsLetterController::class, 'index']);
         Route::get('news-letter-history', [NewsLetterController::class, 'newsletterHistory']);
         Route::post('news-letter', [NewsLetterController::class, 'sendNewsletterNotification']);
+
+        // Orders
+        Route::get('orders', [AdminOrderController::class, 'index']);
+        Route::get('orders/{id}', [AdminOrderController::class, 'orderDetail']);
     });
 });
