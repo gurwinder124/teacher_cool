@@ -28,7 +28,7 @@
                 <td style="padding:26px 0 16px;color:#7D36CC;font-size:24px;font-weight:500;line-height: 26px; border-top: 8px solid #3F1272;">Greetings! {{$receiver_name}}</td>
             </tr>
             <tr>
-                <td style="padding:26px 0 16px;color:#7D36CC;font-size:24px;font-weight:500;line-height: 26px; border-top: 8px solid #3F1272;">
+                <td style="padding:26px 0 16px; font-size:22px;font-weight:400;line-height: 26px;">
                 Welcome To Teacher Cool
                 </td>
             </tr>

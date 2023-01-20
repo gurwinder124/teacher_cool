@@ -75,6 +75,6 @@ class WelcomeEmail extends Mailable
                     ->from($address, $name)
                     ->replyTo($address, $name)
                     ->subject($subject)
-                    ->with([ 'body' => $this->data['data'] ]);
+                    ->with([ 'receiver_name' => $name ]);
     }
 }
