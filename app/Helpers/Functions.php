@@ -37,3 +37,16 @@ function sendError($error, $errorMessages = [], $code = 404)
 
     return response()->json($response, $code);
 }
+
+function getString($n)
+    {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $randomString = '';
+     
+        for ($i = 0; $i < $n; $i++) {
+            $index = rand(0, strlen($characters) - 1);
+            $randomString .= $characters[$index];
+        }
+     
+        return $randomString;
+    }

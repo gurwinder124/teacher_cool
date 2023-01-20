@@ -21,6 +21,25 @@
         </style>
     </head>
     <body class="antialiased">
-        <h3>Welcome To Teacher Cool</h3>
+       
+        <table style="text-align: center; width:550px; background: #fff; border-collapse: collapse;  " align="center" cellpadding="0" cellspacing="0" >
+            <tbody>
+            <tr>
+                <td style="padding:26px 0 16px;color:#7D36CC;font-size:24px;font-weight:500;line-height: 26px; border-top: 8px solid #3F1272;">Greetings! {{$receiver_name}}</td>
+            </tr>
+            <tr>
+                <td style="padding:26px 0 16px;color:#7D36CC;font-size:24px;font-weight:500;line-height: 26px; border-top: 8px solid #3F1272;">
+                Welcome To Teacher Cool
+                </td>
+            </tr>
+            <tr>
+                <td style="color: #333333; padding: 0 40px 0 ;word-break: break-all; font-size:16px; line-height: 26px;" >
+                <a href={{ env('MAIL_FROM_ADDRESS').'/verify' }} >Veriy Email</a></td>
+            </tr>
+            <tr>
+                <td style="padding: 50px 0 15px;font-size: 13px;color: #888888;">Teacher Cool  - All copyrights reserved 2023</td>
+            </tr>
+            </tbody>
+        </table>
     </body>
 </html>

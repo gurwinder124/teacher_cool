@@ -102,6 +102,7 @@ class LoginController extends Controller
             $user->is_active = User::IS_ACTIVE;
             $user->profile_path = $profile_path;
             $user->reffer_user_id = $reffer_id;
+            $user->email_verify_code = getString(10);
             if($request->is_teacher_request){
                 $user->teacher_status = User::TEACHER_STATUS_PENDING;
                 $user->requested_for_teacher = 1;
@@ -179,6 +180,27 @@ class LoginController extends Controller
         } catch (Exception $e) {
             return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
         }
+    }
+
+    public function verifyEmail(Request $request){
+        $email_code = $request->email_verify_code;
+
+        if(!$email_code) {
+            return sendError("Invalid Link", '302');
+        }
+
+        $data = User::where('email_verify_code', '=', $email_code)->first();
+        
+        if(!$data){
+            return sendError("Invalid Link", [], '302');
+        }
+
+        $data = User::where('email_verify_code', '=', $email_code)
+                ->update(['email_verified_at' => date('Y-m-d H:i:s'), 'email_verify_code' => null]);
+
+        return sendResponse([], "Email Verified");
+        
+        
     }
     
 }

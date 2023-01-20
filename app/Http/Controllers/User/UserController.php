@@ -25,7 +25,7 @@ class UserController extends Controller
             
             $user = Auth::user();
             if($user->reffer_code == null){
-                $user->reffer_code = $this->getString(10);
+                $user->reffer_code = getString(10);
                 $user->save();
             }
             
@@ -37,16 +37,4 @@ class UserController extends Controller
         }
     }
 
-    public function getString($n)
-    {
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $randomString = '';
-     
-        for ($i = 0; $i < $n; $i++) {
-            $index = rand(0, strlen($characters) - 1);
-            $randomString .= $characters[$index];
-        }
-     
-        return $randomString;
-    }
 }
