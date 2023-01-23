@@ -9,6 +9,7 @@ use Exception;
 use App\Models\User;
 use App\Models\EmailTemplate;
 use App\Models\EmailHistory;
+use App\Jobs\NewsLetter;
 
 class NewsLetterController extends Controller
 {
@@ -63,6 +64,14 @@ class NewsLetterController extends Controller
             $data->email_type = EmailTemplate::NEWSLETTER_EMAIL;
             $data->message = $request->message;
             $data->save();
+
+            $newsLetterData=[
+                'to'=> "gurwinder11@yopmail.com",
+                'data' => $request->message,
+                'subject' => $request->subject,
+            ];
+            // dispatch(new SendNewRegisterEmail($data))->afterResponse();
+            dispatch(new NewsLetter($newsLetterData))->afterResponse();
 
             return sendResponse([], 'Success');
         }catch (Exception $e){
