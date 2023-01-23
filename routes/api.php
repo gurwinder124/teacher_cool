@@ -69,6 +69,9 @@ Route::prefix('admin')->group(function (){
         Route::get('users', [AdminController::class, 'getUsers']);
         Route::delete('users', [AdminController::class, 'deleteUsers']);
 
+        Route::post('edit-profile', [AdminController::class, 'editProfile']);
+        Route::post('change-password', [AdminController::class, 'changePassword']);
+
         // Sub Admins
         Route::post('sub-admin', [AdminController::class, 'addSubAdmin']);
         Route::post('edit-sub-admin', [AdminController::class, 'editSubAdmin']);

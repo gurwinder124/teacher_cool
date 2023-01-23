@@ -213,4 +213,72 @@ class AdminController extends Controller
     //         return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
     //     }
     // }
+
+    public function editProfile(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'name' => 'required|min:3',
+                'contact' => 'required',
+            ]);
+            if ($validator->fails()) {
+                return response()->json(['code' => '302', 'error' => $validator->errors()]);
+            }
+
+            $user = Auth::user();
+
+            $data = Admin::find($user->id);
+
+            if ($request->file('profile_path')) {
+                // $name = $request->file('profile_path')->getClientOriginalName();
+                $extension = $request->file('profile_path')->getClientOriginalExtension();
+                // $originalfileName = $request->file('profile_path')->getClientOriginalName();
+                // $originalfileName = pathinfo($originalfileName, PATHINFO_FILENAME);
+                // $originalfileName = implode('-',explode(' ', $originalfileName));
+                $fileName = time().'.'.$extension;
+                $profile_path = $request->file('profile_path')->storeAs('profile',$fileName,'public');
+
+                $data->profile = $profile_path;
+            }
+
+            $data->name = $request->name;
+            $data->contact = $request->contact;
+            $data->save();
+
+            return sendResponse($data, 'Updated Successfully');
+        } catch (Exception $e) {
+            return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
+        }
+
+    }
+
+    public function changePassword(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'current_password' => 'required',
+                'new_password' => 'required|string|min:8|confirmed',
+            ]);
+            if ($validator->fails()) {
+                return response()->json(['code' => '302', 'error' => $validator->errors()]);
+            }
+
+            if (!(Hash::check($request->get('current_password'), Auth::user()->password))) {
+                // The passwords matches
+                return sendError("Your current password does not matches with the password.", [], 403);
+            }
+            
+            $user = Auth::user();
+
+            $data = Admin::find($user->id);
+            
+            $data->password = Hash::make($request->new_password);
+            $data->save();
+
+            return sendResponse($data, 'Password Updated Successfully');
+        } catch (Exception $e) {
+            return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
+        }
+
+    }
 }

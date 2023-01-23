@@ -57,7 +57,7 @@ class LoginController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 'email' => 'required|email|unique:users',
-                'password' => 'required',
+                'password' => 'required|min:4',
                 'name' => 'required|min:3',
                 'is_teacher_request' => 'required',
                 'contact' => 'required',
