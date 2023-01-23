@@ -61,6 +61,7 @@ class NewsLetterController extends Controller
             }
 
             $data = new EmailHistory;
+           
             $data->email_type = EmailTemplate::NEWSLETTER_EMAIL;
             $data->message = $request->message;
             $data->save();
@@ -70,6 +71,7 @@ class NewsLetterController extends Controller
                 'message' => $request->message,
                 'subject' => $request->subject,
             ];
+            
             dispatch(new NewsLetter($newsLetterData))->afterResponse();
 
             return sendResponse([], 'Success');
