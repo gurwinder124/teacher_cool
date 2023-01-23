@@ -8,6 +8,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use App\Mail\SendNewsLetter;
+use Illuminate\Support\Facades\Mail;
 
 class NewsLetter implements ShouldQueue
 {
@@ -32,15 +34,6 @@ class NewsLetter implements ShouldQueue
      */
     public function handle()
     {
-        $address = env('MAIL_FROM_ADDRESS');
-        $subject = $this->data['subject'];
-        $data = $this->data['data'];
-
-        return $this->view('emails.newsletter')
-                    ->from($address)
-                    ->replyTo($address)
-                    ->subject($subject)
-                    ->with([ 'data' => $data ]);
-    
+        Mail::to($this->data['to'])->send(new SendNewsLetter($this->data));
     }
 }

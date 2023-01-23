@@ -67,10 +67,9 @@ class NewsLetterController extends Controller
 
             $newsLetterData=[
                 'to'=> "gurwinder11@yopmail.com",
-                'data' => $request->message,
+                'message' => $request->message,
                 'subject' => $request->subject,
             ];
-            // dispatch(new SendNewRegisterEmail($data))->afterResponse();
             dispatch(new NewsLetter($newsLetterData))->afterResponse();
 
             return sendResponse([], 'Success');

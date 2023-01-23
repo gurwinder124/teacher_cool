@@ -9,10 +9,11 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class NewsLetter extends Mailable
+class SendNewsLetter extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $data;
     /**
      * Create a new message instance.
      *
@@ -20,7 +21,7 @@ class NewsLetter extends Mailable
      */
     public function __construct()
     {
-        //
+        $this->data = $data;
     }
 
     /**
@@ -55,5 +56,18 @@ class NewsLetter extends Mailable
     public function attachments()
     {
         return [];
+    }
+
+    public function build()
+    {
+        $address = env('MAIL_FROM_ADDRESS');
+        $subject = $this->data['subject'];
+        $message = $this->data['message'];
+
+        return $this->view('emails.newsletter')
+                    ->from($address)
+                    ->replyTo($address)
+                    ->subject($subject)
+                    ->with([ 'message' => $message ]);
     }
 }
