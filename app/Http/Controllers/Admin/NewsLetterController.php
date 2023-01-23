@@ -60,15 +60,19 @@ class NewsLetterController extends Controller
                 return response()->json(['code' => '302', 'error' => $validator->errors()]);
             }
 
+            $users = User::where('is_newsletter_subscriber', '=', 1)
+                        ->select(['email'])->get()->toarray();
+            // dd($users);
             $data = new EmailHistory;
            
             $data->email_type = EmailTemplate::NEWSLETTER_EMAIL;
             $data->message = $request->message;
             $data->save();
 
-            $newsLetterData=[
-                'to'=> "gurwinder11@yopmail.com",
-                'message' => $request->message,
+            $newsLetterData = [
+                'to' => "gurwinder11@yopmail.com",
+                'users' => $users,
+                'body' => $request->message,
                 'subject' => $request->subject,
             ];
             

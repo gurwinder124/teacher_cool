@@ -29,24 +29,24 @@ class SendNewsLetter extends Mailable
      *
      * @return \Illuminate\Mail\Mailables\Envelope
      */
-    public function envelope()
-    {
-        return new Envelope(
-            subject: 'News Letter',
-        );
-    }
+    // public function envelope()
+    // {
+    //     return new Envelope(
+    //         subject: 'News Letter',
+    //     );
+    // }
 
     /**
      * Get the message content definition.
      *
      * @return \Illuminate\Mail\Mailables\Content
      */
-    public function content()
-    {
-        return new Content(
-            view: 'view.name',
-        );
-    }
+    // public function content()
+    // {
+    //     return new Content(
+    //         view: 'view.name',
+    //     );
+    // }
 
     /**
      * Get the attachments for the message.
@@ -62,12 +62,12 @@ class SendNewsLetter extends Mailable
     {
         $address = env('MAIL_FROM_ADDRESS');
         $subject = $this->data['subject'];
-        $message = $this->data['message'];
+        $body = $this->data['body'];
 
         return $this->view('emails.newsletter')
                     ->from($address)
                     ->replyTo($address)
                     ->subject($subject)
-                    ->with([ 'message' => $message ]);
+                    ->with([ 'body' => $body ]);
     }
 }

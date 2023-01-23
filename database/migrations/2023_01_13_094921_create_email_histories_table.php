@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('email_histories', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
+            $table->foreignId('user_id')->nullable();
             $table->string('email_type');
             $table->longText('message');
             $table->timestamps();

@@ -23,7 +23,7 @@
     <body class="antialiased">
        
     <div class="card" >
-        {{$message}}
+        {!!$body!!}
     </div>
     </body>
 </html>
