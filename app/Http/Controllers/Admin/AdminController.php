@@ -112,6 +112,7 @@ class AdminController extends Controller
             $user->name = $request->name;
             $user->email = $request->email;
             $user->contact = $request->contact;
+            $user->address = ($request->address)? $request->address:"";
             $user->role = Admin::SUB_ADMIN;
             $user->password = Hash::make("mind@123");
             $user->is_active = Admin::IS_ACTIVE;
@@ -151,6 +152,9 @@ class AdminController extends Controller
             $data->name = $request->name;
             $data->contact = $request->contact;
             $data->is_active = $request->is_active;
+            if($request->address){
+                $data->address = $request->address;
+            }
             $data->save();
 
             return sendResponse($data, 'Updated Successfully');
@@ -243,6 +247,9 @@ class AdminController extends Controller
 
             $data->name = $request->name;
             $data->contact = $request->contact;
+            if($request->address){
+                $data->address = $request->address;
+            }
             $data->save();
 
             return sendResponse($data, 'Updated Successfully');
@@ -265,7 +272,12 @@ class AdminController extends Controller
 
             if (!(Hash::check($request->get('current_password'), Auth::user()->password))) {
                 // The passwords matches
-                return sendError("Your current password does not matches with the password.", [], 403);
+                return sendError("Your current password does not matches with the password.", [], 400);
+            }
+
+            if(strcmp($request->get('current_password'), $request->get('new_password')) == 0){
+                // Current password and new password same
+                return sendError("New Password cannot be same as your current password.", [], 400);
             }
             
             $user = Auth::user();
