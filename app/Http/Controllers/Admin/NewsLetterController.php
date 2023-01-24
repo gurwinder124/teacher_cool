@@ -62,7 +62,7 @@ class NewsLetterController extends Controller
 
             $users = User::where('is_newsletter_subscriber', '=', 1)
                         ->select(['email'])->get()->toarray();
-            // dd($users);
+            dd($users);
             $data = new EmailHistory;
            
             $data->email_type = EmailTemplate::NEWSLETTER_EMAIL;
@@ -70,13 +70,12 @@ class NewsLetterController extends Controller
             $data->save();
 
             $newsLetterData = [
-                'to' => "gurwinder11@yopmail.com",
                 'users' => $users,
                 'body' => $request->message,
                 'subject' => $request->subject,
             ];
             
-            dispatch(new NewsLetter($newsLetterData))->afterResponse();
+            dispatch(new NewsLetter($newsLetterData));
 
             return sendResponse([], 'Success');
         }catch (Exception $e){
