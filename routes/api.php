@@ -82,7 +82,7 @@ Route::prefix('admin')->group(function (){
         Route::get('subscription', [SubscriptionController::class, 'index']);
         Route::post('add-subscription', [SubscriptionController::class, 'addSubscription']);
         Route::post('edit-subscription', [SubscriptionController::class, 'editSubscription']);
-
+        Route::get('subscription/{id}', [SubscriptionController::class, 'subscriptionDetail']);
         // Teacher
         Route::get('teacher-request', [TeacherController::class, 'index']);
         Route::post('teacher-request-status', [TeacherController::class, 'changeStatus']);

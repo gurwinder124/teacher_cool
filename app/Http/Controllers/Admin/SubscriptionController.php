@@ -31,7 +31,6 @@ class SubscriptionController extends Controller
         }catch (Exception $e){
             return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
         }
-        
     }
 
     public function addSubscription(Request $request)
@@ -87,6 +86,28 @@ class SubscriptionController extends Controller
            
             return sendResponse($data, 'Subscription Plan Updated');
         } catch (Exception $e) {
+            return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
+        }
+    }
+
+    public function subscriptionDetail($id)
+    {
+        try{
+            $data = SubscriptionPlan::find($id);
+
+            if(!$data){
+                return sendError("Data Not Found", [], 404);
+            }
+            
+            $response = [
+                'success' => true,
+                'data'    => $data,
+                'message' => 'Success',
+                'subscriptions_category' => Subscription::get(),
+            ];
+        
+            return response()->json($response, 200);
+        }catch (Exception $e){
             return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
         }
     }

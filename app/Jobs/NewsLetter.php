@@ -34,7 +34,7 @@ class NewsLetter implements ShouldQueue
      */
     public function handle()
     {
-        foreach ($data as $key => $value) {
+        foreach ($this->data['users'] as $key => $value) {
             Mail::to($value)->send(new SendNewsLetter($this->data));
         }
     }
