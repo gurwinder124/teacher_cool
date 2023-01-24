@@ -67,6 +67,7 @@ Route::prefix('admin')->group(function (){
         //Users 
         Route::get('', [AdminController::class, 'index']);
         Route::get('users', [AdminController::class, 'getUsers']);
+        Route::get('users/{id}', [AdminController::class, 'userDetails']);
         Route::delete('users', [AdminController::class, 'deleteUsers']);
 
         Route::post('edit-profile', [AdminController::class, 'editProfile']);

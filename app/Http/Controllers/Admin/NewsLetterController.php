@@ -62,7 +62,7 @@ class NewsLetterController extends Controller
 
             $users = User::where('is_newsletter_subscriber', '=', 1)
                         ->select(['email'])->get()->toarray();
-            dd($users);
+            // dd($users);
             $data = new EmailHistory;
            
             $data->email_type = EmailTemplate::NEWSLETTER_EMAIL;

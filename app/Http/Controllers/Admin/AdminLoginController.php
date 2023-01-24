@@ -26,8 +26,10 @@ class AdminLoginController extends Controller
                 if($user->is_active){
                     $success['name']  = $user->name;
                     if($user->role == 0){
+                        $success['type'] = 'super-admin';
                         $success['token'] = $user->createToken('accessToken', ['admin'])->accessToken;
                     }else{
+                        $success['type'] = 'sub-admin';
                         $success['token'] = $user->createToken('accessToken', ['sub-admin'])->accessToken;
                     }
     

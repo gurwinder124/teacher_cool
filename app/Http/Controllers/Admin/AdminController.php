@@ -76,6 +76,25 @@ class AdminController extends Controller
 
     }
 
+    public function userDetails($id)
+    {
+        try{
+            $data = DB::table('users')
+                ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
+                ->leftJoin('subscribed_users', 'users.id', '=', 'subscribed_users.user_id')
+                ->leftJoin('teacher_settings', 'users.id', '=', 'teacher_settings.user_id')
+                ->select('users.*', 'user_details.*','subscribed_users.name as subscription_name',
+                    'subscribed_users.expire_date','teacher_settings.document_path','teacher_settings.working_hours',
+                    'teacher_settings.id_proof','teacher_settings.expected_income','teacher_settings.preferred_currency')
+                ->where('users.id', $id)
+                ->get();
+    
+            return sendResponse($data);
+        }catch (Exception $e){
+            return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
+        }
+    }
+
     // public function deleteUsers(Request $request)
     // {
     //     try {
