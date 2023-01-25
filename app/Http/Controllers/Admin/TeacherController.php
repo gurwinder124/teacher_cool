@@ -53,6 +53,9 @@ class TeacherController extends Controller
             }
             
             $data->teacher_status = $request->status;
+            if($request->status == User::TEACHER_STATUS_APPROVED){
+                $data->user_type = User::TEACHER_TYPE;
+            }
             $data->save();
 
             //Send email Notification Pending

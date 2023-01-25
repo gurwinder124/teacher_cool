@@ -63,7 +63,6 @@ class AdminController extends Controller
             
             $data = DB::table('users')
                 ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
-                
                 ->where('users.user_type', $user_type);
             if($user_type == User::TEACHER_TYPE){
                 $data = $data->leftJoin('teacher_settings', 'users.id', '=', 'teacher_settings.user_id')
@@ -79,7 +78,6 @@ class AdminController extends Controller
                             ->orWhere('users.email', 'like', '%'.$keyword.'%')
                             ->orWhere('user_details.contact', 'like', '%'.$keyword.'%');
                         });
-                
             }
             
             // if($user_type){
