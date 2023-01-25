@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use App\Jobs\WelcomeSubAdmin;
 
 class AdminController extends Controller
 {
@@ -126,6 +127,10 @@ class AdminController extends Controller
             if ($validator->fails()) {
                 return response()->json(['code' => '302', 'error' => $validator->errors()]);
             }
+            
+            // $password = explode('@', $request->email)[0];
+            $password = getString(4);
+            // dd($password);
 
             $user = new Admin;
             $user->name = $request->name;
@@ -133,20 +138,21 @@ class AdminController extends Controller
             $user->contact = $request->contact;
             $user->address = ($request->address)? $request->address:"";
             $user->role = Admin::SUB_ADMIN;
-            $user->password = Hash::make("mind@123");
+            $user->password = Hash::make($password);
             $user->is_active = Admin::IS_ACTIVE;
             $user->save();
+
             // $admin=Admin::select('name','email')->where('id','=',1)->first();
             // $email=$admin->email;
             // $name=$admin->name;
-            // $data = [
-            //     'to' =>  $email,
-            //     'name' => $name,
-            //     'data' => "Thanks ",
-            //     'subject' => "Account Created"
-            // ];
+            $data = [
+                'to' =>  $request->email,
+                'name' => $request->name,
+                'password' => $password,
+                'subject' => "Account Created"
+            ];
             
-            // dispatch(new SendNewRegisterEmail($data))->afterResponse();
+            dispatch(new WelcomeSubAdmin($data))->afterResponse();
             return response()->json(['status' => 'Success', 'code' => 200, 'user' => $user]);
         } catch (Exception $e) {
             return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
