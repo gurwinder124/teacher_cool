@@ -154,6 +154,8 @@ class LoginController extends Controller
                 $teacherSetting->working_hours = $request->working_hours;
                 $teacherSetting->expected_income = $request->expected_income;
                 $teacherSetting->preferred_currency = $request->preferred_currency;
+                $teacherSetting->subject = $request->subject;
+                $teacherSetting->category = $request->category;
                 $teacherSetting->save();
             }
             

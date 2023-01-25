@@ -45,6 +45,15 @@ class AdminController extends Controller
     public function getUsers(Request $request)
     {
         try{
+
+            $validator = Validator::make($request->all(), [
+                'user_type' => 'required',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json(['code' => '302', 'error' => $validator->errors()]);
+            }
+
             $keyword = $request->keyword;
             $user_type = $request->user_type;
             $gender = $request->gender;
@@ -54,8 +63,16 @@ class AdminController extends Controller
             
             $data = DB::table('users')
                 ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
-                ->leftJoin('subscribed_users', 'users.id', '=', 'subscribed_users.user_id')
-                ->select('users.*', 'user_details.*','subscribed_users.name as subscription_name','subscribed_users.expire_date');
+                
+                ->where('users.user_type', $user_type);
+            if($user_type == User::TEACHER_TYPE){
+                $data = $data->leftJoin('teacher_settings', 'users.id', '=', 'teacher_settings.user_id')
+                            ->select('users.*', 'user_details.*','teacher_settings.subject','teacher_settings.category');
+            }elseif($user_type == User::STUDENT_TYPE){
+                $data = $data->leftJoin('subscribed_users', 'users.id', '=', 'subscribed_users.user_id')
+                        ->select('users.*', 'user_details.*','subscribed_users.name as subscription_name','subscribed_users.expire_date');
+            }
+
             if($keyword && $keyword != ''){
                 $data = $data->where(function($query) use ($keyword){
                             $query->where('users.name', 'like', '%'.$keyword.'%')
@@ -65,9 +82,9 @@ class AdminController extends Controller
                 
             }
             
-            if($user_type){
-                $data = $data->where('users.user_type', $user_type);
-            }
+            // if($user_type){
+            //     $data = $data->where('users.user_type', $user_type);
+            // }
             if($gender){
                 $data = $data->where('user_details.gender', $gender);
             }
