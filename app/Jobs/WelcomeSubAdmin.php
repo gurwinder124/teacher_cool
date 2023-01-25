@@ -8,7 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use App\Mail\SendNewsLetter;
+use App\Mail\WelcomeSubAdminEmail;
 use Illuminate\Support\Facades\Mail;
 
 class WelcomeSubAdmin implements ShouldQueue
@@ -34,6 +34,6 @@ class WelcomeSubAdmin implements ShouldQueue
      */
     public function handle()
     {
-        Mail::to($this->data['to'])->send(new SendNewsLetter($this->data));
+        Mail::to($this->data['to'])->send(new WelcomeSubAdminEmail($this->data));
     }
 }

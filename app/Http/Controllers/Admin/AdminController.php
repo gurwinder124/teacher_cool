@@ -35,7 +35,7 @@ class AdminController extends Controller
     {
         try{
             $user = Auth::user();
-            
+
             return sendResponse($user);
         }catch (Exception $e){
             return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
@@ -139,9 +139,7 @@ class AdminController extends Controller
                 return response()->json(['code' => '302', 'error' => $validator->errors()]);
             }
             
-            // $password = explode('@', $request->email)[0];
-            $password = getString(4);
-            // dd($password);
+            $password = getString(6);
 
             $user = new Admin;
             $user->name = $request->name;
@@ -152,10 +150,7 @@ class AdminController extends Controller
             $user->password = Hash::make($password);
             $user->is_active = Admin::IS_ACTIVE;
             $user->save();
-
-            // $admin=Admin::select('name','email')->where('id','=',1)->first();
-            // $email=$admin->email;
-            // $name=$admin->name;
+            
             $data = [
                 'to' =>  $request->email,
                 'name' => $request->name,
