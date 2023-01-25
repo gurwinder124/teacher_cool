@@ -30,7 +30,8 @@ class AdminOrderController extends Controller
             if($keyword && $keyword != ''){
                 $data = $data->where(function($query) use ($keyword){
                             $query->where('users.name', 'like', '%'.$keyword.'%')
-                            ->orWhere('users.email', 'like', '%'.$keyword.'%');
+                            ->orWhere('users.email', 'like', '%'.$keyword.'%')
+                            ->orWhere('orders.order_id', 'like', '%'.$keyword.'%');
                         });
             }
 
