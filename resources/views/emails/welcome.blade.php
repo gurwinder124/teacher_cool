@@ -34,7 +34,7 @@
             </tr>
             <tr>
                 <td style="color: #333333; padding: 0 40px 0 ;word-break: break-all; font-size:16px; line-height: 26px;" >
-                <a href={{ env('MAIL_FROM_ADDRESS').'/verify' }} >Veriy Email</a></td>
+                <a href={{ env('APP_URL_FRONT').'/verify/'.$verifyCode }} >Veriy Email</a></td>
             </tr>
             <tr>
                 <td style="padding: 50px 0 15px;font-size: 13px;color: #888888;">Teacher Cool  - All copyrights reserved 2023</td>

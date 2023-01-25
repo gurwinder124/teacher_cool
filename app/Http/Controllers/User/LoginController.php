@@ -92,6 +92,7 @@ class LoginController extends Controller
                 }
             }
 
+            $verifyCode = getString(10);
             
             /* Save User Data*/
             $user = new User;
@@ -102,7 +103,7 @@ class LoginController extends Controller
             $user->is_active = User::IS_ACTIVE;
             $user->profile_path = $profile_path;
             $user->reffer_user_id = $reffer_id;
-            $user->email_verify_code = getString(10);
+            $user->email_verify_code = $verifyCode;
             if($request->is_teacher_request){
                 $user->teacher_status = User::TEACHER_STATUS_PENDING;
                 $user->requested_for_teacher = 1;
@@ -173,6 +174,7 @@ class LoginController extends Controller
             $welcomedata=[
                 'to'=>$request->email,
                 'name'=>$request->name,
+                'verifyCode'=>$verifyCode,
                 'data' => "Thanks ",
                 'subject' => "Regarding Welcome"
             ];
