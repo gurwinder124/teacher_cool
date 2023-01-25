@@ -31,6 +31,17 @@ class AdminController extends Controller
         
     }
 
+    public function profile()
+    {
+        try{
+            $user = Auth::user();
+            
+            return sendResponse($user);
+        }catch (Exception $e){
+            return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
+        }
+    }
+
     public function getUsers(Request $request)
     {
         try{

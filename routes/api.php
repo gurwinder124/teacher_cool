@@ -70,6 +70,7 @@ Route::prefix('admin')->group(function (){
         Route::get('users/{id}', [AdminController::class, 'userDetails']);
         Route::delete('users', [AdminController::class, 'deleteUsers']);
 
+        Route::get('profile', [AdminController::class, 'profile']);
         Route::post('edit-profile', [AdminController::class, 'editProfile']);
         Route::post('change-password', [AdminController::class, 'changePassword']);
 
