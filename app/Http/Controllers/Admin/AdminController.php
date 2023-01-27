@@ -82,7 +82,7 @@ class AdminController extends Controller
                         });
             }
             
-            if($teacher_status || $teacher_status == 0){
+            if($teacher_status == User::TEACHER_STATUS_PENDING || $teacher_status == User::TEACHER_STATUS_APPROVED || $teacher_status == User::TEACHER_STATUS_DISAPPROVED){
                 $data = $data->where('users.teacher_status', $teacher_status);
             }
 

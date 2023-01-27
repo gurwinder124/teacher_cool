@@ -19,9 +19,9 @@ class User extends Authenticatable
     public const TEACHER_TYPE = 1;
     public const STUDENT_TYPE = 2;
 
-    public const TEACHER_STATUS_PENDING = 0;
-    public const TEACHER_STATUS_APPROVED = 1;
-    public const TEACHER_STATUS_DISAPPROVED = 2;
+    public const TEACHER_STATUS_PENDING = 1;
+    public const TEACHER_STATUS_APPROVED = 2;
+    public const TEACHER_STATUS_DISAPPROVED = 3;
 
     protected $guard = 'api';
 
