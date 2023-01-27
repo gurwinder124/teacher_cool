@@ -21,7 +21,8 @@ class TeacherController extends Controller
             
             $data = DB::table('users')
                 ->leftJoin('teacher_settings', 'users.id', '=', 'teacher_settings.user_id')
-                ->select('users.*','teacher_settings.*')
+                ->select('users.*','teacher_settings.id_proof','teacher_settings.document_path','teacher_settings.expected_income',
+                'teacher_settings.preferred_currency','teacher_settings.subject','teacher_settings.category')
                 ->where('users.requested_for_teacher', 1)
                 ->where('users.teacher_status', User::TEACHER_STATUS_PENDING);
 

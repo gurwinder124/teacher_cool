@@ -93,6 +93,7 @@ class OrderController extends Controller
                 $obj->user_id = $data->user_id;
                 $obj->subscription_plan_id = $data->subscription_plan_id;
                 $obj->expire_date = $expireDate;
+                $obj->is_subscribe = 1;
                 $obj->save();
 
                 $user = User::find($data->user_id);

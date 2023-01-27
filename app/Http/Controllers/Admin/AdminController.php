@@ -58,6 +58,8 @@ class AdminController extends Controller
             $user_type = $request->user_type;
             $gender = $request->gender;
             $age = $request->age;
+            $teacher_status = $request->teacher_status;
+            $is_subscribe = $request->is_subscribe;
             $sort = $request->sort;
             $page_size = ($request->page_size)? $request->page_size : 10;
             
@@ -80,15 +82,18 @@ class AdminController extends Controller
                         });
             }
             
-            // if($user_type){
-            //     $data = $data->where('users.user_type', $user_type);
-            // }
+            if($teacher_status){
+                $data = $data->where('users.teacher_status','<=', $teacher_status);
+            }
+
             if($gender){
                 $data = $data->where('user_details.gender', $gender);
             }
+            
             if($age){
                 $data = $data->where('user_details.age','<=', $age);
             }
+            
             if($sort == 'asc'){
                 $data = $data->orderBy('users.created_at');
             }else{

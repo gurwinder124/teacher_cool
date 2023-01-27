@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\TeacherController;
 use App\Http\Controllers\Admin\ContentController;
 use App\Http\Controllers\Admin\NewsLetterController;
 use App\Http\Controllers\Admin\AdminOrderController;
+use App\Http\Controllers\Admin\AssignmentController;
 
 use App\Http\Controllers\User\LoginController;
 use App\Http\Controllers\User\UserController;
@@ -102,5 +103,9 @@ Route::prefix('admin')->group(function (){
         // Orders
         Route::get('orders', [AdminOrderController::class, 'index']);
         Route::get('orders/{id}', [AdminOrderController::class, 'orderDetail']);
+
+        // Orders
+        Route::get('assignment', [AssignmentController::class, 'index']);
+        Route::get('assignment/{id}', [AssignmentController::class, 'orderDetail']);
     });
 });

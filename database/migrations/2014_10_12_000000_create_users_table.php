@@ -28,6 +28,7 @@ return new class extends Migration
             $table->integer('reffer_user_id')->nullable();
             $table->string('reffer_code')->nullable();
             $table->string('email_verify_code')->nullable();
+            $table->tinyInteger('is_subscribe')->default(0)->comment('Not Subscribe=0; Subscribe=1');
             $table->rememberToken();
             $table->timestamps();
         });
