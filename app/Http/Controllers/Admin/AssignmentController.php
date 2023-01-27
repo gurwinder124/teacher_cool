@@ -13,6 +13,7 @@ class AssignmentController extends Controller
     {
         try{
             $keyword = $request->keyword;
+            $assignment_status = $request->assignment_status;
             $sort = $request->sort;
             $page_size = ($request->page_size)? $request->page_size : 10;
 
@@ -25,9 +26,12 @@ class AssignmentController extends Controller
 
             if($keyword && $keyword != ''){
                 $data = $data->where(function($query) use ($keyword){
-                            $query->where('assignments.name', 'like', '%'.$keyword.'%')
+                            $query->where('assignments.title', 'like', '%'.$keyword.'%')
                             ->orWhere('assignments.keyword', 'like', '%'.$keyword.'%');
                         });
+            }
+            if($assignment_status){
+                $data = $data->where('assignments.assignment_status','=', $assignment_status);
             }
 
             if($sort == 'asc'){
