@@ -7,20 +7,44 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Exception;
+use Illuminate\Support\Facades\DB;
+
 class TeacherController extends Controller
 {
     public function index(Request $request)
     {
         try{
             $keyword = $request->keyword;
+            $sort = $request->sort;
+            $page_size = ($request->page_size)? $request->page_size : 10;
             
-            $data = User::where('teacher_status', User::TEACHER_STATUS_PENDING)
-                        ->where('requested_for_teacher', 1);
+            // $data = User::where('teacher_status', User::TEACHER_STATUS_PENDING)
+            //             ->where('requested_for_teacher', 1);
+            // if($keyword && $keyword != ''){
+            //     $data = $data->where('name', 'like', '%'.$keyword.'%');
+            // }
+            
+            // $data = $data->paginate(10);
+
+            
+            $data = DB::table('users')
+                ->leftJoin('teacher_settings', 'users.id', '=', 'teacher_settings.user_id')
+                ->select('users.*','teacher_settings.*')
+                ->where('users.requested_for_teacher', 1);
+
             if($keyword && $keyword != ''){
-                $data = $data->where('name', 'like', '%'.$keyword.'%');
+                $data = $data->where(function($query) use ($keyword){
+                            $query->where('users.name', 'like', '%'.$keyword.'%')
+                            ->orWhere('users.email', 'like', '%'.$keyword.'%');
+                        });
             }
-            
-            $data = $data->paginate(10);
+
+            if($sort == 'asc'){
+                $data = $data->orderBy('users.created_at');
+            }else{
+                $data = $data->orderByDesc('users.created_at');
+            }
+            $data = $data->paginate($page_size);
 
             $response = [
                 'success' => true,

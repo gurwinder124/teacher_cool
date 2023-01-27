@@ -187,7 +187,7 @@ class LoginController extends Controller
     }
 
     public function verifyEmail(Request $request){
-        $email_code = $request->email_verify_code;
+        $email_code = $request->code;
 
         if(!$email_code) {
             return sendError("Invalid Link", '302');
