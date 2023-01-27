@@ -82,12 +82,12 @@ class AdminController extends Controller
                         });
             }
             
-            if($teacher_status){
-                $data = $data->where('users.teacher_status','=', $teacher_status);
+            if($teacher_status || $teacher_status == 0){
+                $data = $data->where('users.teacher_status', $teacher_status);
             }
 
             if($is_subscribe){
-                $data = $data->where('users.is_subscribe','=', $is_subscribe);
+                $data = $data->where('users.is_subscribe', $is_subscribe);
             }
 
             if($gender){

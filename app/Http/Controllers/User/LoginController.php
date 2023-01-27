@@ -66,8 +66,6 @@ class LoginController extends Controller
                 'country' => 'required',
                 'qualification' => 'required',
                 'university' => 'required',
-                'gender'=> 'required',
-                'age' => 'required',
             ]);
             if ($validator->fails()) {
                 return response()->json(['code' => '302', 'error' => $validator->errors()]);
