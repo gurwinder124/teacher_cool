@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('assignments', function (Blueprint $table) {
             $table->id();
+            $table->string('assignment_id');
             $table->foreignId('user_id');
             $table->foreignId('teacher_id')->dafault(0);
             $table->longText('question')->nullable();
@@ -26,7 +27,6 @@ return new class extends Migration
             $table->string('assignment_answer_path')->nullable();
             $table->tinyInteger('assignment_status');
             $table->tinyInteger('is_paid_to_teacher');
-            $table->tinyInteger('is_admin_approved');
             $table->dateTime('due_date');
             $table->timestamps();
         });

@@ -83,7 +83,7 @@ class AdminController extends Controller
             }
             
             if($teacher_status){
-                $data = $data->where('users.teacher_status','<=', $teacher_status);
+                $data = $data->where('users.teacher_status','=', $teacher_status);
             }
 
             if($gender){

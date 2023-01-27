@@ -104,7 +104,7 @@ Route::prefix('admin')->group(function (){
         Route::get('orders', [AdminOrderController::class, 'index']);
         Route::get('orders/{id}', [AdminOrderController::class, 'orderDetail']);
 
-        // Orders
+        // Assignment Orders
         Route::get('assignment', [AssignmentController::class, 'index']);
         Route::get('assignment/{id}', [AssignmentController::class, 'orderDetail']);
     });
