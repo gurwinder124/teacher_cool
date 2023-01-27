@@ -17,20 +17,13 @@ class TeacherController extends Controller
             $keyword = $request->keyword;
             $sort = $request->sort;
             $page_size = ($request->page_size)? $request->page_size : 10;
-            
-            // $data = User::where('teacher_status', User::TEACHER_STATUS_PENDING)
-            //             ->where('requested_for_teacher', 1);
-            // if($keyword && $keyword != ''){
-            //     $data = $data->where('name', 'like', '%'.$keyword.'%');
-            // }
-            
-            // $data = $data->paginate(10);
 
             
             $data = DB::table('users')
                 ->leftJoin('teacher_settings', 'users.id', '=', 'teacher_settings.user_id')
                 ->select('users.*','teacher_settings.*')
-                ->where('users.requested_for_teacher', 1);
+                ->where('users.requested_for_teacher', 1)
+                ->where('users.teacher_status', User::TEACHER_STATUS_PENDING);
 
             if($keyword && $keyword != ''){
                 $data = $data->where(function($query) use ($keyword){
