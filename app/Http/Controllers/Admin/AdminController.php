@@ -86,6 +86,10 @@ class AdminController extends Controller
                 $data = $data->where('users.teacher_status','=', $teacher_status);
             }
 
+            if($is_subscribe){
+                $data = $data->where('users.is_subscribe','=', $is_subscribe);
+            }
+
             if($gender){
                 $data = $data->where('user_details.gender', $gender);
             }
