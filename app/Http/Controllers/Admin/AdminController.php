@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Admin;
 use App\Models\User;
 use App\Models\Order;
+use App\Models\Subscription;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -104,8 +105,17 @@ class AdminController extends Controller
                 $data = $data->orderByDesc('users.created_at');
             }
             $data = $data->paginate($page_size);
-    
-            return sendResponse($data);
+            
+            $response = [
+                'success' => true,
+                'data'    => $data,
+                'message' => 'Success',
+                'teacher_request' => User::teacherRequestStatus(),
+                'subscription_status' => Subscription::subscriptionStatus(),
+            ];
+
+            return response()->json($response, 200);
+
         }catch (Exception $e){
             return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
         }
