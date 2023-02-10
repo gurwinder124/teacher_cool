@@ -10,8 +10,11 @@ use App\Http\Controllers\Admin\TeacherController;
 use App\Http\Controllers\Admin\ContentController;
 use App\Http\Controllers\Admin\NewsLetterController;
 use App\Http\Controllers\Admin\AdminOrderController;
+use App\Http\Controllers\Admin\AdminTransactionController;
 use App\Http\Controllers\Admin\AssignmentController;
-
+use App\Http\Controllers\Admin\ContentCategoryController;
+use App\Http\Controllers\Admin\OrderPaymentController;
+use App\Http\Controllers\User\DashboardContentController;
 use App\Http\Controllers\User\LoginController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\User\ForgetPasswordController;
@@ -43,6 +46,10 @@ Route::prefix('v1')->group(function () {
     // Order Callback
     Route::get('order-callback', [OrderController::class, 'changeOrderStatus']);
 
+    // content
+    Route::get('dashboard-content', [DashboardContentController::class, 'index']);
+
+
     //PROTDECTED ROUTE
     Route::middleware(['auth:api', 'scopes:user'])->group(function (){
         Route::get('/profile', [UserController::class, 'index']);
@@ -60,6 +67,7 @@ Route::prefix('v1')->group(function () {
 //ADMIN ROUTE
 Route::prefix('admin')->group(function (){
     Route::post('login', [AdminLoginController::class, 'login']);
+    // Route::post('login', [AdminLoginController::class, 'login']);
     Route::post('forget_password', [AdminForgetPasswordController::class, 'forgetPassword']);
     Route::get('reset_password', [AdminForgetPasswordController::class, 'resetPassword']);
     Route::post('update-new-password', [AdminForgetPasswordController::class, 'updateNewPassword']);
@@ -92,7 +100,8 @@ Route::prefix('admin')->group(function (){
 
         // Content
         Route::get('content', [ContentController::class, 'index']);
-        Route::post('content', [ContentController::class, 'uploade']);
+        Route::get('content/{id}', [ContentController::class, 'getContent']);
+        Route::post('content', [ContentController::class, 'uploade'])->withoutMiddleware('throttle');
         Route::post('content-request', [ContentController::class, 'contentRequest']);
 
         // NewsLetter
@@ -107,5 +116,25 @@ Route::prefix('admin')->group(function (){
         // Assignment Orders
         Route::get('assignment', [AssignmentController::class, 'index']);
         Route::get('assignment/{id}', [AssignmentController::class, 'orderDetail']);
+        Route::post('assignment-status', [AssignmentController::class, 'updateStatus']);
+
+        //Subject or Categories Management
+        Route::get('subject',[ContentCategoryController::class,'index']);
+        Route::post('add-subject',[ContentCategoryController::class,'addCategory']);
+        Route::get('subject/{id}',[ContentCategoryController::class,'getSubject']);
+        Route::post('subject/{id}',[ContentCategoryController::class,'editCategory']);
+        Route::delete('subject/{id}',[ContentCategoryController::class,'destroy']);
+
+        //Manage Payment or Teacher Cool Weighage
+        Route::get('admin-payment',[AdminTransactionController::class,'index']);
+        Route::post('add-admin-payment',[AdminTransactionController::class,'addPayment']);
+        Route::post('admin-payment/{id}',[AdminTransactionController::class,'editPayment']);
+        
+        //Order Payment Management
+        Route::get('order-payment',[OrderPaymentController::class,'getPaymentList']);
+        Route::get('order-payment/{id}',[OrderPaymentController::class,'getSinglePayment']);
+
+
+
     });
 });

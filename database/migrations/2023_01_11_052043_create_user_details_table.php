@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('state')->nullable();
             $table->string('country');
             $table->string('qualification');
-            $table->string('university');
+            $table->string('university')->nullable();
             $table->timestamps();
         });
     }

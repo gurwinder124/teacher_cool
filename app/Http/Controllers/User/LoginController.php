@@ -10,7 +10,10 @@ use Illuminate\Support\Facades\Validator;
 use Hash;
 use App\Models\UserDetails;
 use App\Jobs\SendWelcomeEmail;
+use App\Models\SMS;
 use App\Models\TeacherSetting;
+use Exception;
+use Twilio\Rest\Client;
 
 class LoginController extends Controller
 {
@@ -61,11 +64,11 @@ class LoginController extends Controller
                 'name' => 'required|min:3',
                 'is_teacher_request' => 'required',
                 'contact' => 'required',
-                'city' => 'required',
-                'state' => 'required',
+               // 'city' => 'required',
+               // 'state' => 'required',
                 'country' => 'required',
                 'qualification' => 'required',
-                'university' => 'required',
+               // 'university' => 'required',
             ]);
             if ($validator->fails()) {
                 return response()->json(['code' => '302', 'error' => $validator->errors()]);
@@ -105,6 +108,7 @@ class LoginController extends Controller
             if($request->is_teacher_request){
                 $user->teacher_status = User::TEACHER_STATUS_PENDING;
                 $user->requested_for_teacher = 1;
+		$user->user_type =1;
             }
             
             $user->save();
@@ -143,8 +147,8 @@ class LoginController extends Controller
             $userDetails->gender = $request->gender;
             $userDetails->age = $request->age; 
             
-            $userDetails->save();
-
+            $saveUser= $userDetails->save();
+            $saveTeacher = false;
             if($request->is_teacher_request){
                 $teacherSetting = new TeacherSetting;
                 $teacherSetting->user_id = $user->id;
@@ -155,9 +159,19 @@ class LoginController extends Controller
                 $teacherSetting->preferred_currency = $request->preferred_currency;
                 $teacherSetting->subject = $request->subject;
                 $teacherSetting->category = $request->category;
-                $teacherSetting->save();
+                $saveTeacher=$teacherSetting->save();
             }
-            
+            $smsUserData =[
+                'body'=> 'Register Successfully with Teacher Cool'
+            ];
+            $smsTeacherData =[
+                'body'=> 'Your Request as Teacher is pending for confirmation. We will revert within 48 hrs'
+            ];
+            if($saveTeacher){
+                //$this->sendSMS($smsTeacherData);   
+            }elseif($saveUser){
+               // $this->sendSMS($smsUserData);
+            }
             
             // $admin=Admin::select('name','email')->where('id','=',1)->first();
             // $email=$admin->email;
@@ -204,5 +218,24 @@ class LoginController extends Controller
         
         
     }
+
+    //public function sendSMS($data){
+       
+    //    $account_sid = env('TWILIO_APP_ID');
+    //    $auth_token = env('TWILIO_APP_KEY');
+        
+     //   $twilio_number = env('TWILIO_APP_NUMBER');
+
+     //   $client = new Client($account_sid, $auth_token);
+     //   $client->messages->create(
+            // Where to send a text message (your cell phone?)
+            // $data['phone_number'],
+      //      '+91 95015 60691',
+       //     array(
+         //       'from' => $twilio_number,
+        //        'body' => $data['body']
+        //    )
+       // );
+    //}
     
 }

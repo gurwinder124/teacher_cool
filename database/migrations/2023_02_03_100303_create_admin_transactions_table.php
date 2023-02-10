@@ -13,15 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('contents', function (Blueprint $table) {
+        Schema::create('admin_transactions', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id')->default(0);
-            $table->foreignId('content_types_id');
-            $table->integer('content_category');
-            $table->string('name');
-            $table->string('path');
-            $table->tinyInteger('uploaded_by_admin')->default(2);
-            $table->tinyInteger('is_approved')->default(0);
+            $table->integer('teacher_cool_weightage');
+            //$table->integer('teacher_weightage');
+            $table->integer('rate_per_assignment');
+            $table->integer('discount')->default(0);
             $table->timestamps();
         });
     }
@@ -33,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('contents');
+        Schema::dropIfExists('admin_transactions');
     }
 };

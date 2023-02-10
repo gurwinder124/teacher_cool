@@ -63,12 +63,12 @@ class WelcomeSubAdminEmail extends Mailable
     {
         $address = env('MAIL_FROM_ADDRESS');
         $subject = $this->data['subject'];
-        $name = $this->data['name'];
+        $name = env('MAIL_FROM_NAME');
 
         return $this->view('emails.subadmin')
                     ->from($address, $name)
                     ->replyTo($address, $name)
                     ->subject($subject)
-                    ->with([ 'receiver_name' => $name , 'password'=> $this->data['password']]);
+                    ->with([ 'receiver_name' => $name , 'password'=> $this->data['password'],'email'=> $this->data['email']]);
     }
 }

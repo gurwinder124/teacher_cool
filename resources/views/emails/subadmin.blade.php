@@ -34,6 +34,10 @@
             </tr>
             <tr>
                 <td style="color: #333333; padding: 0 40px 0 ;word-break: break-all; font-size:16px; line-height: 26px;" >
+                    Your email:- <b>{{ $email}}</b></td>
+            </tr>
+            <tr>
+                <td style="color: #333333; padding: 0 40px 0 ;word-break: break-all; font-size:16px; line-height: 26px;" >
                 Your Password:- <b>{{ $password}}</b></td>
             </tr>
             <tr>
