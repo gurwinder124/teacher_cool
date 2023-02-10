@@ -182,12 +182,14 @@ class AdminController extends Controller
             $user->address = ($request->address)? $request->address:"";
             $user->role = Admin::SUB_ADMIN;
             $user->password = Hash::make($password);
+            $user->email_verified_at = date('Y-m-d H:i:s');
             $user->is_active = Admin::IS_ACTIVE;
             $user->save();
             
             $data = [
                 'to' =>  $request->email,
                 'name' => $request->name,
+                'email' => $request->email,
                 'password' => $password,
                 'subject' => "Account Created"
             ];
