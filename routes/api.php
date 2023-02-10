@@ -106,6 +106,6 @@ Route::prefix('admin')->group(function (){
 
         // Assignment Orders
         Route::get('assignment', [AssignmentController::class, 'index']);
-        Route::get('assignment/{id}', [AssignmentController::class, 'orderDetail']);
+        Route::get('assignment/{id}', [AssignmentController::class, 'assignmentDetail']);
     });
 });

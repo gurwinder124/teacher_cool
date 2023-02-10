@@ -54,4 +54,21 @@ class AssignmentController extends Controller
             return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
         }
     }
+
+    public function assignmentDetail($id)
+    {
+        try{
+            $data = DB::table('assignments')
+                ->leftJoin('users as teacher', 'teacher.id', '=', 'assignments.teacher_id')
+                ->leftJoin('users as student', 'student.id', '=', 'assignments.user_id')
+                ->select('assignments.*', 'teacher.email as teacher_email','teacher.name as teacher_name',
+                'student.email as student_email','student.name as student_name')
+                ->where('assignments.id', '=', $id)
+                ->first();
+    
+            return sendResponse($data);
+        }catch (Exception $e){
+            return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
+        }
+    }
 }
