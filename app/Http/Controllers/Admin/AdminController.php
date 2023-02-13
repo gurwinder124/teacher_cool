@@ -66,7 +66,8 @@ class AdminController extends Controller
             
             $data = DB::table('users')
                 ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
-                ->where('users.user_type', $user_type);
+                ->where('users.user_type', $user_type)
+                ->where('users.email_verified_at','!=', null);
             if($user_type == User::TEACHER_TYPE){
                 $data = $data->leftJoin('teacher_settings', 'users.id', '=', 'teacher_settings.user_id')
                             ->leftJoin('content_categories', 'content_categories.id', '=', 'teacher_settings.subject_id')

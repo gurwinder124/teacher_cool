@@ -124,7 +124,7 @@ class LoginController extends Controller
             if($request->is_teacher_request){
                 $user->teacher_status = User::TEACHER_STATUS_PENDING;
                 $user->requested_for_teacher = 1;
-		        $user->user_type =User::TEACHER_TYPE;;
+		        $user->user_type =User::TEACHER_TYPE;
             }
             
             $user->save();

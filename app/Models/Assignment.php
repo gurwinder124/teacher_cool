@@ -9,9 +9,9 @@ class Assignment extends Model
 {
     use HasFactory;
 
-    public const ASSIGNMENT_STATUS_PENDING = 0;
-    public const ASSIGNMENT_STATUS_SUBMITTED = 1;
-    public const ASSIGNMENT_STATUS_APPROVED = 2;
+    public const ASSIGNMENT_STATUS_PENDING = 1;
+    public const ASSIGNMENT_STATUS_SUBMITTED = 2;
+    public const ASSIGNMENT_STATUS_APPROVED = 3;
 
 
     public static function assignmentStatus()
