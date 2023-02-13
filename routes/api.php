@@ -115,6 +115,7 @@ Route::prefix('admin')->group(function (){
 
         // Assignment Orders
         Route::get('assignment', [AssignmentController::class, 'index']);
+        // Route::get('assignment/{id}', [AssignmentController::class, 'assignmentDetail']);
         Route::get('assignment/{id}', [AssignmentController::class, 'orderDetail']);
         Route::post('assignment-status', [AssignmentController::class, 'updateStatus']);
 
