@@ -9,7 +9,8 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class WelcomeSubAdminEmail extends Mailable
+
+class TeacherStatusEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -33,19 +34,19 @@ class WelcomeSubAdminEmail extends Mailable
     // public function envelope()
     // {
     //     return new Envelope(
-    //         subject: 'Send Welcome Sub Admin',
+    //         subject: this->data['subject'],
     //     );
     // }
 
-    /**
-     * Get the message content definition.
-     *
-     * @return \Illuminate\Mail\Mailables\Content
-     */
+    // /**
+    //  * Get the message content definition.
+    //  *
+    //  * @return \Illuminate\Mail\Mailables\Content
+    //  */
     // public function content()
     // {
     //     return new Content(
-    //         view: 'view.name',
+    //         view: 'emails.welcome',
     //     );
     // }
 
@@ -59,17 +60,23 @@ class WelcomeSubAdminEmail extends Mailable
         return [];
     }
 
+    /**
+     * Build the message.
+     *
+     * @return $this
+     */
     public function build()
     {
         $address = env('MAIL_FROM_ADDRESS');
         $subject = $this->data['subject'];
         $name = env('MAIL_FROM_NAME');
         $receiver_name = $this->data['name'];
+        $body = $this->data['body'];
 
-        return $this->view('emails.subadmin')
+        return $this->view('emails.teacherstatus')
                     ->from($address, $name)
                     ->replyTo($address, $name)
                     ->subject($subject)
-                    ->with([ 'receiver_name' => $receiver_name , 'password'=> $this->data['password'],'email'=> $this->data['email']]);
+                    ->with([ 'receiver_name' => $receiver_name , 'body' => $body]);
     }
 }

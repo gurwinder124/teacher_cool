@@ -69,13 +69,14 @@ class WelcomeEmail extends Mailable
     {
         $address = env('MAIL_FROM_ADDRESS');
         $subject = $this->data['subject'];
-        $name = $this->data['name'];
+        $name = env('MAIL_FROM_NAME');
+        $receiver_name = $this->data['name'];
         $verifyCode = $this->data['verifyCode'];
 
         return $this->view('emails.welcome')
                     ->from($address, $name)
                     ->replyTo($address, $name)
                     ->subject($subject)
-                    ->with([ 'receiver_name' => $name, 'verifyCode'=> $verifyCode ]);
+                    ->with([ 'receiver_name' => $receiver_name, 'verifyCode'=> $verifyCode ]);
     }
 }

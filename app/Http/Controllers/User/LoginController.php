@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\AdminEmail;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -10,6 +11,7 @@ use Illuminate\Support\Facades\Validator;
 use Hash;
 use App\Models\UserDetails;
 use App\Jobs\SendWelcomeEmail;
+use App\Jobs\TeacherStatus;
 use App\Models\SMS;
 use App\Models\TeacherSetting;
 use Exception;
@@ -108,7 +110,7 @@ class LoginController extends Controller
             if($request->is_teacher_request){
                 $user->teacher_status = User::TEACHER_STATUS_PENDING;
                 $user->requested_for_teacher = 1;
-		$user->user_type =1;
+		        $user->user_type =User::TEACHER_TYPE;;
             }
             
             $user->save();
@@ -168,9 +170,9 @@ class LoginController extends Controller
                 'body'=> 'Your Request as Teacher is pending for confirmation. We will revert within 48 hrs'
             ];
             if($saveTeacher){
-                //$this->sendSMS($smsTeacherData);   
+                // $this->sendSMS($smsTeacherData);   
             }elseif($saveUser){
-               // $this->sendSMS($smsUserData);
+                // $this->sendSMS($smsUserData);
             }
             
             // $admin=Admin::select('name','email')->where('id','=',1)->first();
@@ -187,7 +189,9 @@ class LoginController extends Controller
                 'to'=>$request->email,
                 'name'=>$request->name,
                 'verifyCode'=>$verifyCode,
-                'data' => "Thanks ",
+                'data' => 
+                $saveTeacher? "Your Request as Teacher is pending for confirmation. We will revert within 48 hrs.Please verify your email from the link below:  " 
+                :($saveUser? "Hope, You will have wonderful experience here.Please verify your email from the link below:":''),
                 'subject' => "Regarding Welcome"
             ];
             // dispatch(new SendNewRegisterEmail($data))->afterResponse();
@@ -202,40 +206,74 @@ class LoginController extends Controller
         $email_code = $request->code;
 
         if(!$email_code) {
-            return sendError("Invalid Link", '302');
+            echo sendError("Invalid Link", '302');
+            die;
         }
 
         $data = User::where('email_verify_code', '=', $email_code)->first();
         
         if(!$data){
-            return sendError("Invalid Link", [], '302');
+            echo sendError("Invalid Link", [], '302');
+            die;
         }
 
-        $data = User::where('email_verify_code', '=', $email_code)
+        $updateData = User::where('email_verify_code', '=', $email_code)
                 ->update(['email_verified_at' => date('Y-m-d H:i:s'), 'email_verify_code' => null]);
+        if($updateData){
+            $teacherEmailData=[
+                'to'=>$data->email,
+                'name'=>$data->name,
+                'body' =>"Your Request as Teacher has been Pending for approval. We will revert you within 24hrs." ,
+                'subject' => "Regarding Approval Request"
+            ];
+            dispatch(new TeacherStatus($teacherEmailData))->afterResponse();
+            $adminEmailData=[
+                'to'=>'teachercool@yopmail.com',
+                'name'=>'Teacher Cool',
+                'body' =>"New teacher, ".$data->name." has been Register with ".$data->email." email." ,
+                'subject' => "Regarding Teacher Approval"
+            ];
+            dispatch(new AdminEmail($adminEmailData))->afterResponse();
+        }
 
-        return sendResponse([], "Email Verified");
+        // return sendResponse([], "Email Verified");
+        $html =  `<!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Teacher Cool</title>
+        </head>
+        <body>
+            <h1>Verification Completed</h1>
+        </body>
+        </html>
+        
+        `;
+        echo $html;
+        die;
         
         
     }
 
-    //public function sendSMS($data){
+    public function sendSMS($data){
        
-    //    $account_sid = env('TWILIO_APP_ID');
-    //    $auth_token = env('TWILIO_APP_KEY');
+        // $account_sid = env('TWILIO_APP_ID');
+        // $auth_token = env('TWILIO_APP_KEY');
         
-     //   $twilio_number = env('TWILIO_APP_NUMBER');
+        // $twilio_number = env('TWILIO_APP_NUMBER');
 
-     //   $client = new Client($account_sid, $auth_token);
-     //   $client->messages->create(
-            // Where to send a text message (your cell phone?)
-            // $data['phone_number'],
-      //      '+91 95015 60691',
-       //     array(
-         //       'from' => $twilio_number,
-        //        'body' => $data['body']
-        //    )
-       // );
-    //}
+        // $client = new Client($account_sid, $auth_token);
+        // $client->messages->create(
+        //     // Where to send a text message (your cell phone?)
+        //     // $data['phone_number'],
+        //     '+91 95015 60691',
+        //     array(
+        //         'from' => $twilio_number,
+        //         'body' => $data['body']
+        //     )
+        // );
+    }
     
 }

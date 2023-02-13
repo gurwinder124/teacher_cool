@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\TeacherStatus;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
@@ -69,14 +70,32 @@ class TeacherController extends Controller
             if(!$data){
                 return sendError("Invalid Record");
             }
-            
+          
             $data->teacher_status = $request->status;
             if($request->status == User::TEACHER_STATUS_APPROVED){
                 $data->user_type = User::TEACHER_TYPE;
+                $welcomeData=[
+                    'to'=>$data->email,
+                    'name'=>$data->name,
+                    'body' =>"Your Request as Teacher has been approved. Please login with your credentials." ,
+                    'subject' => "Regarding Approval"
+                ];
+                dispatch(new TeacherStatus($welcomeData))->afterResponse();
+            }
+            if($request->status == User::TEACHER_STATUS_DISAPPROVED){
+                $rejectData=[
+                    'to'=>$data->email,
+                    'name'=>$data->name,
+                    // 'verifyCode'=>$verifyCode,
+                    'body' =>"Unfortunately your request has been disapproved." ,
+                    'subject' => "Regarding Disapproval"
+                ];
+                dispatch(new TeacherStatus($rejectData))->afterResponse();
             }
             $data->save();
 
             //Send email Notification Pending
+
 
             return sendResponse($data, 'Updated Successfully');
         } catch (Exception $e) {

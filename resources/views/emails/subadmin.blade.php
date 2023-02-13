@@ -21,7 +21,7 @@
         </style>
     </head>
     <body class="antialiased">
-       
+        
         <table style="text-align: center; width:550px; background: #fff; border-collapse: collapse;  " align="center" cellpadding="0" cellspacing="0" >
             <tbody>
             <tr>
@@ -39,6 +39,23 @@
             <tr>
                 <td style="color: #333333; padding: 0 40px 0 ;word-break: break-all; font-size:16px; line-height: 26px;" >
                 Your Password:- <b>{{ $password}}</b></td>
+            </tr>
+            <tr>
+                <td>
+                <p style="text-align: center;margin: 2.5em auto;">
+                  <a class="button" href="https://stgn.appsndevs.com/teachercool/sub-admin/login" style="background: #1670F8; 
+                       text-decoration: none; 
+                       padding: 1em 1.5em;
+                       color: #ffffff; 
+                       border-radius: 48px;
+                       mso-padding-alt:0;
+                       text-underline-color:#1670F8">
+                    <!--[if mso]><i style="letter-spacing: 25px;mso-font-width:-100%;mso-text-raise:20pt">&nbsp;</i><![endif]-->
+                    <span style="mso-text-raise:10pt;font-weight:bold;">Login</span>
+                    <!--[if mso]><i style="letter-spacing: 25px;mso-font-width:-100%">&nbsp;</i><![endif]-->
+                  </a>
+                </p>
+                </td>
             </tr>
             <tr>
                 <td style="padding: 50px 0 15px;font-size: 13px;color: #888888;">Teacher Cool  - All copyrights reserved 2023</td>

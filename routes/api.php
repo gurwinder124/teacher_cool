@@ -41,7 +41,7 @@ Route::prefix('v1')->group(function () {
     Route::post('forget_password', [ForgetPasswordController::class, 'forgetPassword']);
     Route::get('reset_password', [ForgetPasswordController::class, 'resetPassword']);
     Route::post('update-new-password', [ForgetPasswordController::class, 'updateNewPassword']);
-    Route::post('verify-email', [LoginController::class, 'verifyEmail']);
+    Route::get('verify-email', [LoginController::class, 'verifyEmail']);
 
     // Order Callback
     Route::get('order-callback', [OrderController::class, 'changeOrderStatus']);
