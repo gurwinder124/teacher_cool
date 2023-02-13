@@ -14,11 +14,25 @@ use App\Jobs\SendWelcomeEmail;
 use App\Jobs\TeacherStatus;
 use App\Models\SMS;
 use App\Models\TeacherSetting;
+use App\Models\ContentCategories;
 use Exception;
 use Twilio\Rest\Client;
 
 class LoginController extends Controller
 {
+
+    public function registerInfo(){
+        try{
+            $data['subjects']= ContentCategories::pluck('category_name','id');
+            if(!$data){
+                return sendError('No record Found');
+            }
+            return sendResponse($data);
+        }catch (Exception $e){
+            return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
+        }
+    }
+
     public function login(Request $request)
     {
         try {
