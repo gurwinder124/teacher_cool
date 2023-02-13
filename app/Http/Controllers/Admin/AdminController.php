@@ -23,7 +23,7 @@ class AdminController extends Controller
         try{
             $user['teachers'] = User::where('user_type', User::TEACHER_TYPE)->count();
             $user['students'] = User::where('user_type', User::STUDENT_TYPE)->count();
-            $user['orders'] = Order::where('is_paid', 1)->count();
+            $user['orders'] = Order::where('is_paid', Order::ORDER_PAYMENT_PAID)->count();
             $user['earning'] = 0; // Code Pending
             return sendResponse($user);
         }catch (Exception $e){

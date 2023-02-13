@@ -20,7 +20,7 @@ return new class extends Migration
             $table->foreignId('subscription_plan_id')->nullable();
             $table->foreignId('content_id')->nullable();
             $table->tinyInteger('order_type');
-            $table->tinyInteger('is_paid')->default(0)->comment('not-paid=0; paid=1');
+            $table->tinyInteger('is_paid')->default(2)->comment('paid=1: not-paid=2');
             $table->string('total_amount');
             $table->string('net_amount');
             $table->string('discount')->default(0);

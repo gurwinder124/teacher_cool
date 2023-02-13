@@ -11,4 +11,7 @@ class Order extends Model
 
     public const SUBSCRIPTION_ORDER_TYPE = 1;
     public const OTHER_ORDER_TYPE = 2;
+
+    public const ORDER_PAYMENT_PAID = 1;
+    public const ORDER_PAYMENT_PENDING = 2;
 }

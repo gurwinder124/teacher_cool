@@ -54,6 +54,7 @@ class OrderController extends Controller
             $orderObj->total_amount =$request->total_amount;
             $orderObj->net_amount =$request->net_amount;
             $orderObj->discount = $request->discount;
+            $orderObj->is_paid = Order::ORDER_PAYMENT_PENDING;
             if($request->order_type == Order::OTHER_ORDER_TYPE){
                 $orderObj->content_id = $request->content_id;
             }else{
@@ -73,13 +74,13 @@ class OrderController extends Controller
     public function changeOrderStatus(Request $request)
     {
         $data = Order::find($request->order_id);
-        if(empty($data) || $data->is_paid == 1){
+        if(empty($data) || $data->is_paid == Order::ORDER_PAYMENT_PAID){
             return response()->json(['code' => '302', 'error' => 'Invalid Order']);
         }
 
         // Condition to Be add
         if(true){
-            $data->is_paid = 1;
+            $data->is_paid = Order::ORDER_PAYMENT_PAID;
             $data->save();
 
             if($data->order_type == Order::SUBSCRIPTION_ORDER_TYPE){
@@ -93,7 +94,6 @@ class OrderController extends Controller
                 $obj->user_id = $data->user_id;
                 $obj->subscription_plan_id = $data->subscription_plan_id;
                 $obj->expire_date = $expireDate;
-                $obj->is_subscribe = 1;
                 $obj->save();
 
                 $user = User::find($data->user_id);

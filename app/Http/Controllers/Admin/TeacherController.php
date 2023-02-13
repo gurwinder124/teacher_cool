@@ -26,6 +26,7 @@ class TeacherController extends Controller
                 ->select('users.*','teacher_settings.id_proof','teacher_settings.document_path','teacher_settings.expected_income',
                 'teacher_settings.preferred_currency','content_categories.category_name as subject','teacher_settings.category')
                 ->where('users.requested_for_teacher', 1)
+                ->where('users.email_verified_at','!=', null)
                 ->where('users.teacher_status', User::TEACHER_STATUS_PENDING);
 
             if($keyword && $keyword != ''){

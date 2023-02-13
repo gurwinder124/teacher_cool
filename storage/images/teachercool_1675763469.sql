@@ -581,7 +581,7 @@ CREATE TABLE `orders` (
   `subscription_plan_id` bigint UNSIGNED DEFAULT NULL,
   `content_id` bigint UNSIGNED DEFAULT NULL,
   `order_type` tinyint NOT NULL,
-  `is_paid` tinyint NOT NULL DEFAULT '0' COMMENT 'not-paid=0; paid=1',
+  `is_paid` tinyint NOT NULL DEFAULT '0' COMMENT 'not-paid=2; paid=1',
   `total_amount` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `net_amount` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `discount` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',

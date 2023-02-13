@@ -20,6 +20,7 @@ class AdminOrderController extends Controller
             $keyword = $request->keyword;
             $user_type = $request->user_type;
             $page_size = ($request->page_size)? $request->page_size : 10;
+            $is_paid = ($request->is_paid)? $request->is_paid : false;
             $sort = $request->sort;
             
             $data = DB::table('orders')
@@ -37,6 +38,9 @@ class AdminOrderController extends Controller
 
             if($user_type){
                 $data = $data->where('users.user_type', $user_type);
+            }
+            if($is_paid){
+                $data = $data->where('orders.is_paid', $is_paid);
             }
             
             if($sort == 'asc'){

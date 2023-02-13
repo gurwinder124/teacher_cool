@@ -218,52 +218,54 @@ class LoginController extends Controller
 
     public function verifyEmail($code)
     {
+        try {
+            $data = User::where('email_verify_code', '=', $code)->first();
+            if(!$data){
+                return view('verify-email',  ['isValid' => false]);
+            }
+            $updateData = User::where('email_verify_code', '=', $code)
+                    ->update(['email_verified_at' => date('Y-m-d H:i:s'), 'email_verify_code' => null]);
+                    
+            if($updateData && $data->requested_for_teacher){
+                $teacherEmailData=[
+                    'to'=>$data->email,
+                    'name'=>$data->name,
+                    'body' =>"Your Request as Teacher has been Pending for approval. We will revert you within 24hrs." ,
+                    'subject' => "Regarding Approval Request"
+                ];
+                dispatch(new TeacherStatus($teacherEmailData))->afterResponse();
+                $adminEmailData=[
+                    'to'=>'teachercool@yopmail.com',
+                    'name'=>'Teacher Cool',
+                    'body' =>"New teacher, ".$data->name." has been Register with ".$data->email." email." ,
+                    'subject' => "Regarding Teacher Approval"
+                ];
+                dispatch(new AdminEmail($adminEmailData))->afterResponse();
+            }
 
-        $data = User::where('email_verify_code', '=', $code)->first();
-        
-        if(!$data){
+            // return sendResponse([], "Email Verified");
+            // $html =  `<!DOCTYPE html>
+            // <html lang="en">
+            // <head>
+            //     <meta charset="UTF-8">
+            //     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            //     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            //     <title>Teacher Cool</title>
+            // </head>
+            // <body>
+            //     <h1>Verification Completed</h1>
+            // </body>
+            // </html>
+            
+            // `;
+            // echo $html;
+            if($updateData){
+                return view('verify-email',  ['isValid' => true]);
+            }
+            return view('verify-email',  ['isValid' => false]);
+        } catch (Exception $e) {
             return view('verify-email',  ['isValid' => false]);
         }
-
-        $updateData = User::where('email_verify_code', '=', $code)
-                ->update(['email_verified_at' => date('Y-m-d H:i:s'), 'email_verify_code' => null]);
-        if($updateData){
-            $teacherEmailData=[
-                'to'=>$data->email,
-                'name'=>$data->name,
-                'body' =>"Your Request as Teacher has been Pending for approval. We will revert you within 24hrs." ,
-                'subject' => "Regarding Approval Request"
-            ];
-            dispatch(new TeacherStatus($teacherEmailData))->afterResponse();
-            $adminEmailData=[
-                'to'=>'teachercool@yopmail.com',
-                'name'=>'Teacher Cool',
-                'body' =>"New teacher, ".$data->name." has been Register with ".$data->email." email." ,
-                'subject' => "Regarding Teacher Approval"
-            ];
-            dispatch(new AdminEmail($adminEmailData))->afterResponse();
-        }
-
-        // return sendResponse([], "Email Verified");
-        // $html =  `<!DOCTYPE html>
-        // <html lang="en">
-        // <head>
-        //     <meta charset="UTF-8">
-        //     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        //     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        //     <title>Teacher Cool</title>
-        // </head>
-        // <body>
-        //     <h1>Verification Completed</h1>
-        // </body>
-        // </html>
-        
-        // `;
-        // echo $html;
-        // die;
-        return view('verify-email',  ['isValid' => true]);
-        
-        
     }
 
     public function sendSMS($data){
