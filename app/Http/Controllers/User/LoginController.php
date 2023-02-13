@@ -173,7 +173,7 @@ class LoginController extends Controller
                 $teacherSetting->working_hours = $request->working_hours;
                 $teacherSetting->expected_income = $request->expected_income;
                 $teacherSetting->preferred_currency = $request->preferred_currency;
-                $teacherSetting->subject = $request->subject;
+                $teacherSetting->subject_id = $request->subject;
                 $teacherSetting->category = $request->category;
                 $saveTeacher=$teacherSetting->save();
             }
@@ -216,22 +216,16 @@ class LoginController extends Controller
         }
     }
 
-    public function verifyEmail(Request $request){
-        $email_code = $request->code;
+    public function verifyEmail($code)
+    {
 
-        if(!$email_code) {
-            echo sendError("Invalid Link", '302');
-            die;
-        }
-
-        $data = User::where('email_verify_code', '=', $email_code)->first();
+        $data = User::where('email_verify_code', '=', $code)->first();
         
         if(!$data){
-            echo sendError("Invalid Link", [], '302');
-            die;
+            return view('verify-email',  ['isValid' => false]);
         }
 
-        $updateData = User::where('email_verify_code', '=', $email_code)
+        $updateData = User::where('email_verify_code', '=', $code)
                 ->update(['email_verified_at' => date('Y-m-d H:i:s'), 'email_verify_code' => null]);
         if($updateData){
             $teacherEmailData=[
@@ -251,22 +245,23 @@ class LoginController extends Controller
         }
 
         // return sendResponse([], "Email Verified");
-        $html =  `<!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta http-equiv="X-UA-Compatible" content="IE=edge">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Teacher Cool</title>
-        </head>
-        <body>
-            <h1>Verification Completed</h1>
-        </body>
-        </html>
+        // $html =  `<!DOCTYPE html>
+        // <html lang="en">
+        // <head>
+        //     <meta charset="UTF-8">
+        //     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        //     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        //     <title>Teacher Cool</title>
+        // </head>
+        // <body>
+        //     <h1>Verification Completed</h1>
+        // </body>
+        // </html>
         
-        `;
-        echo $html;
-        die;
+        // `;
+        // echo $html;
+        // die;
+        return view('verify-email',  ['isValid' => true]);
         
         
     }

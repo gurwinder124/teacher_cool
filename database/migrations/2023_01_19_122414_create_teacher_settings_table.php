@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('working_hours')->nullable();
             $table->string('expected_income')->nullable();
             $table->string('preferred_currency')->nullable();
-            $table->string('subject')->nullable();
+            $table->integer('subject_id')->nullable();
             $table->string('category')->nullable();
             $table->timestamps();
         });

@@ -34,7 +34,10 @@
             </tr>
             <tr>
                 <td style="color: #333333; padding: 0 40px 0 ;word-break: break-all; font-size:16px; line-height: 26px;" >
-                <a href="https://stgps.appsndevs.com/teachercool/api/v1/verify-email?code="{{$verifyCode }} >Verify Email</a></td>
+                <!-- <a href="https://stgps.appsndevs.com/teachercool/api/v1/verify-email?code="{{$verifyCode }} >Verify Email</a></td> -->
+                <a href={{url('/verify-email')}}/{{ $verifyCode }} >
+                    <button class="btn btn-primary" type="button">Verify Your Email</button>
+                </a></td>
             </tr>
             <tr>
                 <td style="padding: 50px 0 15px;font-size: 13px;color: #888888;">Teacher Cool  - All copyrights reserved 2023</td>
