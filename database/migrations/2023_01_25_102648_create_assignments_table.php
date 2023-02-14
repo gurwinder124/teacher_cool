@@ -25,8 +25,8 @@ return new class extends Migration
             $table->string('assingment_path')->nullable();
             $table->longText('assignment_answer')->nullable();
             $table->string('assignment_answer_path')->nullable();
-            $table->tinyInteger('assignment_status');
-            $table->tinyInteger('is_paid_to_teacher');
+            $table->tinyInteger('assignment_status')->dafault(1)->comment('pending=1; submitted=2; approved=3');;
+            $table->tinyInteger('is_paid_to_teacher')->dafault(0);
             $table->dateTime('due_date');
             $table->timestamps();
         });
