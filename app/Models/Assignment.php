@@ -18,6 +18,7 @@ class Assignment extends Model
     public static function assignmentStatus()
     {
         return [
+            ['value'=>0, 'name' => "All"],
             ['value'=>static::ASSIGNMENT_STATUS_PENDING, 'name' => "Pending"],
             ['value'=>static::ASSIGNMENT_STATUS_SUBMITTED, 'name' =>  "Submitted"],
             ['value'=>static::ASSIGNMENT_STATUS_APPROVED, 'name' =>  "Approved"],

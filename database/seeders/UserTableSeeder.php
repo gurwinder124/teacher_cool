@@ -15,14 +15,14 @@ class UserTableSeeder extends Seeder
      */
     public function run()
     {
-        User::factory()->count(50)->create();
+        User::factory()->count(20)->create();
 
-        for($i = 0; $i< 50; $i++){
+        for($i = 0; $i< 20; $i++){
             DB::table('user_details')->insert([
                 'id' => $i+1,
                 'user_id' => $i+1,
                 'gender' => 'male',
-                'age' => '25',
+                'age' => rand(21, 49),
                 'contact' => rand(7162100000, 9962113343),
                 'city'=>'mohali',
                 'state'=>'punjab',
@@ -33,7 +33,7 @@ class UserTableSeeder extends Seeder
             ]);
         }
 
-        for($i = 0; $i< 10; $i++){
+        for($i = 0; $i< 5; $i++){
             DB::table('teacher_settings')->insert([
                 'id' => $i+1,
                 'user_id' => $i+1,

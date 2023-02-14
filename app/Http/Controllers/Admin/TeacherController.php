@@ -76,24 +76,23 @@ class TeacherController extends Controller
             $data->teacher_status = $request->status;
             if($request->status == User::TEACHER_STATUS_APPROVED){
                 $data->user_type = User::TEACHER_TYPE;
-                $welcomeData=[
+                $emailData=[
                     'to'=>$data->email,
                     'name'=>$data->name,
                     'body' =>"Your Request as Teacher has been approved. Please login with your credentials." ,
                     'subject' => "Regarding Approval"
                 ];
-                dispatch(new TeacherStatus($welcomeData))->afterResponse();
+                
             }
             if($request->status == User::TEACHER_STATUS_DISAPPROVED){
-                $rejectData=[
+                $emailData=[
                     'to'=>$data->email,
                     'name'=>$data->name,
-                    // 'verifyCode'=>$verifyCode,
                     'body' =>"Unfortunately your request has been disapproved." ,
                     'subject' => "Regarding Disapproval"
                 ];
-                dispatch(new TeacherStatus($rejectData))->afterResponse();
             }
+            dispatch(new TeacherStatus($emailData))->afterResponse();
             $data->save();
 
             //Send email Notification Pending

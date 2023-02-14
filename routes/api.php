@@ -13,7 +13,7 @@ use App\Http\Controllers\Admin\AdminOrderController;
 use App\Http\Controllers\Admin\AdminTransactionController;
 use App\Http\Controllers\Admin\AssignmentController;
 use App\Http\Controllers\Admin\ContentCategoryController;
-use App\Http\Controllers\Admin\OrderPaymentController;
+use App\Http\Controllers\Admin\AssignmentPaymentController;
 use App\Http\Controllers\User\DashboardContentController;
 use App\Http\Controllers\User\LoginController;
 use App\Http\Controllers\User\UserController;
@@ -133,8 +133,8 @@ Route::prefix('admin')->group(function (){
         Route::post('admin-payment/{id}',[AdminTransactionController::class,'editPayment']);
         
         //Order Payment Management
-        Route::get('order-payment',[OrderPaymentController::class,'getPaymentList']);
-        Route::get('order-payment/{id}',[OrderPaymentController::class,'getSinglePayment']);
+        Route::get('order-payment',[AssignmentPaymentController::class,'getPaymentList']);
+        Route::get('order-payment/{id}',[AssignmentPaymentController::class,'getSinglePayment']);
 
 
 
