@@ -60,7 +60,7 @@ class LoginController extends Controller
                     }
                     return response()->json([$success, "msg"=> 'You are successfully logged in.']);
                 }
-                return sendError('Account not Activated');
+                return sendError('Account not Activated',[], 403);
                 
                
             }else {
