@@ -84,12 +84,15 @@ class AssignmentController extends Controller
                 return response()->json(['code' => '302', 'error' => $validator->errors()]);
             }
             $ids=$request->id;
+            if($request->assignment_status != Assignment::ASSIGNMENT_STATUS_APPROVED && $request->assignment_status != Assignment::ASSIGNMENT_STATUS_REJECTED){
+                return sendError('Invalid Status Request');
+            }
             foreach($ids as $id){
                 $assignment = Assignment::find($id);
                 if(!$assignment){
                     return sendError('No data found for given Id');
                 }
-                if($assignment->assignment_status == (Assignment::ASSIGNMENT_STATUS_PENDING)||(Assignment::ASSIGNMENT_STATUS_SUBMITTED)||(Assignment::ASSIGNMENT_STATUS_APPROVED)){
+                if($assignment->assignment_status == Assignment::ASSIGNMENT_STATUS_SUBMITTED){
                     $assignment->assignment_status = $request->assignment_status;
                 }
                 $assignment->save();
