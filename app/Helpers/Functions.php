@@ -30,7 +30,7 @@ function sendError($error, $errorMessages = [], $code = 404)
 {
     $response = [
         'success' => false,
-        'message' => $error,
+        'error' => $error,
     ];
 
     !empty($errorMessages) ? $response['data'] = $errorMessages : null;
