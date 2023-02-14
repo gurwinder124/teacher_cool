@@ -133,8 +133,8 @@ Route::prefix('admin')->group(function (){
         Route::post('admin-payment/{id}',[AdminTransactionController::class,'editPayment']);
         
         //Order Payment Management
-        Route::get('order-payment',[AssignmentPaymentController::class,'getPaymentList']);
-        Route::get('order-payment/{id}',[AssignmentPaymentController::class,'getSinglePayment']);
+        Route::get('order-payment',[AssignmentPaymentController::class,'paymentList']);
+        Route::get('order-payment/{id}',[AssignmentPaymentController::class,'singlePaymentTeacher']);
 
 
 

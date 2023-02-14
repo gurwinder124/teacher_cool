@@ -29,6 +29,7 @@ return new class extends Migration
             $table->tinyInteger('assignment_status')->dafault(1)->comment('pending=1; submitted=2; approved=3');
             $table->tinyInteger('is_paid_to_teacher')->dafault(0)->comment('not-paid=0; paid=1;');;
             $table->dateTime('due_date');
+            $table->dateTime('answered_on')->nullable();
             $table->timestamps();
         });
     }
