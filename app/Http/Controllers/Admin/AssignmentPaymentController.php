@@ -14,16 +14,13 @@ class AssignmentPaymentController extends Controller
     public function getPaymentList(Request $request)
     {
         try {
-            $data = DB::table('assignments')
-                ->join('users', 'users.id', '=', 'assignments.teacher_id')
-                ->select('users.name as teacher_name', 'users.email as teacher_email','users.name as teacher_name',
-                'assignments.assignment_id', 'assignments.category','assignments.title', 'assignments.teacher_id', 
-                'assignments.is_paid_to_teacher','assignments.assignment_status', 'assignments.due_date')
-                ->where('assignments.assignment_status', Assignment::ASSIGNMENT_STATUS_APPROVED)
+            $data = DB::table('users')
+                ->join('assignments', 'users.id', '=', 'assignments.teacher_id')
+                // ->select('users.name', 'users.email','assignments.assignment_id', 'assignments.category','assignments.title', 'assignments.teacher_id', 
+                // 'assignments.is_paid_to_teacher','assignments.assignment_status', 'assignments.due_date')
+                ->selectRaw('count(assignments.id) as assignments_count, users.name, users.email, assignments.teacher_id')
+                ->groupBy('teacher_id')
                 ->get();
-                // ->groupBy(function($data) {
-                //     return $data->teacher_id;
-                // });
         return sendResponse($data);
         }catch (Exception $e){
             return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
@@ -34,10 +31,11 @@ class AssignmentPaymentController extends Controller
     public function getSinglePayment($id)       
     {
         try {
-            $getPayment = OrderPayment::find($id);
+            // $getPayment = OrderPayment::find($id);
+            // return sendResponse($getPayment,200);
         }catch (Exception $e){
             return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
         }
-        return sendResponse($getPayment,200);
+        
     }
 }
