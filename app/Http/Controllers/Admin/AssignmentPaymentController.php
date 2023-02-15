@@ -8,6 +8,7 @@ use App\Models\Assignment;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\Content;
 
 class AssignmentPaymentController extends Controller
 {
@@ -65,6 +66,7 @@ class AssignmentPaymentController extends Controller
                 'data'    => $data,
                 'message' => 'Success',
                 'all_assignment_status' => Assignment::assignmentStatus(),
+                'category_status' => Content::getContentCategory(),
             ];
             return response()->json($response, 200);
         }catch (Exception $e){
