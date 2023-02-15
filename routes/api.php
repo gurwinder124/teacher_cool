@@ -135,8 +135,7 @@ Route::prefix('admin')->group(function (){
         //Order Payment Management
         Route::get('order-payment',[AssignmentPaymentController::class,'paymentList']);
         Route::get('single-order-payment',[AssignmentPaymentController::class,'singlePaymentTeacher']);
-
-
+        Route::post('block-order-payment',[AssignmentPaymentController::class,'blockTeacherPayment']);
 
     });
 });
