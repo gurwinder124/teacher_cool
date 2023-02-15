@@ -16,10 +16,10 @@ class AssignmentPaymentController extends Controller
         try {
             $data = DB::table('users')
                 ->join('assignments', 'users.id', '=', 'assignments.teacher_id')
-                ->selectRaw('count(assignments.id) as assignments_count, users.name, users.email, assignments.teacher_id')
-                ->groupBy('teacher_id')
+                ->selectRaw('count(assignments.id) as assignments_count, users.name, users.email, assignments.teacher_id, DATE(assignments.answered_on) as answered_on_date ')
+                ->groupBy('teacher_id','answered_on_date')
                 ->get();
-            // return sendResponse($data);
+            return sendResponse($data);
         }catch (Exception $e){
             return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
         }
