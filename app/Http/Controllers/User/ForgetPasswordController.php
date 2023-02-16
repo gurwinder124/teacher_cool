@@ -28,14 +28,11 @@ class ForgetPasswordController extends Controller
             if (count($user) > 0) {
                 $token = Str::random(40);
 
-                $url = env('APP_URL_FRONT').'/reset-password?token=' . $token;
-
-                $name = $user[0]['name'];
-                $user['to'] = $request->email;
+                $url = env('APP_URL_FRONT').'/reset-password/' . $token;
                 $data = [
                     'url' => $url,
-                    'name' => $name,
-                    'email' => $request->email,
+                    'name' => $user[0]['name'],
+                    'to' => $request->email,
                     'subject' => "Reset password"
                 ];
                 dispatch(new ResetPassword($data))->afterResponse();

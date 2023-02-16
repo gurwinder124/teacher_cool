@@ -13,6 +13,8 @@ use Str;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Exception;
+use App\Jobs\ResetPassword;
+
 class AdminForgetPasswordController extends Controller
 {
     public function forgetPassword(Request $request)
@@ -22,21 +24,15 @@ class AdminForgetPasswordController extends Controller
             if (count($user) > 0) {
                 $token = Str::random(40);
 
-                $url = '/reset-password?token=' . $token;
-
-                $name = $user[0]['name'];
-                $user['to'] = $request->email;
-                
+                $url = env('APP_URL_FRONT').'/admin/reset-password/' . $token;
                 $data = [
                     'url' => $url,
-                    'name' => $name,
-                    'email' => $request->email,
-                    'title' => "Reset password"
+                    'name' => $user[0]['name'],
+                    'to' => $request->email,
+                    'subject' => "Reset password"
                 ];
+                dispatch(new ResetPassword($data))->afterResponse();
 
-                // Mail::send('forgetPasword', $data, function ($message) use ($user) {
-                //     $message->to($user['to'])->subject('Regarding password reset');
-                // });
                 $datetime = Carbon::now()->format('Y-m-d H:i:s');
                 PasswordReset::updateOrCreate(
                     ['email' => $request->email],
