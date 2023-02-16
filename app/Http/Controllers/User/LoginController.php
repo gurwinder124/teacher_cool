@@ -48,9 +48,15 @@ class LoginController extends Controller
                 $user= Auth::user();
                
                 if($user->is_active && $user->email_verified_at != null){
-                    // dd("test");
                     $success['user']  = $user;
-                    if ($user->teacher_status == User::TEACHER_STATUS_APPROVED) {
+                    if ($user->user_type == User::TEACHER_TYPE) {
+                        if($user->teacher_status == User::TEACHER_STATUS_PENDING){
+                            $data['profile_status']  = 'pending';
+                            return sendResponse($data, 'Your Profile is in Review');
+                        }elseif($user->teacher_status == User::TEACHER_STATUS_DISAPPROVED){
+                            $data['profile_status']  = 'rejected';
+                            return sendResponse($data,'Unfortunately, Your Profile is Rejected');
+                        }
                         $success['user_type']  = 'teacher';
                         $success['token'] = $user->createToken('accessToken', ['teacher'])->accessToken;
                     }
@@ -58,7 +64,8 @@ class LoginController extends Controller
                         $success['user_type']  = 'student';
                         $success['token'] = $user->createToken('accessToken', ['user'])->accessToken;
                     }
-                    return response()->json([$success, "msg"=> 'You are successfully logged in.']);
+                    return sendResponse($success, 'You are successfully logged in.');
+                    // return response()->json([$success, "msg"=> 'You are successfully logged in.']);
                 }
                 return sendError('Account not Activated',[], 403);
                 

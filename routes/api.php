@@ -72,17 +72,22 @@ Route::prefix('admin')->group(function (){
     Route::post('forget_password', [AdminForgetPasswordController::class, 'forgetPassword']);
     Route::get('reset_password', [AdminForgetPasswordController::class, 'resetPassword']);
     Route::post('update-new-password', [AdminForgetPasswordController::class, 'updateNewPassword']);
-    //protected route
+
+    //Protected route Both for Super Admin and Sub-admin
+    Route::middleware(['auth:admin-api','scope:admin,sub-admin'])->group(function () {
+        // Profile Routes
+        Route::get('profile', [AdminController::class, 'profile']);
+        Route::post('edit-profile', [AdminController::class, 'editProfile']);
+        Route::post('change-password', [AdminController::class, 'changePassword']);
+    });
+
+    //Protected route Only for Super Admin
     Route::middleware(['auth:admin-api','scopes:admin'])->group(function () {
         //Users 
         Route::get('', [AdminController::class, 'index']);
         Route::get('users', [AdminController::class, 'getUsers']);
         Route::get('users/{id}', [AdminController::class, 'userDetails']);
         Route::delete('users', [AdminController::class, 'deleteUsers']);
-
-        Route::get('profile', [AdminController::class, 'profile']);
-        Route::post('edit-profile', [AdminController::class, 'editProfile']);
-        Route::post('change-password', [AdminController::class, 'changePassword']);
 
         // Sub Admins
         Route::post('sub-admin', [AdminController::class, 'addSubAdmin']);
