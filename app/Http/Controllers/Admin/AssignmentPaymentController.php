@@ -52,7 +52,6 @@ class AssignmentPaymentController extends Controller
     {
         try {
             $teacher_id = $request->teacher_id;
-            // $date = ($request->date)? date("Y-m-d", strtotime($request->date)): null;
             $start_date = ($request->start_date)? date("Y-m-d", strtotime($request->start_date)): null;
             $end_date = ($request->end_date)? date("Y-m-d", strtotime($request->end_date)): null;
 
@@ -62,11 +61,11 @@ class AssignmentPaymentController extends Controller
             if($teacher_id < 1 ){
                 return sendError('Invalid Request');
             }
-            $data = DB::table('users')
-                ->join('assignments', 'users.id', '=', 'assignments.teacher_id')
-                ->select('users.name', 'users.email','assignments.id','assignments.amount', 'assignments.assignment_id', 'assignments.category','assignments.title', 'assignments.teacher_id', 'assignments.is_paid_to_teacher','assignments.assignment_status', 'assignments.due_date','assignments.answered_on_date','assignments.answered_on_time')
+            $data = DB::table('assignments')
+                ->join('users as teacher', 'teacher.id', '=', 'assignments.teacher_id')
+                ->join('users as student', 'student.id', '=', 'assignments.user_id')
+                ->select('teacher.name as teacher_name', 'teacher.email as teacher_email','student.name as student_name','assignments.id','assignments.amount', 'assignments.assignment_id', 'assignments.category','assignments.title', 'assignments.teacher_id', 'assignments.is_paid_to_teacher','assignments.assignment_status', 'assignments.due_date','assignments.answered_on_date','assignments.answered_on_time')
                 ->where('teacher_id', $teacher_id);
-                // ->where('assignments.answered_on_date','=', $date);
 
             if($start_date && $start_date != ''){
                 $data = $data->where('assignments.answered_on_date','>=', $start_date);
