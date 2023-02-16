@@ -66,7 +66,7 @@ class ForgetPasswordController extends Controller
                 return response()->json(['code' => '302', 'error' => $validator->errors()]);
             }
 
-            $resetData = DB::table('reset_code_passwords')
+            $resetData = DB::table('password_resets')
                     ->select('email')
                     ->where('token', $request->token)
                     ->first();
