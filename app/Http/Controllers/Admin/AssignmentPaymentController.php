@@ -22,8 +22,9 @@ class AssignmentPaymentController extends Controller
             $page_size = ($request->page_size)? $request->page_size : 10;
 
             $data = DB::table('users')
+                ->join('teacher_settings', 'users.id', '=', 'teacher_settings.user_id')
                 ->join('assignments', 'users.id', '=', 'assignments.teacher_id')
-                ->selectRaw('count(assignments.id) as assignments_count, users.name, users.email, users.teacher_id_number, users.is_payment_block, assignments.teacher_id ');
+                ->selectRaw('count(assignments.id) as assignments_count, users.name, users.email, users.teacher_id_number, users.is_payment_block, teacher_settings.category, assignments.teacher_id ');
             if($keyword && $keyword != ''){
                 $data = $data->where(function($query) use ($keyword){
                             $query->where('users.name', 'like', '%'.$keyword.'%')
