@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Assignment;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-
+use App\Models\Content;
 
 class AssignmentController extends Controller
 {
@@ -48,6 +48,7 @@ class AssignmentController extends Controller
                 'data'    => $data,
                 'message' => 'Success',
                 'all_assignment_status' => Assignment::assignmentStatus(),
+                'category_status' => Content::getContentCategory(),
             ];
         
             return response()->json($response, 200);

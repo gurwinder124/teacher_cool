@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use Str;
 use DB;
 use App\Http\Controllers\Controller;
+use App\Jobs\ResetPassword;
 
 class ForgetPasswordController extends Controller
 {
@@ -19,7 +20,7 @@ class ForgetPasswordController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                'email'    => 'required|email'
+                'email' => 'required|email'
             ]);
             if ($validator->fails()) return sendError('Validation Error.', $validator->errors(), 422);
 
@@ -27,7 +28,7 @@ class ForgetPasswordController extends Controller
             if (count($user) > 0) {
                 $token = Str::random(40);
 
-                $url = '/reset-password?token=' . $token;
+                $url = env('APP_URL_FRONT').'/reset-password?token=' . $token;
 
                 $name = $user[0]['name'];
                 $user['to'] = $request->email;
@@ -35,12 +36,10 @@ class ForgetPasswordController extends Controller
                     'url' => $url,
                     'name' => $name,
                     'email' => $request->email,
-                    'title' => "Reset password"
+                    'subject' => "Reset password"
                 ];
+                dispatch(new ResetPassword($data))->afterResponse();
 
-                // Mail::send('forgetPasword', $data, function ($message) use ($user) {
-                //     $message->to($user['to'])->subject('Regarding password reset');
-                // });
                 $datetime = Carbon::now()->format('Y-m-d H:i:s');
                 PasswordReset::updateOrCreate(
                     ['email' => $request->email],
