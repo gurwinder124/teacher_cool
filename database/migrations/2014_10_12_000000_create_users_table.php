@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('profile_path')->nullable();
+            $table->string('teacher_id_number')->nullable()->unique();
+            $table->tinyInteger('is_payment_block')->dafault(0)->comment('not-block=0; blocked=1;');
             $table->tinyInteger('user_type')->default(2)->comment('Teacher=1; Student=2');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

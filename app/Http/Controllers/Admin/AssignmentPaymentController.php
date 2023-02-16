@@ -17,27 +17,28 @@ class AssignmentPaymentController extends Controller
     {
         try {
             $keyword = $request->keyword;
-            $start_date = ($request->start_date)? date("Y-m-d", strtotime($request->start_date)): null;
-            $end_date = ($request->end_date)? date("Y-m-d", strtotime($request->end_date)): null;
+            
+            $sort = $request->sort;
+            $page_size = ($request->page_size)? $request->page_size : 10;
 
             $data = DB::table('users')
                 ->join('assignments', 'users.id', '=', 'assignments.teacher_id')
-                ->selectRaw('count(assignments.id) as assignments_count, users.name, users.email, assignments.teacher_id, assignments.answered_on_date ');
+                ->selectRaw('count(assignments.id) as assignments_count, users.name, users.email, users.teacher_id_number, users.is_payment_block, assignments.teacher_id ');
             if($keyword && $keyword != ''){
                 $data = $data->where(function($query) use ($keyword){
                             $query->where('users.name', 'like', '%'.$keyword.'%')
                             ->orWhere('users.email', 'like', '%'.$keyword.'%');
                         });
             }
-            if($start_date && $start_date != ''){
-                $data = $data->where('assignments.answered_on_date','>=', $start_date);
-            }
+            
 
-            if($end_date && $end_date != ''){
-                $data = $data->where('assignments.answered_on_date','<=', $end_date);
+            if($sort == 'asc'){
+                $data = $data->orderBy('users.name');
+            }else{
+                $data = $data->orderByDesc('users.name');
             }
-
-            $data = $data->groupBy('teacher_id','assignments.answered_on_date')->get();
+            $data = $data->groupBy('teacher_id')
+                        ->paginate($page_size);
 
             return sendResponse($data);
         }catch (Exception $e){
@@ -50,18 +51,37 @@ class AssignmentPaymentController extends Controller
     {
         try {
             $teacher_id = $request->teacher_id;
-            $date = ($request->date)? date("Y-m-d", strtotime($request->date)): null;
+            // $date = ($request->date)? date("Y-m-d", strtotime($request->date)): null;
+            $start_date = ($request->start_date)? date("Y-m-d", strtotime($request->start_date)): null;
+            $end_date = ($request->end_date)? date("Y-m-d", strtotime($request->end_date)): null;
+
+            $sort = $request->sort;
+            $page_size = ($request->page_size)? $request->page_size : 10;
             
-            if($teacher_id < 1 || $date == null){
+            if($teacher_id < 1 ){
                 return sendError('Invalid Request');
             }
             $data = DB::table('users')
                 ->join('assignments', 'users.id', '=', 'assignments.teacher_id')
                 ->select('users.name', 'users.email','assignments.id','assignments.amount', 'assignments.assignment_id', 'assignments.category','assignments.title', 'assignments.teacher_id', 'assignments.is_paid_to_teacher','assignments.assignment_status', 'assignments.due_date','assignments.answered_on_date','assignments.answered_on_time')
-                ->where('teacher_id', $teacher_id)
-                ->where('assignments.answered_on_date','=', $date)
-                ->get();
-                // return sendResponse($data);
+                ->where('teacher_id', $teacher_id);
+                // ->where('assignments.answered_on_date','=', $date);
+
+            if($start_date && $start_date != ''){
+                $data = $data->where('assignments.answered_on_date','>=', $start_date);
+            }
+
+            if($end_date && $end_date != ''){
+                $data = $data->where('assignments.answered_on_date','<=', $end_date);
+            }
+
+            if($sort == 'asc'){
+                $data = $data->orderBy('assignments.answered_on_date');
+            }else{
+                $data = $data->orderByDesc('assignments.answered_on_date');
+            }
+            $data = $data->paginate($page_size);
+
             $response = [
                 'success' => true,
                 'data'    => $data,
@@ -81,7 +101,7 @@ class AssignmentPaymentController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                'assignment_id' => 'required|integer',
+                'teacher_id' => 'required|integer',
                 'block_status' => 'required|integer',
             ]);
 
@@ -89,18 +109,18 @@ class AssignmentPaymentController extends Controller
                 return response()->json(['code' => '302', 'error' => $validator->errors()]);
             }
 
-            $assignment_id = $request->assignment_id;
+            $teacher_id = $request->teacher_id;
             $status = $request->block_status;
 
             if($status != 0 && $status !=  1){
                 return sendError('Invalid Request');
             }
 
-            if($assignment_id < 1){
+            if($teacher_id < 1){
                 return sendError('Invalid Request');
             }
 
-            $data = Assignment::find($assignment_id);
+            $data = User::find($teacher_id);
             if(!$data){
                 return sendError('Invalid Request', [], 404);
             }
