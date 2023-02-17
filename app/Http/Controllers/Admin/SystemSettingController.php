@@ -23,28 +23,28 @@ class SystemSettingController extends Controller
         return sendResponse($payment,200);
     }
 
-    // public function addPayment(Request $request)   
-    // {
-    //     try {
-    //         $validator = Validator::make($request->all(), [
-    //             'teacher_cool_weightage' => 'required',
-    //             // 'teacher_weightage' => 'required',
-    //             'rate_per_assignment' => 'required',
-    //         ]);
-    //         if ($validator->fails()) {
-    //             return response()->json(['code' => '302', 'error' => $validator->errors()]);
-    //         }
-    //         $payment = new SystemSetting;
-    //         $payment->teacher_cool_weightage=$request->teacher_cool_weightage;
-    //         // $payment->teacher_weightage = $request->teacher_weightage;
-    //         $payment->rate_per_assignment = $request->rate_per_assignment;
-    //         $payment->discount = ($request->discount)? $request->discount : 0;
-    //         $payment->save();
-    //     } catch (Exception $e){
-    //         return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
-    //     }
-    //     return sendResponse($payment,'Transaction added successfully');
-    // }
+    public function addPayment(Request $request)   
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'teacher_cool_weightage' => 'required',
+                // 'teacher_weightage' => 'required',
+                'rate_per_assignment' => 'required',
+            ]);
+            if ($validator->fails()) {
+                return response()->json(['code' => '302', 'error' => $validator->errors()]);
+            }
+            $payment = new SystemSetting;
+            $payment->teacher_cool_weightage=$request->teacher_cool_weightage;
+            // $payment->teacher_weightage = $request->teacher_weightage;
+            $payment->rate_per_assignment = $request->rate_per_assignment;
+            $payment->discount = ($request->discount)? $request->discount : 0;
+            $payment->save();
+        } catch (Exception $e){
+            return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
+        }
+        return sendResponse($payment,'Transaction added successfully');
+    }
 
     public function editPayment($id,Request $request)
     {
