@@ -228,21 +228,62 @@ class LoginController extends Controller
         }
     }
 
-    public function verifyEmail(Request $request)
+    // public function verifyEmail(Request $request)
+    // {
+    //     try {
+    //         $validator = Validator::make($request->all(), [
+    //             'email_token' => 'required',
+    //         ]);
+    //         if ($validator->fails()) {
+    //             return response()->json(['code' => '302', 'error' => $validator->errors()]);
+    //         }
+
+    //         $data = User::where('email_verify_code', '=', $request->email_token)->first();
+    //         if(!$data){
+    //             return sendError('No record Found');
+    //         }
+    //         $updateData = User::where('email_verify_code', '=', $request->email_token)
+    //                 ->update(['email_verified_at' => date('Y-m-d H:i:s'), 'email_verify_code' => null]);
+                    
+    //         if($updateData && $data->requested_for_teacher){
+    //             $teacherEmailData=[
+    //                 'to'=>$data->email,
+    //                 'receiver_name'=>$data->name,
+    //                 'body' =>"Your Request as Teacher has been Pending for approval. We will revert you within 24hrs." ,
+    //                 'subject' => "Regarding Approval Request"
+    //             ];
+    //             dispatch(new TeacherStatus($teacherEmailData))->afterResponse();
+    //             $adminEmailData=[
+    //                 'to'=> env('ADMIN_EMAIL_ADDRESS'),
+    //                 'name'=>'Teacher Cool',
+    //                 'body' =>"New teacher, ".$data->name." has been Register with ".$data->email." email." ,
+    //                 'subject' => "Regarding Teacher Approval"
+    //             ];
+    //             dispatch(new AdminEmail($adminEmailData))->afterResponse();
+    //         }
+
+    //         if($updateData){
+    //             // return view('verify-email',  ['isValid' => true]);
+    //             return sendResponse('', 'Email Verified');
+    //         }
+    //         return sendError('Somthing went Wrong');
+    //     } catch (Exception $e) {
+    //         // return view('verify-email',  ['isValid' => false]);
+    //         return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
+    //     }
+    // }
+
+    public function verifyEmail($code)
     {
         try {
-            $validator = Validator::make($request->all(), [
-                'email_token' => 'required',
-            ]);
-            if ($validator->fails()) {
-                return response()->json(['code' => '302', 'error' => $validator->errors()]);
-            }
-
-            $data = User::where('email_verify_code', '=', $request->email_token)->first();
+            
+            $data = User::where('email_verify_code', '=', $code)->first();
+            
             if(!$data){
-                return sendError('No record Found');
+                return view('verify-email', ['isValid' => false]);
             }
-            $updateData = User::where('email_verify_code', '=', $request->email_token)
+            
+            $updateData = User::where('email_verify_code', '=', $code)
                     ->update(['email_verified_at' => date('Y-m-d H:i:s'), 'email_verify_code' => null]);
                     
             if($updateData && $data->requested_for_teacher){
@@ -261,15 +302,12 @@ class LoginController extends Controller
                 ];
                 dispatch(new AdminEmail($adminEmailData))->afterResponse();
             }
-
             if($updateData){
-                // return view('verify-email',  ['isValid' => true]);
-                return sendResponse('', 'Email Verified');
+                return view('verify-email',  ['isValid' => true]);
             }
-            return sendError('Somthing went Wrong');
+            return view('verify-email', ['isValid' => false]);
         } catch (Exception $e) {
-            // return view('verify-email',  ['isValid' => false]);
-            return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
+            return view('verify-email',  ['isValid' => false]);
         }
     }
 

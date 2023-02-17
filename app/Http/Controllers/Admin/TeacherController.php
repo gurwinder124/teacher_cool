@@ -93,7 +93,7 @@ class TeacherController extends Controller
                 $emailData=[
                     'to'=>$data->email,
                     'receiver_name'=>$data->name,
-                    'login_url'=> null,
+                    'login_url'=> false,
                     'body' =>"Unfortunately your request has been disapproved." ,
                     'subject' => "Regarding Disapproval"
                 ];

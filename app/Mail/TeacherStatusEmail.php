@@ -72,7 +72,7 @@ class TeacherStatusEmail extends Mailable
         $name = env('MAIL_FROM_NAME');
         $receiver_name = $this->data['receiver_name'];
         $body = $this->data['body'];
-        $login_url = $this->data['login_url'];
+        $login_url = (isset($this->data['login_url']))? $this->data['login_url'] : false;
 
         return $this->view('emails.teacherstatus')
                     ->from($address, $name)
