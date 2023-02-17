@@ -83,7 +83,7 @@ class TeacherController extends Controller
                 $data->user_type = User::TEACHER_TYPE;
                 $emailData=[
                     'to'=>$data->email,
-                    'name'=>$data->name,
+                    'receiver_name'=>$data->name,
                     'login_url'=> env('APP_URL_FRONT').'/teacher/login',
                     'body' =>"Your Request as Teacher has been approved. Please login with your credentials." ,
                     'subject' => "Regarding Approval"
@@ -92,8 +92,8 @@ class TeacherController extends Controller
             }else{
                 $emailData=[
                     'to'=>$data->email,
-                    'name'=>$data->name,
-                    'login_url'=> false,
+                    'receiver_name'=>$data->name,
+                    'login_url'=> null,
                     'body' =>"Unfortunately your request has been disapproved." ,
                     'subject' => "Regarding Disapproval"
                 ];

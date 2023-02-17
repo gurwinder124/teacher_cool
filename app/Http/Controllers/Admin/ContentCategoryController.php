@@ -12,7 +12,7 @@ class ContentCategoryController extends Controller
 {
     public function index(){
         try{
-            $categories= Subject::select('id','category_name')->get();
+            $categories= Subject::select('id','subject_name')->get();
             if(!$categories){
                 return sendError('No record Found');
             }
@@ -39,13 +39,14 @@ class ContentCategoryController extends Controller
         try{
             $validator = Validator::make($request->all(), [
                 // 'id' => 'required',
-                'category_name' => 'required',
+                'subject_name' => 'required',
             ]);
             if ($validator->fails()) {
                 return response()->json(['code' => '302', 'error' => $validator->errors()]);
             }
             $category=new Subject;
-            $category->category_name =$request->category_name;
+            $category->category_id = 1;
+            $category->subject_name =$request->subject_name;
             $category->save();
         }catch (Exception $e){
             return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
@@ -57,7 +58,7 @@ class ContentCategoryController extends Controller
         try{
             $validator = Validator::make($request->all(), [
                 // 'id' => 'required',
-                'category_name' => 'required',
+                'subject_name' => 'required',
             ]);
             if ($validator->fails()) {
                 return response()->json(['code' => '302', 'error' => $validator->errors()]);
@@ -66,7 +67,7 @@ class ContentCategoryController extends Controller
             if(!$category){
                 return sendError('No record found');
             }
-            $category->category_name = $request->category_name;
+            $category->subject_name = $request->subject_name;
             $category->save();
         }catch (Exception $e){
             return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
