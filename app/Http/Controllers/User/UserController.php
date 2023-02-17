@@ -81,7 +81,7 @@ class UserController extends Controller
                             ->update($data);
 
             if($userDetails){
-                return sendResponse($data, 'Updated Successfully');
+                return sendResponse($userData, 'Updated Successfully');
             }
             return sendError('Somthing went Wrong');
         } catch (Exception $e) {

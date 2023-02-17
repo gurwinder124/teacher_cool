@@ -56,7 +56,7 @@ Route::prefix('v1')->group(function () {
 
 
     //PROTDECTED ROUTES FOR BOTH TEACHER AND STUDENT
-    Route::middleware(['auth:api', 'scope:user, teacher'])->group(function (){
+    Route::middleware(['auth:api', 'scope:user,teacher'])->group(function (){
         Route::get('/profile', [UserController::class, 'index']);
         Route::post('edit-profile', [UserController::class, 'editProfile']);
         Route::get('/reffral', [UserController::class, 'genrateReaffral']);
