@@ -10,7 +10,7 @@ use App\Http\Controllers\Admin\TeacherController;
 use App\Http\Controllers\Admin\ContentController;
 use App\Http\Controllers\Admin\NewsLetterController;
 use App\Http\Controllers\Admin\AdminOrderController;
-use App\Http\Controllers\Admin\AdminTransactionController;
+use App\Http\Controllers\Admin\SystemSettingController;
 use App\Http\Controllers\Admin\AssignmentController;
 use App\Http\Controllers\Admin\ContentCategoryController;
 use App\Http\Controllers\Admin\AssignmentPaymentController;
@@ -144,9 +144,9 @@ Route::prefix('admin')->group(function (){
         Route::delete('subject/{id}',[ContentCategoryController::class,'destroy']);
 
         //Manage Payment or Teacher Cool Weighage
-        Route::get('admin-payment',[AdminTransactionController::class,'index']);
-        Route::post('add-admin-payment',[AdminTransactionController::class,'addPayment']);
-        Route::post('admin-payment/{id}',[AdminTransactionController::class,'editPayment']);
+        Route::get('admin-payment',[SystemSettingController::class,'index']);
+        // Route::post('add-admin-payment',[SystemSettingController::class,'addPayment']);
+        Route::post('admin-payment/{id}',[SystemSettingController::class,'editPayment']);
         
         //Order Payment Management
         Route::get('order-payment',[AssignmentPaymentController::class,'paymentList']);

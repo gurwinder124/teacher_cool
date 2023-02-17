@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('admin_transactions', function (Blueprint $table) {
+        Schema::create('system_settings', function (Blueprint $table) {
             $table->id();
             $table->integer('teacher_cool_weightage');
             //$table->integer('teacher_weightage');
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('admin_transactions');
+        Schema::dropIfExists('system_settings');
     }
 };
