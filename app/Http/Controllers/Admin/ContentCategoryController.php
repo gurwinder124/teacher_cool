@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\ContentCategories;
+use App\Models\Subject;
 use Illuminate\Support\Facades\Validator;
 use Exception;
 use Illuminate\Http\Request;
@@ -12,7 +12,7 @@ class ContentCategoryController extends Controller
 {
     public function index(){
         try{
-            $categories= ContentCategories::select('id','category_name')->get();
+            $categories= Subject::select('id','category_name')->get();
             if(!$categories){
                 return sendError('No record Found');
             }
@@ -25,7 +25,7 @@ class ContentCategoryController extends Controller
     public function getSubject($id)     
     {
         try {
-            $category = ContentCategories::find($id);
+            $category = Subject::find($id);
             if(!$category){
                 return sendError('No record found');
             }
@@ -44,7 +44,7 @@ class ContentCategoryController extends Controller
             if ($validator->fails()) {
                 return response()->json(['code' => '302', 'error' => $validator->errors()]);
             }
-            $category=new ContentCategories;
+            $category=new Subject;
             $category->category_name =$request->category_name;
             $category->save();
         }catch (Exception $e){
@@ -62,7 +62,7 @@ class ContentCategoryController extends Controller
             if ($validator->fails()) {
                 return response()->json(['code' => '302', 'error' => $validator->errors()]);
             }
-            $category=ContentCategories::find($id);
+            $category=Subject::find($id);
             if(!$category){
                 return sendError('No record found');
             }
@@ -80,7 +80,7 @@ class ContentCategoryController extends Controller
             if(!$id){
                 return sendError('Id is required');
             }
-            $category = ContentCategories::find($id);
+            $category = Subject::find($id);
             if($category){
                 $category->delete();
             }else{
