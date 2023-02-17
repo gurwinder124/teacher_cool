@@ -12,7 +12,7 @@ use App\Http\Controllers\Admin\NewsLetterController;
 use App\Http\Controllers\Admin\AdminOrderController;
 use App\Http\Controllers\Admin\SystemSettingController;
 use App\Http\Controllers\Admin\AssignmentController;
-use App\Http\Controllers\Admin\ContentCategoryController;
+use App\Http\Controllers\Admin\SubjectController;
 use App\Http\Controllers\Admin\AssignmentPaymentController;
 use App\Http\Controllers\User\DashboardContentController;
 use App\Http\Controllers\User\LoginController;
@@ -137,11 +137,11 @@ Route::prefix('admin')->group(function (){
         Route::post('assignment-status', [AssignmentController::class, 'updateStatus']);
 
         //Subject or Categories Management
-        Route::get('subject',[ContentCategoryController::class,'index']);
-        Route::post('add-subject',[ContentCategoryController::class,'addSubject']);
-        Route::get('subject/{id}',[ContentCategoryController::class,'getSubject']);
-        Route::post('subject/{id}',[ContentCategoryController::class,'editSubject']);
-        Route::delete('subject/{id}',[ContentCategoryController::class,'destroy']);
+        Route::get('subject',[SubjectController::class,'index']);
+        Route::post('add-subject',[SubjectController::class,'addSubject']);
+        Route::get('subject/{id}',[SubjectController::class,'getSubject']);
+        Route::post('subject/{id}',[SubjectController::class,'editSubject']);
+        Route::delete('subject/{id}',[SubjectController::class,'destroy']);
 
         //Manage Payment or Teacher Cool Weighage
         Route::get('admin-payment',[SystemSettingController::class,'index']);

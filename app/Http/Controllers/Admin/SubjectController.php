@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use Exception;
 use Illuminate\Http\Request;
 
-class ContentCategoryController extends Controller
+class SubjectController extends Controller
 {
     public function index(){
         try{
@@ -48,7 +48,7 @@ class ContentCategoryController extends Controller
         try{
             $validator = Validator::make($request->all(), [
                 'category_id' => 'required',
-                'subject_name' => 'required',
+                'subject_name' => 'required|unique:subjects',
             ]);
             if ($validator->fails()) {
                 return response()->json(['code' => '302', 'error' => $validator->errors()]);

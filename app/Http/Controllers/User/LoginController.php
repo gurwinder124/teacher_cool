@@ -24,7 +24,7 @@ class LoginController extends Controller
     public function registerInfo()
     {
         try{
-            $data['subjects']= Subject::pluck('subject_name','id');
+            $data['subjects'] = Subject::select('subject_name','id')->get();
             if(!$data){
                 return sendError('No record Found');
             }
