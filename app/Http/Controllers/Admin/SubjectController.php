@@ -13,7 +13,7 @@ class SubjectController extends Controller
 {
     public function index(){
         try{
-            $data = Subject::select('id','subject_name')->get();
+            $data = Subject::select('id','category_id','subject_name')->get();
             if(!$data){
                 return sendError('No record Found');
             }
