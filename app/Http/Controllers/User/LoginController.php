@@ -21,7 +21,8 @@ use Twilio\Rest\Client;
 class LoginController extends Controller
 {
 
-    public function registerInfo(){
+    public function registerInfo()
+    {
         try{
             $data['subjects']= ContentCategories::pluck('category_name','id');
             if(!$data){
@@ -132,6 +133,7 @@ class LoginController extends Controller
                 $user->teacher_status = User::TEACHER_STATUS_PENDING;
                 $user->requested_for_teacher = 1;
 		        $user->user_type =User::TEACHER_TYPE;
+                $user->teacher_id_number  ='TCH-'.time();
             }
             
             $user->save();

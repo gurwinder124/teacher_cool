@@ -33,7 +33,11 @@ use App\Http\Controllers\User\OrderController;
 */
 
 Route::get('login', [LoginController::class, 'login']);
-// USER ROUTE
+/*
+---------------------------------------------------------
+    USER ROUTES
+----------------------------------------------------------
+*/
 Route::prefix('v1')->group(function () {
 
     Route::post('login', [LoginController::class, 'login']);
@@ -51,11 +55,16 @@ Route::prefix('v1')->group(function () {
     Route::get('dashboard-content', [DashboardContentController::class, 'index']);
 
 
-    //PROTDECTED ROUTE
-    Route::middleware(['auth:api', 'scopes:user'])->group(function (){
+    //PROTDECTED ROUTES FOR BOTH TEACHER AND STUDENT
+    Route::middleware(['auth:api', 'scope:user, teacher'])->group(function (){
         Route::get('/profile', [UserController::class, 'index']);
+        Route::post('edit-profile', [UserController::class, 'editProfile']);
         Route::get('/reffral', [UserController::class, 'genrateReaffral']);
 
+    });
+
+    //PROTDECTED ROUTES FOR STUDENT ONLY
+    Route::middleware(['auth:api', 'scopes:user'])->group(function (){
         // Content
         Route::get('content', [UserContentController::class, 'index']);
         Route::post('request-content', [UserContentController::class, 'uploade']);
@@ -65,7 +74,11 @@ Route::prefix('v1')->group(function () {
     });
 });
 
-//ADMIN ROUTE
+/*
+---------------------------------------------------------
+    ADMIN ROUTES
+----------------------------------------------------------
+*/
 Route::prefix('admin')->group(function (){
     Route::post('login', [AdminLoginController::class, 'login']);
     Route::post('forget-password', [AdminForgetPasswordController::class, 'forgetPassword']);
