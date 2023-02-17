@@ -206,17 +206,20 @@ class LoginController extends Controller
             //     'data' => "Thanks ",
             //     'subject' => "Regarding Register new User"
             // ];
+            // $url = env('APP_URL_FRONT').'/verify-email/' . $verifyCode;
+            $url = url('/verify-email/').'/'. $verifyCode;
+            
             $welcomedata=[
-                'to'=>$request->email,
-                'name'=>$request->name,
-                'verifyCode'=>$verifyCode,
+                'to'=> $request->email,
+                'receiver_name'=> $request->name,
+                'url'=> $url,
                 'data' => 
                 $saveTeacher? "Your Request as Teacher is pending for confirmation. We will revert within 48 hrs.Please verify your email from the link below:  " 
                 :($saveUser? "Hope, You will have wonderful experience here.Please verify your email from the link below:":''),
                 'subject' => "Regarding Welcome"
             ];
-            // dispatch(new SendNewRegisterEmail($data))->afterResponse();
             dispatch(new SendWelcomeEmail($welcomedata))->afterResponse();
+
             return response()->json(['status' => 'Success', 'code' => 200, 'user' => $user]);
         } catch (Exception $e) {
             return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
@@ -236,13 +239,13 @@ class LoginController extends Controller
             if($updateData && $data->requested_for_teacher){
                 $teacherEmailData=[
                     'to'=>$data->email,
-                    'name'=>$data->name,
+                    'receiver_name'=>$data->name,
                     'body' =>"Your Request as Teacher has been Pending for approval. We will revert you within 24hrs." ,
                     'subject' => "Regarding Approval Request"
                 ];
                 dispatch(new TeacherStatus($teacherEmailData))->afterResponse();
                 $adminEmailData=[
-                    'to'=>'teachercool@yopmail.com',
+                    'to'=> env('ADMIN_EMAIL_ADDRESS'),
                     'name'=>'Teacher Cool',
                     'body' =>"New teacher, ".$data->name." has been Register with ".$data->email." email." ,
                     'subject' => "Regarding Teacher Approval"
@@ -250,22 +253,6 @@ class LoginController extends Controller
                 dispatch(new AdminEmail($adminEmailData))->afterResponse();
             }
 
-            // return sendResponse([], "Email Verified");
-            // $html =  `<!DOCTYPE html>
-            // <html lang="en">
-            // <head>
-            //     <meta charset="UTF-8">
-            //     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-            //     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            //     <title>Teacher Cool</title>
-            // </head>
-            // <body>
-            //     <h1>Verification Completed</h1>
-            // </body>
-            // </html>
-            
-            // `;
-            // echo $html;
             if($updateData){
                 return view('verify-email',  ['isValid' => true]);
             }

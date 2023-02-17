@@ -70,7 +70,7 @@ class TeacherStatusEmail extends Mailable
         $address = env('MAIL_FROM_ADDRESS');
         $subject = $this->data['subject'];
         $name = env('MAIL_FROM_NAME');
-        $receiver_name = $this->data['name'];
+        $receiver_name = $this->data['receiver_name'];
         $body = $this->data['body'];
         $login_url = $this->data['login_url'];
 

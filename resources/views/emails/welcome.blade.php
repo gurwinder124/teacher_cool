@@ -20,20 +20,6 @@
   <style type="text/CSS"></style>
   <style @import url('https://dopplerhealth.com/fonts/BasierCircle/basiercircle-regular-webfont.woff2');></style>
   <title></title>
-  <!--[if mso]>
-  <style>
-    table {border-collapse:collapse;border-spacing:0;border:none;margin:0;}
-    div, td {padding:0;}
-    div {margin:0 !important;}
-	</style>
-  <noscript>
-    <xml>
-      <o:OfficeDocumentSettings>
-        <o:PixelsPerInch>96</o:PixelsPerInch>
-      </o:OfficeDocumentSettings>
-    </xml>
-  </noscript>
-  <![endif]-->
   <style>
     table,
     td,
@@ -81,11 +67,7 @@
     <table role="presentation" style="width:100%;border:none;border-spacing:0;">
       <tr>
         <td align="center" style="padding:0;">
-          <!--[if mso]>
-          <table role="presentation" align="center" style="width:600px;">
-          <tr>
-          <td>
-          <![endif]-->
+          
           <table role="presentation" style="width:94%;max-width:600px;border:none;border-spacing:0;text-align:left;font-family:'Basier Circle', 'Roboto', 'Helvetica', 'Arial', sans-serif;font-size:1em;line-height:1.37em;color:#384049;">
             <!--      Logo headder -->
             <tr style="background-color: #1670F8;">
@@ -104,12 +86,11 @@
                 <p style="text-align: center; margin:0;">Dear {{$receiver_name}},
                 </p>
                 <p style="text-align: center;">Welcome To Teacher Cool,</p>
-                <!-- <p style="text-align: center;">{{$body}}</p> -->
-                <p>
+                <p style="text-align: center;">
                     Please verify your email from the link below: 
                 </p>
                 <p style="text-align: center;margin: 2.5em auto;">
-                  <a class="button" href={{url('/verify-email')}}/{{ $verifyCode }} style="background: #1670F8; 
+                  <a class="button" href={{ $url }} style="background: #1670F8; 
                        text-decoration: none; 
                        padding: 1em 1.5em;
                        color: #ffffff; 
@@ -149,11 +130,6 @@
               </td>
             </tr>
           </table>
-          <!--[if mso]>
-          </td>
-          </tr>
-          </table>
-          <![endif]-->
         </td>
       </tr>
     </table>

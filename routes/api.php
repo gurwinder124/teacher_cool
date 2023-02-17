@@ -40,8 +40,8 @@ Route::prefix('v1')->group(function () {
     Route::post('register', [LoginController::class, 'register']);
     Route::post('forget-password', [ForgetPasswordController::class, 'forgetPassword']);
     Route::post('reset-password', [ForgetPasswordController::class, 'resetPassword']);
-    // Route::post('update-new-password', [ForgetPasswordController::class, 'updateNewPassword']);
-    // Route::get('verify-email', [LoginController::class, 'verifyEmail']);
+    
+    // Route::post('verify-email', [LoginController::class, 'verifyEmail']);
     Route::get('register-info', [LoginController::class, 'registerInfo']);
 
     // Order Callback
@@ -68,10 +68,8 @@ Route::prefix('v1')->group(function () {
 //ADMIN ROUTE
 Route::prefix('admin')->group(function (){
     Route::post('login', [AdminLoginController::class, 'login']);
-    // Route::post('login', [AdminLoginController::class, 'login']);
     Route::post('forget-password', [AdminForgetPasswordController::class, 'forgetPassword']);
     Route::post('reset-password', [AdminForgetPasswordController::class, 'resetPassword']);
-    // Route::post('update-new-password', [AdminForgetPasswordController::class, 'updateNewPassword']);
 
     //Protected route Both for Super Admin and Sub-admin
     Route::middleware(['auth:admin-api','scope:admin,sub-admin'])->group(function () {
