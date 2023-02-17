@@ -228,14 +228,21 @@ class LoginController extends Controller
         }
     }
 
-    public function verifyEmail($code)
+    public function verifyEmail(Request $request)
     {
         try {
-            $data = User::where('email_verify_code', '=', $code)->first();
-            if(!$data){
-                return view('verify-email',  ['isValid' => false]);
+            $validator = Validator::make($request->all(), [
+                'email_token' => 'required',
+            ]);
+            if ($validator->fails()) {
+                return response()->json(['code' => '302', 'error' => $validator->errors()]);
             }
-            $updateData = User::where('email_verify_code', '=', $code)
+
+            $data = User::where('email_verify_code', '=', $request->email_token)->first();
+            if(!$data){
+                return sendError('No record Found');
+            }
+            $updateData = User::where('email_verify_code', '=', $request->email_token)
                     ->update(['email_verified_at' => date('Y-m-d H:i:s'), 'email_verify_code' => null]);
                     
             if($updateData && $data->requested_for_teacher){
@@ -256,11 +263,13 @@ class LoginController extends Controller
             }
 
             if($updateData){
-                return view('verify-email',  ['isValid' => true]);
+                // return view('verify-email',  ['isValid' => true]);
+                return sendResponse('', 'Email Verified');
             }
-            return view('verify-email',  ['isValid' => false]);
+            return sendError('Somthing went Wrong');
         } catch (Exception $e) {
-            return view('verify-email',  ['isValid' => false]);
+            // return view('verify-email',  ['isValid' => false]);
+            return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
         }
     }
 
