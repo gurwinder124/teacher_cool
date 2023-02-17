@@ -145,9 +145,9 @@
                   </a>
                 </p>
                 <p style="margin:0;font-size:.75rem;line-height:1.5em;text-align: center; color:#FFF;">
-                  more recently with desktop publishing software like Aldus PageMaker including versions
+                  Teacher Cool  - All copyrights reserved 2023
                   <br>
-                  <a class="unsub" href="#" style="color:#FFF;text-decoration:underline;">Unsubscribe</a>
+                  <!-- <a class="unsub" href="#" style="color:#FFF;text-decoration:underline;">Unsubscribe</a> -->
                 </p>
               </td>
             </tr>
