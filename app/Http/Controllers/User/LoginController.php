@@ -14,7 +14,7 @@ use App\Jobs\SendWelcomeEmail;
 use App\Jobs\TeacherStatus;
 use App\Models\SMS;
 use App\Models\TeacherSetting;
-use App\Models\ContentCategories;
+use App\Models\Subject;
 use Exception;
 use Twilio\Rest\Client;
 
@@ -24,7 +24,7 @@ class LoginController extends Controller
     public function registerInfo()
     {
         try{
-            $data['subjects']= ContentCategories::pluck('category_name','id');
+            $data['subjects']= Subject::pluck('subject_name','id');
             if(!$data){
                 return sendError('No record Found');
             }
