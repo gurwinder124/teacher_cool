@@ -145,7 +145,7 @@ Route::prefix('admin')->group(function (){
 
         //Manage Payment or Teacher Cool Weighage
         Route::get('admin-payment',[SystemSettingController::class,'index']);
-        // Route::post('add-admin-payment',[SystemSettingController::class,'addPayment']);
+        Route::post('add-admin-payment',[SystemSettingController::class,'addPayment']);
         Route::post('admin-payment/{id}',[SystemSettingController::class,'editPayment']);
         
         //Order Payment Management
