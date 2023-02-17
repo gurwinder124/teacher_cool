@@ -138,9 +138,9 @@ Route::prefix('admin')->group(function (){
 
         //Subject or Categories Management
         Route::get('subject',[ContentCategoryController::class,'index']);
-        Route::post('add-subject',[ContentCategoryController::class,'addCategory']);
+        Route::post('add-subject',[ContentCategoryController::class,'addSubject']);
         Route::get('subject/{id}',[ContentCategoryController::class,'getSubject']);
-        Route::post('subject/{id}',[ContentCategoryController::class,'editCategory']);
+        Route::post('subject/{id}',[ContentCategoryController::class,'editSubject']);
         Route::delete('subject/{id}',[ContentCategoryController::class,'destroy']);
 
         //Manage Payment or Teacher Cool Weighage

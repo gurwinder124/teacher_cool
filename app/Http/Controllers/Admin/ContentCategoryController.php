@@ -12,10 +12,18 @@ class ContentCategoryController extends Controller
 {
     public function index(){
         try{
-            $categories= Subject::select('id','subject_name')->get();
+            $data = Subject::select('id','subject_name')->get();
             if(!$categories){
                 return sendError('No record Found');
             }
+
+            $response = [
+                'success' => true,
+                'data'    => $data,
+                'message' => 'Success',
+                'category' => Content::getContentCategory(),
+            ];
+            return response()->json($response, 200);
         }catch (Exception $e){
             return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
         }
@@ -29,50 +37,54 @@ class ContentCategoryController extends Controller
             if(!$category){
                 return sendError('No record found');
             }
+            return sendResponse($category);
         } catch (Exception $e){
             return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
         }
-        return sendResponse($category,200);
+        
     }
 
-    public function addCategory(Request $request){
+    public function addSubject(Request $request){
         try{
             $validator = Validator::make($request->all(), [
-                // 'id' => 'required',
+                'category_id' => 'required',
                 'subject_name' => 'required',
             ]);
             if ($validator->fails()) {
                 return response()->json(['code' => '302', 'error' => $validator->errors()]);
             }
-            $category=new Subject;
-            $category->category_id = 1;
-            $category->subject_name =$request->subject_name;
+            $category = new Subject;
+            $category->category_id = $request->category_id;
+            $category->subject_name = $request->subject_name;
             $category->save();
+
+            return sendResponse($category,"Subject Added successfully");
         }catch (Exception $e){
             return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
         }
-        return sendResponse($category,"Category added successfully");
     }
 
-    public function editCategory($id,Request $request){
+    public function editSubject($id,Request $request){
         try{
             $validator = Validator::make($request->all(), [
-                // 'id' => 'required',
+                'category_id' => 'required',
                 'subject_name' => 'required',
             ]);
             if ($validator->fails()) {
                 return response()->json(['code' => '302', 'error' => $validator->errors()]);
             }
-            $category=Subject::find($id);
+            $category = Subject::find($id);
             if(!$category){
                 return sendError('No record found');
             }
             $category->subject_name = $request->subject_name;
+            $category->category_id = $request->category_id;
             $category->save();
+
+            return sendResponse($category,"Subject Updated successfully");
         }catch (Exception $e){
             return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
         }
-        return sendResponse($category,"Category Updated successfully");
     }
 
     public function destroy($id)    
@@ -87,10 +99,11 @@ class ContentCategoryController extends Controller
             }else{
                 return sendError('No record found for given Id');
             }
+            return sendResponse('Deleted Successfully',200);
         }catch (Exception $e){
             return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
         }
-        return sendResponse('Deleted Successfully',200);
+        
     }
     
 }
