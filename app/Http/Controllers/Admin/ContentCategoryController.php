@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Subject;
+use App\Models\Content;
 use Illuminate\Support\Facades\Validator;
 use Exception;
 use Illuminate\Http\Request;
