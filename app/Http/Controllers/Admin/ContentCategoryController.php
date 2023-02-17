@@ -13,7 +13,7 @@ class ContentCategoryController extends Controller
     public function index(){
         try{
             $data = Subject::select('id','subject_name')->get();
-            if(!$categories){
+            if(!$data){
                 return sendError('No record Found');
             }
 
@@ -27,7 +27,6 @@ class ContentCategoryController extends Controller
         }catch (Exception $e){
             return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
         }
-        return sendResponse($categories);
     }
 
     public function getSubject($id)     
