@@ -13,9 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('content_categories', function (Blueprint $table) {
+        Schema::create('subjects', function (Blueprint $table) {
             $table->id();
-            $table->string('category_name');
+            $table->integer('category_id')->comment('IT=1; NON-IT=2;');;
+            $table->string('subject_name')->unique();
             $table->timestamps();
         });
     }
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('content_categories');
+        Schema::dropIfExists('subjects');
     }
 };

@@ -23,7 +23,7 @@ class UserController extends Controller
                     ->leftJoin('teacher_settings', 'users.id', '=', 'teacher_settings.user_id')
                     ->select('user_details.*','users.name','users.email','users.profile_path','users.teacher_id_number', 'teacher_settings.id_proof','teacher_settings.document_path','teacher_settings.working_hours','teacher_settings.expected_income','teacher_settings.category','teacher_settings.subject_id')
                     ->where('users.id', $user->id)
-                    ->get();
+                    ->first();
             
             if(!$data){
                 sendError('Inavlid User', 401);
