@@ -109,22 +109,23 @@
                     <!-- Please verify your email from the link below:  -->
                     </p>
                 <p style="text-align: center;margin: 2.5em auto;">
-                  <!-- <a class="button" href="/teacher/login" style="background: #1670F8; 
+                @if ($login_url)
+                  <a class="button" href={{ $login_url }} style="background: #1670F8; 
                        text-decoration: none; 
                        padding: 1em 1.5em;
                        color: #ffffff; 
                        border-radius: 48px;
                        mso-padding-alt:0;
-                       text-underline-color:#1670F8"> -->
+                       text-underline-color:#1670F8">
                     <!--[if mso]><i style="letter-spacing: 25px;mso-font-width:-100%;mso-text-raise:20pt">&nbsp;</i><![endif]-->
-                    <!-- <span style="mso-text-raise:10pt;font-weight:bold;">Veriy Email!</span> -->
+                    <span style="mso-text-raise:10pt;font-weight:bold;">Login</span>
                     <!--[if mso]><i style="letter-spacing: 25px;mso-font-width:-100%">&nbsp;</i><![endif]-->
-                  <!-- </a> -->
+                  </a>
+                @endif
+                  
                 </p>
                 <p></p>
                 <p style="margin:0">For any query please contact us on <b>teachercool@yopmail.com</b></p>
-                <!-- <p>Regards,</p>
-                <p>Teacher cool</p> -->
               </td>
             </tr>
             <tr>

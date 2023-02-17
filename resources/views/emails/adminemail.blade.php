@@ -122,9 +122,6 @@
                   <!-- </a> -->
                 </p>
                 <p></p>
-                <p style="margin:0">For any query please contact us on <b>teachercool@yopmail.com</b></p>
-                <!-- <p>Regards,</p>
-                <p>Teacher cool</p> -->
               </td>
             </tr>
             <tr>

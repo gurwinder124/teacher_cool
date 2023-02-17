@@ -68,35 +68,40 @@ class TeacherController extends Controller
                 return response()->json(['code' => '302', 'error' => $validator->errors()]);
             }
 
+            if($request->status != User::TEACHER_STATUS_DISAPPROVED && $request->status != User::TEACHER_STATUS_APPROVED){
+                return sendError("Invalid Status");
+            }
+
             $data = User::find($request->id);
             if(!$data){
                 return sendError("Invalid Record");
             }
           
             $data->teacher_status = $request->status;
+            
             if($request->status == User::TEACHER_STATUS_APPROVED){
                 $data->user_type = User::TEACHER_TYPE;
                 $emailData=[
                     'to'=>$data->email,
                     'name'=>$data->name,
+                    'login_url'=> env('APP_URL_FRONT').'/teacher/login',
                     'body' =>"Your Request as Teacher has been approved. Please login with your credentials." ,
                     'subject' => "Regarding Approval"
                 ];
                 
-            }
-            if($request->status == User::TEACHER_STATUS_DISAPPROVED){
+            }else{
                 $emailData=[
                     'to'=>$data->email,
                     'name'=>$data->name,
+                    'login_url'=> false,
                     'body' =>"Unfortunately your request has been disapproved." ,
                     'subject' => "Regarding Disapproval"
                 ];
             }
-            dispatch(new TeacherStatus($emailData))->afterResponse();
             $data->save();
 
             //Send email Notification Pending
-
+            dispatch(new TeacherStatus($emailData))->afterResponse();
 
             return sendResponse($data, 'Updated Successfully');
         } catch (Exception $e) {
