@@ -208,8 +208,8 @@ class LoginController extends Controller
             //     'data' => "Thanks ",
             //     'subject' => "Regarding Register new User"
             // ];
-            $url = env('APP_URL_FRONT').'/verify-email/' . $verifyCode;
-            // $url = url('/verify-email/').'/'. $verifyCode;
+            // $url = env('APP_URL_FRONT').'/verify-email/' . $verifyCode;
+            $url = url('/verify-email/').'/'. $verifyCode;
             
             $welcomedata=[
                 'to'=> $request->email,
