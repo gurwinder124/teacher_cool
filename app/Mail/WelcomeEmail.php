@@ -72,9 +72,11 @@ class WelcomeEmail extends Mailable
         $name = env('MAIL_FROM_NAME');
         $receiver_name = $this->data['receiver_name'];
         $url = $this->data['url'];
+        $reciver_email = $this->data['to'];
 
         return $this->view('emails.welcome')
                     ->from($address, $name)
+                    ->to($reciver_email, $receiver_name)
                     ->replyTo($address, $name)
                     ->subject($subject)
                     ->with([ 'receiver_name' => $receiver_name, 'url'=> $url ]);
