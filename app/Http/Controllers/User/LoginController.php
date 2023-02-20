@@ -198,18 +198,8 @@ class LoginController extends Controller
                 // $this->sendSMS($smsUserData);
             }
             
-            // $admin=Admin::select('name','email')->where('id','=',1)->first();
-            // $email=$admin->email;
-            // $name=$admin->name;
-            // $data = [
-            //     'to' =>  $email,
-            //     'name' => $name,
-            //     'company_name' =>$request->company_name,
-            //     'data' => "Thanks ",
-            //     'subject' => "Regarding Register new User"
-            // ];
-            // $url = env('APP_URL_FRONT').'/verify-email/' . $verifyCode;
-            $url = url('/verify-email/').'/'. $verifyCode;
+            $url = env('APP_URL_FRONT').'/verify-email/' . $verifyCode;
+            // $url = url('/verify-email/').'/'. $verifyCode;
             
             $welcomedata=[
                 'to'=> $request->email,
