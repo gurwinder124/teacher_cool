@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Exception;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -84,6 +85,41 @@ class UserController extends Controller
                 return sendResponse($userData, 'Updated Successfully');
             }
             return sendError('Somthing went Wrong');
+        } catch (Exception $e) {
+            return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
+        }
+
+    }
+
+    public function changePassword(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'current_password' => 'required',
+                'new_password' => 'required|string|min:8|confirmed',
+            ]);
+            if ($validator->fails()) {
+                return response()->json(['code' => '302', 'error' => $validator->errors()]);
+            }
+
+            if (!(Hash::check($request->get('current_password'), Auth::user()->password))) {
+                // The passwords matches
+                return sendError("Your current password does not matches with the password.", [], 400);
+            }
+
+            if(strcmp($request->get('current_password'), $request->get('new_password')) == 0){
+                // Current password and new password same
+                return sendError("New Password cannot be same as your current password.", [], 400);
+            }
+            
+            $user = Auth::user();
+
+            $data = User::find($user->id);
+            
+            $data->password = Hash::make($request->new_password);
+            $data->save();
+
+            return sendResponse($data, 'Password Updated Successfully');
         } catch (Exception $e) {
             return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
         }

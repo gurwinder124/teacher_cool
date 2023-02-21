@@ -60,6 +60,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/profile', [UserController::class, 'index']);
         Route::post('edit-profile', [UserController::class, 'editProfile']);
         Route::get('/reffral', [UserController::class, 'genrateReaffral']);
+        Route::post('change-password', [UserController::class, 'changePassword']);
 
     });
 
