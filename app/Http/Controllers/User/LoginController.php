@@ -85,7 +85,7 @@ class LoginController extends Controller
             $validator = Validator::make($request->all(), [
                 'email' => 'required|email|unique:users',
                 'password' => 'required|min:4',
-                'name' => 'required|min:3',
+                'first_name' => 'required|min:3',
                 'is_teacher_request' => 'required',
                 'contact' => 'required',
                // 'city' => 'required',
@@ -121,7 +121,8 @@ class LoginController extends Controller
             
             /* Save User Data*/
             $user = new User;
-            $user->name = $request->name;
+            $user->name = $request->first_name;
+            $user->last_name = $request->last_name;
             $user->email = $request->email;
             $user->password = Hash::make($request->password);
             $user->user_type = User::STUDENT_TYPE;
