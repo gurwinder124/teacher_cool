@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('profile')->nullable();
             $table->string('contact')->nullable();
+            $table->string('gender')->nullable();
             $table->longText('address')->nullable();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();

@@ -14,6 +14,8 @@ use App\Http\Controllers\Admin\SystemSettingController;
 use App\Http\Controllers\Admin\AssignmentController;
 use App\Http\Controllers\Admin\SubjectController;
 use App\Http\Controllers\Admin\AssignmentPaymentController;
+use App\Http\Controllers\Admin\NotificationController;
+//User Controllers
 use App\Http\Controllers\User\DashboardContentController;
 use App\Http\Controllers\User\LoginController;
 use App\Http\Controllers\User\UserController;
@@ -60,7 +62,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/profile', [UserController::class, 'index']);
         Route::post('edit-profile', [UserController::class, 'editProfile']);
         Route::get('/reffral', [UserController::class, 'genrateReaffral']);
-        Route::post('change-password', [UserController::class, 'changePassword']);
+        Route::post('/change-password', [UserController::class, 'changePassword']);
 
     });
 
@@ -133,8 +135,8 @@ Route::prefix('admin')->group(function (){
 
         // Assignment Orders
         Route::get('assignment', [AssignmentController::class, 'index']);
-        // Route::get('assignment/{id}', [AssignmentController::class, 'assignmentDetail']);
-        Route::get('assignment/{id}', [AssignmentController::class, 'orderDetail']);
+        Route::get('assignment/{id}', [AssignmentController::class, 'assignmentDetail']);
+        // Route::get('assignment/{id}', [AssignmentController::class, 'orderDetail']);
         Route::post('assignment-status', [AssignmentController::class, 'updateStatus']);
 
         //Subject or Categories Management
@@ -153,6 +155,9 @@ Route::prefix('admin')->group(function (){
         Route::get('order-payment',[AssignmentPaymentController::class,'paymentList']);
         Route::get('single-order-payment',[AssignmentPaymentController::class,'singlePaymentTeacher']);
         Route::post('block-order-payment',[AssignmentPaymentController::class,'blockTeacherPayment']);
+
+        Route::get('notification', [NotificationController::class, 'index']);
+        Route::post('notification', [NotificationController::class, 'addNotification']);
 
     });
 });

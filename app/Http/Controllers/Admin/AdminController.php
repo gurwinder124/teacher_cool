@@ -316,6 +316,9 @@ class AdminController extends Controller
 
             $data->name = $request->name;
             $data->contact = $request->contact;
+            if($request->gender){
+                $data->gender = $request->gender;
+            }
             if($request->address){
                 $data->address = $request->address;
             }
@@ -341,7 +344,7 @@ class AdminController extends Controller
 
             if (!(Hash::check($request->get('current_password'), Auth::user()->password))) {
                 // The passwords matches
-                return sendError("Your current password does not matches with the password.", [], 400);
+                return sendError("Your current password is Incorrect.", [], 400);
             }
 
             if(strcmp($request->get('current_password'), $request->get('new_password')) == 0){

@@ -104,7 +104,7 @@ class UserController extends Controller
 
             if (!(Hash::check($request->get('current_password'), Auth::user()->password))) {
                 // The passwords matches
-                return sendError("Your current password does not matches with the password.", [], 400);
+                return sendError("Your current password is Incorrect.", [], 400);
             }
 
             if(strcmp($request->get('current_password'), $request->get('new_password')) == 0){
