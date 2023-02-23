@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Teacher Cool</title>
+        <title>{{ env('APP_NAME', 'Teacher Cool') }}</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
@@ -58,7 +58,7 @@
                 </td>
             </tr>
             <tr>
-                <td style="padding: 50px 0 15px;font-size: 13px;color: #888888;">Teacher Cool  - All copyrights reserved 2023</td>
+                <td style="padding: 50px 0 15px;font-size: 13px;color: #888888;"> {{ env('APP_NAME', 'Teacher Cool') }}  - All copyrights reserved 2023</td>
             </tr>
             </tbody>
         </table>

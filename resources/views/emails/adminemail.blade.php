@@ -2,7 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" >
 <head>
   <meta charset="UTF-8">
-  <title>Teacher Cool</title>
+  <title> {{ env('APP_NAME', 'Teacher Cool') }}</title>
   
 
 </head>
@@ -100,10 +100,10 @@
                 <p></p>
                 <p></p>
               <td style="padding:30px;background-color:#f5f5f5;">
-                <h1 style="text-align: center; margin-top:0;font-size:1.953em;line-height:1.3;font-weight:bold;letter-spacing:-0.02em;margin-bottom:10;color:#7D36CC;">Greetings! Teacher Cool</h1>
+                <h1 style="text-align: center; margin-top:0;font-size:1.953em;line-height:1.3;font-weight:bold;letter-spacing:-0.02em;margin-bottom:10;color:#7D36CC;">Greetings!  {{ env('APP_NAME', 'Teacher Cool') }}</h1>
                 <p style="text-align: center; margin:0;">Dear Admin,
                 </p>
-                <!-- <p style="text-align: center;">Welcome To Teacher Cool,</p> -->
+                <!-- <p style="text-align: center;">Welcome To  {{ env('APP_NAME', 'Teacher Cool') }},</p> -->
                 <p style="text-align: center;">{{$body}}</p>
                 <p>
                     <!-- Please verify your email from the link below:  -->

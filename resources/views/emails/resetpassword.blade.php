@@ -2,7 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" >
 <head>
   <meta charset="UTF-8">
-  <title>Teacher Cool</title>
+  <title>{{ env('APP_NAME', 'Teacher Cool') }}</title>
   
 
 </head>
@@ -103,7 +103,7 @@
                   </a>
                 </p>
                 <p></p>
-                <p style="margin:0">For any query please contact us on <b>teachercool@yopmail.com</b></p>
+                <p style="margin:0">For any query please contact us on <b>{{ env('MAIL_FROM_ADDRESS', '') }}</b></p>
               </td>
             </tr>
             <tr>
@@ -123,7 +123,7 @@
                   </a>
                 </p>
                 <p style="margin:0;font-size:.75rem;line-height:1.5em;text-align: center; color:#FFF;">
-                  Teacher Cool  - All copyrights reserved 2023
+                  {{ env('APP_NAME', 'Teacher Cool') }} - All copyrights reserved 2023
                   <br>
                   <!-- <a class="unsub" href="#" style="color:#FFF;text-decoration:underline;">Unsubscribe</a> -->
                 </p>

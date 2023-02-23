@@ -125,7 +125,7 @@
                   
                 </p>
                 <p></p>
-                <p style="margin:0">For any query please contact us on <b>teachercool@yopmail.com</b></p>
+                <p style="margin:0">For any query please contact us on <b>{{ env('MAIL_FROM_ADDRESS', '') }}</b></p>
               </td>
             </tr>
             <tr>

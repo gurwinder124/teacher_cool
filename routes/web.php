@@ -17,4 +17,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/test', function () {
+    return view('emails.newsletter');
+});
+
 // Route::get('verify-email/{code}', [LoginController::class, 'verifyEmail']);
