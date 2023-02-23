@@ -131,9 +131,11 @@ class AdminController extends Controller
                 ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
                 ->leftJoin('subscribed_users', 'users.id', '=', 'subscribed_users.user_id')
                 ->leftJoin('teacher_settings', 'users.id', '=', 'teacher_settings.user_id')
+                ->leftJoin('subjects', 'teacher_settings.subject_id', '=', 'subjects.id')
                 ->select('users.*', 'user_details.*','subscribed_users.name as subscription_name',
                     'subscribed_users.expire_date','teacher_settings.document_path','teacher_settings.working_hours',
-                    'teacher_settings.id_proof','teacher_settings.expected_income','teacher_settings.preferred_currency')
+                    'teacher_settings.id_proof','teacher_settings.expected_income','teacher_settings.preferred_currency',
+                    'teacher_settings.category','subjects.subject_name')
                 ->where('users.id', $id)
                 ->get();
     
