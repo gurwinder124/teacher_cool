@@ -100,12 +100,12 @@ class LoginController extends Controller
 
             $profile_path = '';
             if ($request->file('profile')) {
-                // $name = $request->file('comment_attch')->getClientOriginalName();
+                // $name = $request->file('profile')->getClientOriginalName();
                 $extension = $request->file('profile')->getClientOriginalExtension();
-                // $originalfileName = $request->file('profile')->getClientOriginalName();
-                // $originalfileName = pathinfo($originalfileName, PATHINFO_FILENAME);
-                // $originalfileName = implode('-',explode(' ', $originalfileName));
-                $fileName = time().'.'.$extension;
+                $originalfileName = $request->file('profile')->getClientOriginalName();
+                $originalfileName = pathinfo($originalfileName, PATHINFO_FILENAME);
+                $originalfileName = implode('-',explode(' ', $originalfileName));
+                $fileName = $originalfileName."-".time().'.'.$extension;
                 $profile_path = $request->file('profile')->storeAs('profile',$fileName,'public');
             }
 
@@ -141,23 +141,23 @@ class LoginController extends Controller
 
             $id_proof_path = '';
             if ($request->file('id_proof')) {
-                // $name = $request->file('comment_attch')->getClientOriginalName();
+                // $name = $request->file('id_proof')->getClientOriginalName();
                 $extension = $request->file('id_proof')->getClientOriginalExtension();
-                // $originalfileName = $request->file('id_proof')->getClientOriginalName();
-                // $originalfileName = pathinfo($originalfileName, PATHINFO_FILENAME);
-                // $originalfileName = implode('-',explode(' ', $originalfileName));
-                $fileName = time().'.'.$extension;
+                $originalfileName = $request->file('id_proof')->getClientOriginalName();
+                $originalfileName = pathinfo($originalfileName, PATHINFO_FILENAME);
+                $originalfileName = implode('-',explode(' ', $originalfileName));
+                $fileName = $originalfileName."-".time().'.'.$extension;
                 $id_proof_path = $request->file('id_proof')->storeAs('teacher',$fileName,'public');
             }
 
             $document_path = '';
             if ($request->file('document_path')) {
-                // $name = $request->file('comment_attch')->getClientOriginalName();
+                // $name = $request->file('document_path')->getClientOriginalName();
                 $extension = $request->file('document_path')->getClientOriginalExtension();
-                // $originalfileName = $request->file('document_path')->getClientOriginalName();
-                // $originalfileName = pathinfo($originalfileName, PATHINFO_FILENAME);
-                // $originalfileName = implode('-',explode(' ', $originalfileName));
-                $fileName = time().'.'.$extension;
+                $originalfileName = $request->file('document_path')->getClientOriginalName();
+                $originalfileName = pathinfo($originalfileName, PATHINFO_FILENAME);
+                $originalfileName = implode('-',explode(' ', $originalfileName));
+                $fileName = $originalfileName."-".time().'.'.$extension;
                 $document_path = $request->file('document_path')->storeAs('teacher',$fileName,'public');
             }
 
