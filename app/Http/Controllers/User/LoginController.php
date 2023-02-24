@@ -17,6 +17,7 @@ use App\Models\TeacherSetting;
 use App\Models\Subject;
 use Exception;
 use Twilio\Rest\Client;
+use App\Models\Content;
 
 class LoginController extends Controller
 {
@@ -24,7 +25,13 @@ class LoginController extends Controller
     public function registerInfo()
     {
         try{
-            $data['subjects'] = Subject::select('subject_name','id')->get();
+            $data['all_subjects'] = Subject::
+                                select('subject_name','id','category_id')
+                                ->get();
+            $data['subjects_by_category'] = $data['all_subjects']->groupBy(function($data) {
+                                    return $data->category_id;
+                                });
+            $data['category_status'] = Content::getContentCategory();
             if(!$data){
                 return sendError('No record Found');
             }
