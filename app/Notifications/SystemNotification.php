@@ -58,7 +58,8 @@ class SystemNotification extends Notification implements ShouldQueue
     public function toArray($notifiable)
     {
         return [
-            //
+            'title'=>$this->data['title'],
+            'message'=>$this->data['message']
         ];
     }
 }

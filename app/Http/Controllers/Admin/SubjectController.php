@@ -11,7 +11,8 @@ use Illuminate\Http\Request;
 
 class SubjectController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         try{
             $data = Subject::select('id','category_id','subject_name')->get();
             if(!$data){
