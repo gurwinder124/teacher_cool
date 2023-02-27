@@ -24,7 +24,7 @@ class SubscriptionController extends Controller
                 'success' => true,
                 'data'    => $data,
                 'message' => 'Success',
-                'subscriptions_category' => Subscription::pluck('name', 'id'),
+                'subscriptions_category' => Subscription::select('name', 'id')->get(),
             ];
         
             return response()->json($response, 200);
