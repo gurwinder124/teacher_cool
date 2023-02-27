@@ -58,10 +58,10 @@ class LoginController extends Controller
                
                 if($user->is_active && $user->email_verified_at != null){
                     $success['user']  = $user;
-                    if($user->user_type == User::TEACHER_TYPE && $request->user_type != User::STUDENT_TYPE){
+                    if($user->user_type == User::TEACHER_TYPE && $request->user_type == User::STUDENT_TYPE){
                         return sendError('User is Not a Student',[], 403);
                     }
-                    if($user->user_type == User::STUDENT_TYPE && $request->user_type != User::TEACHER_TYPE){
+                    if($user->user_type == User::STUDENT_TYPE && $request->user_type == User::TEACHER_TYPE){
                         return sendError('User is Not a Teacher',[], 403);
                     }
 
