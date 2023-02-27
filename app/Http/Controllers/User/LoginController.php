@@ -46,7 +46,8 @@ class LoginController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 'email'    => 'required|email',
-                'password' => 'required'
+                'password' => 'required',
+                'user_type' => 'required'
             ]);
 
             if ($validator->fails()) return sendError('Validation Error.', $validator->errors(), 422);
@@ -57,6 +58,13 @@ class LoginController extends Controller
                
                 if($user->is_active && $user->email_verified_at != null){
                     $success['user']  = $user;
+                    if($user->user_type == User::TEACHER_TYPE && $request->user_type != User::TEACHER_TYPE){
+                        return sendError('User is Not a Teacher',[], 403);
+                    }
+                    if($user->user_type == User::STUDENT_TYPE && $request->user_type != User::STUDENT_TYPE){
+                        return sendError('User is Not a Student',[], 403);
+                    }
+                    
                     if ($user->user_type == User::TEACHER_TYPE) {
                         if($user->teacher_status == User::TEACHER_STATUS_PENDING){
                             $data['profile_status']  = 'pending';
