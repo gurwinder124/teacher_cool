@@ -8,6 +8,7 @@ use App\Models\Content;
 use App\Models\User;
 use App\Models\UserDetails;
 use App\Models\TeacherSetting;
+use App\Models\Subject;
 use Illuminate\Support\Facades\Auth;
 use Exception;
 use Illuminate\Support\Facades\Validator;
@@ -20,12 +21,20 @@ class UserController extends Controller
     {
         try {
             $user = Auth::user();
-            $data = DB::table('users')
+            $data['user'] = DB::table('users')
                     ->join('user_details', 'users.id', '=', 'user_details.user_id')
                     ->leftJoin('teacher_settings', 'users.id', '=', 'teacher_settings.user_id')
-                    ->select('user_details.*','users.name as first_name','users.last_name','users.user_type','users.teacher_status','users.email','users.profile_path','users.teacher_id_number', 'teacher_settings.id_proof','teacher_settings.document_path','teacher_settings.working_hours','teacher_settings.expected_income','teacher_settings.category','teacher_settings.subject_id')
+                    ->select('user_details.*','users.name as first_name','users.last_name','users.user_type','users.teacher_status','users.email','users.profile_path','users.teacher_id_number', 'teacher_settings.id_proof','teacher_settings.document_path','teacher_settings.working_hours','teacher_settings.expected_income','teacher_settings.category','teacher_settings.subject_id','teacher_settings.preferred_currency','teacher_settings.experience','teacher_settings.teacher_bio')
                     ->where('users.id', $user->id)
                     ->first();
+
+            $data['all_subjects'] = Subject::
+                                select('subject_name','id','category_id')
+                                ->get();
+            $data['subjects_by_category'] = $data['all_subjects']->groupBy(function($data) {
+                                    return $data->category_id;
+                                });
+            $data['category_status'] = Content::getContentCategory();
             
             if(!$data){
                 sendError('Inavlid User', 401);

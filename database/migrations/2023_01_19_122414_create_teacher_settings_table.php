@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('teacher_settings', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->unique();
+            $table->string('experience')->nullable();
             $table->string('id_proof')->nullable();
             $table->string('document_path')->nullable();
             $table->string('working_hours')->nullable();
@@ -23,6 +24,7 @@ return new class extends Migration
             $table->string('preferred_currency')->nullable();
             $table->integer('subject_id')->nullable();
             $table->string('category')->nullable();
+            $table->longText('teacher_bio')->nullable();
             $table->timestamps();
         });
     }
