@@ -23,7 +23,7 @@ class UserController extends Controller
             $data = DB::table('users')
                     ->join('user_details', 'users.id', '=', 'user_details.user_id')
                     ->leftJoin('teacher_settings', 'users.id', '=', 'teacher_settings.user_id')
-                    ->select('user_details.*','users.name','users.last_name','users.user_type','users.teacher_status','users.email','users.profile_path','users.teacher_id_number', 'teacher_settings.id_proof','teacher_settings.document_path','teacher_settings.working_hours','teacher_settings.expected_income','teacher_settings.category','teacher_settings.subject_id')
+                    ->select('user_details.*','users.name as first_name','users.last_name','users.user_type','users.teacher_status','users.email','users.profile_path','users.teacher_id_number', 'teacher_settings.id_proof','teacher_settings.document_path','teacher_settings.working_hours','teacher_settings.expected_income','teacher_settings.category','teacher_settings.subject_id')
                     ->where('users.id', $user->id)
                     ->first();
             
