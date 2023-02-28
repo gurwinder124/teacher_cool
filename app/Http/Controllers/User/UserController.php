@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Content;
 use App\Models\User;
 use App\Models\UserDetails;
+use App\Models\TeacherSetting;
 use Illuminate\Support\Facades\Auth;
 use Exception;
 use Illuminate\Support\Facades\Validator;
@@ -22,7 +23,7 @@ class UserController extends Controller
             $data = DB::table('users')
                     ->join('user_details', 'users.id', '=', 'user_details.user_id')
                     ->leftJoin('teacher_settings', 'users.id', '=', 'teacher_settings.user_id')
-                    ->select('user_details.*','users.name','users.user_type','users.teacher_status','users.email','users.profile_path','users.teacher_id_number', 'teacher_settings.id_proof','teacher_settings.document_path','teacher_settings.working_hours','teacher_settings.expected_income','teacher_settings.category','teacher_settings.subject_id')
+                    ->select('user_details.*','users.name','users.last_name','users.user_type','users.teacher_status','users.email','users.profile_path','users.teacher_id_number', 'teacher_settings.id_proof','teacher_settings.document_path','teacher_settings.working_hours','teacher_settings.expected_income','teacher_settings.category','teacher_settings.subject_id')
                     ->where('users.id', $user->id)
                     ->first();
             
@@ -39,12 +40,8 @@ class UserController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                'name' => 'required|min:3',
+                'first_name' => 'required|min:3',
                 'contact' => 'required',
-                'gender' => 'required',
-                'age' => 'required',
-                'city' => 'required',
-                'state' => 'required',
                 'country' => 'required',
                 'qualification' => 'required',
                 'university' => 'required',
@@ -65,7 +62,8 @@ class UserController extends Controller
                 $userData->profile_path = $profile_path;
             }
 
-            $userData->name = $request->name;
+            $userData->name = $request->first_name;
+            $userData->last_name = $request->last_name;
             $userData->save();
 
             
@@ -81,8 +79,50 @@ class UserController extends Controller
             $userDetails = UserDetails::where('user_id',$user->id)
                             ->update($data);
 
-            if($userDetails){
-                return sendResponse($userData, 'Updated Successfully');
+            if($userDetails && $userData->user_type == User::STUDENT_TYPE){
+                return sendResponse($userData, 'Profile Updated Successfully');
+            }
+
+            if($userData->user_type == User::TEACHER_TYPE){
+                
+                $teacherSettingData['user_id'] = $user->id;
+                // $teacherSettingData['id_proof'] = $id_proof_path;
+                // $teacherSettingData['document_path'] = $document_path; 
+                $teacherSettingData['working_hours'] = $request->working_hours;
+                $teacherSettingData['expected_income'] = $request->expected_income;
+                $teacherSettingData['preferred_currency'] = $request->preferred_currency;
+                $teacherSettingData['subject_id'] = $request->subject;
+                $teacherSettingData['category'] = $request->category;
+
+                
+                if ($request->file('id_proof')) {
+                    // $name = $request->file('id_proof')->getClientOriginalName();
+                    $extension = $request->file('id_proof')->getClientOriginalExtension();
+                    $originalfileName = $request->file('id_proof')->getClientOriginalName();
+                    $originalfileName = pathinfo($originalfileName, PATHINFO_FILENAME);
+                    $originalfileName = implode('-',explode(' ', $originalfileName));
+                    $fileName = $originalfileName."-".time().'.'.$extension;
+
+                    $teacherSettingData['id_proof'] = $request->file('id_proof')->storeAs('teacher',$fileName,'public');
+                }
+
+                if ($request->file('document_path')) {
+                    // $name = $request->file('document_path')->getClientOriginalName();
+                    $extension = $request->file('document_path')->getClientOriginalExtension();
+                    $originalfileName = $request->file('document_path')->getClientOriginalName();
+                    $originalfileName = pathinfo($originalfileName, PATHINFO_FILENAME);
+                    $originalfileName = implode('-',explode(' ', $originalfileName));
+                    $fileName = $originalfileName."-".time().'.'.$extension;
+
+                    $teacherSettingData['document_path']  = $request->file('document_path')->storeAs('teacher',$fileName,'public');
+                }
+
+                $teacherSetting = TeacherSetting::where('user_id',$user->id)
+                                    ->update($teacherSettingData);
+
+                if($teacherSetting ){
+                    return sendResponse([], 'Profile Updated Successfully');
+                }
             }
             return sendError('Somthing went Wrong');
         } catch (Exception $e) {
