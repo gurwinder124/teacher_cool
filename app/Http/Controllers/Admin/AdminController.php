@@ -165,6 +165,33 @@ class AdminController extends Controller
     //     }
     // }
 
+    public function usersStatus(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'user_id' => 'required',
+                'user_status' => 'required',
+            ]);
+            if ($validator->fails()) {
+                return response()->json(['code' => '302', 'error' => $validator->errors()]);
+            }
+            if($request->user_status != User::IS_ACTIVE && $request->user_status != User::NOT_ACTIVE){
+                return sendError('Invalid Status Request');
+            }
+            $user = User::find($request->user_id);
+            if(!$user){
+                return sendError('Invalid User Request');
+            }
+            $user->is_active = $request->user_status;
+            $user->save();
+
+            return sendResponse("User Status Updated Successfully.");
+
+        } catch(\Exception $e) {
+            return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
+        }
+    }
+
     public function addSubAdmin(Request $request)
     {
         try {

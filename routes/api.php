@@ -101,7 +101,8 @@ Route::prefix('admin')->group(function (){
         Route::get('', [AdminController::class, 'index']);
         Route::get('users', [AdminController::class, 'getUsers']);
         Route::get('users/{id}', [AdminController::class, 'userDetails']);
-        Route::delete('users', [AdminController::class, 'deleteUsers']);
+        // Route::delete('users', [AdminController::class, 'deleteUsers']);
+        Route::post('user-status', [AdminController::class, 'usersStatus']);
 
         // Sub Admins
         Route::post('sub-admin', [AdminController::class, 'addSubAdmin']);
