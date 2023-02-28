@@ -44,7 +44,6 @@ class UserController extends Controller
                 'contact' => 'required',
                 'country' => 'required',
                 'qualification' => 'required',
-                'university' => 'required',
             ]);
             if ($validator->fails()) {
                 return response()->json(['code' => '302', 'error' => $validator->errors()]);
