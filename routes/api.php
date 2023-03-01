@@ -64,6 +64,9 @@ Route::prefix('v1')->group(function () {
         Route::get('/reffral', [UserController::class, 'genrateReaffral']);
         Route::post('/change-password', [UserController::class, 'changePassword']);
 
+        // Notifications
+        // Route::get('/notification', [UserController::class, 'notification']);
+
     });
 
     //PROTDECTED ROUTES FOR STUDENT ONLY

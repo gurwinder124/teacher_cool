@@ -19,7 +19,9 @@ return new class extends Migration
             $table->foreignId('content_types_id');
             $table->integer('content_category');
             $table->string('name');
+            $table->longText('description')->nullable();
             $table->string('path');
+            $table->string('word_count')->nullable();
             $table->tinyInteger('uploaded_by_admin')->default(2);
             $table->tinyInteger('is_approved')->default(0);
             $table->timestamps();

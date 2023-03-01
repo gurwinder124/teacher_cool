@@ -70,8 +70,8 @@ class AdminController extends Controller
                 ->where('users.email_verified_at','!=', null);
             if($user_type == User::TEACHER_TYPE){
                 $data = $data->leftJoin('teacher_settings', 'users.id', '=', 'teacher_settings.user_id')
-                            ->leftJoin('content_categories', 'content_categories.id', '=', 'teacher_settings.subject_id')
-                            ->select('users.*', 'user_details.*','content_categories.category_name as subject','teacher_settings.category');
+                            ->leftJoin('subjects', 'subjects.id', '=', 'teacher_settings.subject_id')
+                            ->select('users.*', 'user_details.*','subjects.subject_name as subject','teacher_settings.category');
             }elseif($user_type == User::STUDENT_TYPE){
                 $data = $data->leftJoin('subscribed_users', 'users.id', '=', 'subscribed_users.user_id')
                         ->select('users.*', 'user_details.*','subscribed_users.name as subscription_name','subscribed_users.expire_date');

@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Content;
-use App\Models\ContentCategories;
 use App\Models\ContentType;
 use App\Models\Reward;
 use Carbon\Carbon;
@@ -15,7 +14,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Pion\Laravel\ChunkUpload\Exceptions\UploadFailedException;
 use Illuminate\Http\UploadedFile;
-
+use countword;
 
 class ContentController extends Controller
 {
@@ -126,20 +125,40 @@ class ContentController extends Controller
     public function uploade(Request $request)
     {
         try{
-        // dd('here');
-        //Turn Off The Throttle API
-        //from web route
-        // create the file receiver
-            if($request->hasFile('file')){
+            // $validator = Validator::make($request->all(), [
+            //     'file' => 'required|mimes:csv,txt,xlx,xls,pdf,doc,docx'
+            // ]);
+
+            // if ($validator->fails()) {
+            //     return response()->json(['code' => '302', 'error' => $validator->errors()]);
+            // }
+            
+            //Turn Off The Throttle API
+            //from web route
+            // create the file receiver
+            $allowedExt = ['pdf','docx','doc','txt'];
+            if($request->file('file')){
                 
-                $content_ids =ContentCategories::get('id')->pluck('id');
+                // $content_ids =ContentCategories::get('id')->pluck('id');
                 // $dd($content_ids);
-                $data=new Form;
-                $paths=[];
+                // $data=new Form;
+                // $paths=[];
                 $user_obj = auth()->user();
-                $baseUrl = url('');
+                // $baseUrl = url('');
+
+                foreach($request->file('file') as $val){
+                    $extension =  $val->getClientOriginalExtension();
+                    if(!in_array( $extension, $allowedExt )){
+                        return sendError('Extentions Not Matched');
+                    }
+                }
                     
                 foreach($request->file('file') as $val){
+                    $counter = new countword();
+                    $wordCount  = $counter->count($val);
+
+                    $description = '';
+
                     if($files=$val){  
                         $name=$files->getClientOriginalName();
                         $filename = pathinfo($name, PATHINFO_FILENAME);
@@ -147,24 +166,25 @@ class ContentController extends Controller
                         $input = $filename.'_'.time().'.'.$extension;
                         //$path = $request->file('file')->storeAs('content',$fileName,'public');
                         $files->move('storage/app/public/content/',$input);
-                        $path = $baseUrl."/storage/app/public/content/".$input;  
-                        $data->path=$name;  
-                        array_push($paths,$path);
+                        $path = "/storage/app/public/content/".$input;  
 
                         $attchObj = new Content;
                         $attchObj->user_id =$user_obj->id;
                         $attchObj->content_types_id = array_rand([1,2]);
                         $attchObj->name = $input;
-                        $attchObj->content_category = array_rand(is_array($content_ids)?[$content_ids]:[Content::CONTENT_CATEGORY_IT,Content::CONTENT_CATEGORY_NON_IT]);
+                        $attchObj->description = $description;
+                        $attchObj->content_category = array_rand([Content::CONTENT_CATEGORY_IT,Content::CONTENT_CATEGORY_NON_IT]);
                         $attchObj->path = $path;
+                        $attchObj->word_count = $wordCount;
                         $attchObj->uploaded_by_admin = 1;
                         $attchObj->is_approved = 1;
                         $attchObj->save();
-                    }        
-                } 
+                    }  
+                       
+                }  
                 return sendResponse( '', 'File Uploaded Successfully'); 
                     
-                }
+            }
         }catch (Exception $e){
             return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
         }
