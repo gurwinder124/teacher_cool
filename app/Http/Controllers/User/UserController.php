@@ -62,6 +62,8 @@ class UserController extends Controller
 
             $userData = User::find($user->id);
 
+            $is_resubmit = false;
+
             if ($request->file('profile_path')) {
                 $extension = $request->file('profile_path')->getClientOriginalExtension();
                 $fileName = time().'.'.$extension;
@@ -70,12 +72,26 @@ class UserController extends Controller
                 $userData->profile_path = $profile_path;
             }
 
-            $userData->name = $request->first_name;
-            $userData->last_name = $request->last_name;
+            if($request->first_name != $userData->name){
+                $userData->name = $request->first_name;
+                $is_resubmit = true;
+            }
+            if($request->last_name != $userData->last_name){
+                $userData->last_name = $request->last_name;
+                $is_resubmit = true;
+            }
+            
             $userData->save();
 
+            // Edit User Details 
+            $userDetailsData = UserDetails::where('user_id',$user->id)
+                            ->select('contact')
+                            ->first();
             
-            $data['contact'] = $request->contact;
+            if($request->contact != $userDetailsData->contact){
+                $data['contact'] = $request->contact;
+                $is_resubmit = true;
+            }
             $data['gender'] = $request->gender;
             $data['age'] = $request->age;
             $data['city'] = $request->city;
@@ -92,7 +108,6 @@ class UserController extends Controller
             }
 
             if($userData->user_type == User::TEACHER_TYPE){
-                $is_resubmit = false;
 
                 $teacherSettingData['user_id'] = $user->id;
                 $teacherSettingData['working_hours'] = $request->working_hours;
