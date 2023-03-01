@@ -25,7 +25,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->tinyInteger('is_active')->default(0);
-            $table->tinyInteger('teacher_status')->default(0);
+            $table->tinyInteger('teacher_status')->default(1);
             $table->tinyInteger('requested_for_teacher')->default(0);
             $table->tinyInteger('is_newsletter_subscriber')->default(0);
             $table->integer('reffer_user_id')->nullable();

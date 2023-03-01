@@ -103,11 +103,8 @@ class LoginController extends Controller
                 'first_name' => 'required|min:3',
                 'is_teacher_request' => 'required',
                 'contact' => 'required',
-               // 'city' => 'required',
-               // 'state' => 'required',
                 'country' => 'required',
                 'qualification' => 'required',
-               // 'university' => 'required',
             ]);
             if ($validator->fails()) {
                 return response()->json(['code' => '302', 'error' => $validator->errors()]);

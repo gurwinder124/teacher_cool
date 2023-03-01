@@ -22,6 +22,7 @@ class User extends Authenticatable
     public const TEACHER_STATUS_PENDING = 1;
     public const TEACHER_STATUS_APPROVED = 2;
     public const TEACHER_STATUS_DISAPPROVED = 3;
+    public const TEACHER_STATUS_RESUBMIT = 4;
 
     protected $guard = 'api';
 
@@ -66,6 +67,7 @@ class User extends Authenticatable
             ['value'=>static::TEACHER_STATUS_PENDING, 'name' => "Pending"],
             ['value'=>static::TEACHER_STATUS_APPROVED, 'name' =>  "Approved"],
             ['value'=>static::TEACHER_STATUS_DISAPPROVED, 'name' =>  "Disapproved"],
+            ['value'=>static::TEACHER_STATUS_RESUBMIT, 'name' =>  "Resubmit"],
         ];
     }
 }

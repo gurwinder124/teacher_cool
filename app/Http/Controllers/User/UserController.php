@@ -92,10 +92,9 @@ class UserController extends Controller
             }
 
             if($userData->user_type == User::TEACHER_TYPE){
-                
+                $is_resubmit = false;
+
                 $teacherSettingData['user_id'] = $user->id;
-                // $teacherSettingData['id_proof'] = $id_proof_path;
-                // $teacherSettingData['document_path'] = $document_path; 
                 $teacherSettingData['working_hours'] = $request->working_hours;
                 $teacherSettingData['expected_income'] = $request->expected_income;
                 $teacherSettingData['preferred_currency'] = $request->preferred_currency;
@@ -112,6 +111,7 @@ class UserController extends Controller
                     $fileName = $originalfileName."-".time().'.'.$extension;
 
                     $teacherSettingData['id_proof'] = $request->file('id_proof')->storeAs('teacher',$fileName,'public');
+                    $is_resubmit = true;
                 }
 
                 if ($request->file('document_path')) {
@@ -123,14 +123,20 @@ class UserController extends Controller
                     $fileName = $originalfileName."-".time().'.'.$extension;
 
                     $teacherSettingData['document_path']  = $request->file('document_path')->storeAs('teacher',$fileName,'public');
+                    $is_resubmit = true;
                 }
 
                 $teacherSetting = TeacherSetting::where('user_id',$user->id)
                                     ->update($teacherSettingData);
 
                 if($teacherSetting ){
+                    if($is_resubmit){
+                        $userReq = User::where('id',$user->id)
+                            ->update(['teacher_status'=>User::TEACHER_STATUS_RESUBMIT]);
+                    }
                     return sendResponse([], 'Profile Updated Successfully');
                 }
+                return sendError('Profentional Information Not Updated');
             }
             return sendError('Somthing went Wrong');
         } catch (Exception $e) {
