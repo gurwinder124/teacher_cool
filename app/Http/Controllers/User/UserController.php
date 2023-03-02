@@ -159,6 +159,10 @@ class UserController extends Controller
                         $userReq = User::where('id',$user->id)
                             ->update(['teacher_status'=>User::TEACHER_STATUS_RESUBMIT]);
                     }
+
+                    // send email to Admin
+
+                    
                     return sendResponse([], 'Profile Updated Successfully');
                 }
                 return sendError('Profentional Information Not Updated');
