@@ -22,6 +22,7 @@ use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\User\ForgetPasswordController;
 use App\Http\Controllers\User\UserContentController;
 use App\Http\Controllers\User\OrderController;
+use App\Http\Controllers\User\BillingInfoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -67,6 +68,13 @@ Route::prefix('v1')->group(function () {
         // Notifications
         // Route::get('/notification', [UserController::class, 'notification']);
 
+    });
+
+    //PROTDECTED ROUTES FOR TEACHER ONLY
+    Route::middleware(['auth:api', 'scopes:teacher'])->group(function (){
+        // Content
+        Route::get('billing-info', [BillingInfoController::class, 'index']);
+        Route::post('billing-info', [BillingInfoController::class, 'addBillingInfo']);
     });
 
     //PROTDECTED ROUTES FOR STUDENT ONLY
