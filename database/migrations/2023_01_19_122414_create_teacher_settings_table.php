@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->unique();
             $table->string('experience')->nullable();
+            $table->string('experience_letter')->nullable();
             $table->string('id_proof')->nullable();
             $table->string('document_path')->nullable();
             $table->string('working_hours')->nullable();

@@ -120,7 +120,6 @@ class UserController extends Controller
                 $teacherSettingData['teacher_bio'] = $request->teacher_bio;
                 
                 if ($request->file('id_proof')) {
-                    // $name = $request->file('id_proof')->getClientOriginalName();
                     $extension = $request->file('id_proof')->getClientOriginalExtension();
                     $originalfileName = $request->file('id_proof')->getClientOriginalName();
                     $originalfileName = pathinfo($originalfileName, PATHINFO_FILENAME);
@@ -132,7 +131,6 @@ class UserController extends Controller
                 }
 
                 if ($request->file('document_path')) {
-                    // $name = $request->file('document_path')->getClientOriginalName();
                     $extension = $request->file('document_path')->getClientOriginalExtension();
                     $originalfileName = $request->file('document_path')->getClientOriginalName();
                     $originalfileName = pathinfo($originalfileName, PATHINFO_FILENAME);
@@ -141,6 +139,16 @@ class UserController extends Controller
 
                     $teacherSettingData['document_path']  = $request->file('document_path')->storeAs('teacher',$fileName,'public');
                     $is_resubmit = true;
+                }
+
+                if ($request->file('experience_letter')) {
+                    $extension = $request->file('experience_letter')->getClientOriginalExtension();
+                    $originalfileName = $request->file('experience_letter')->getClientOriginalName();
+                    $originalfileName = pathinfo($originalfileName, PATHINFO_FILENAME);
+                    $originalfileName = implode('-',explode(' ', $originalfileName));
+                    $fileName = $originalfileName."-".time().'.'.$extension;
+
+                    $teacherSettingData['experience_letter'] = $request->file('experience_letter')->storeAs('teacher',$fileName,'public');
                 }
 
                 $teacherSetting = TeacherSetting::where('user_id',$user->id)
