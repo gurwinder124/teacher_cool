@@ -35,6 +35,7 @@ class UserController extends Controller
                                     return $data->category_id;
                                 });
             $data['category_status'] = Content::getContentCategory();
+            $data['experience_arr'] = User::experienceArr();
             
             if(!$data){
                 sendError('Inavlid User', 401);
@@ -115,7 +116,8 @@ class UserController extends Controller
                 $teacherSettingData['preferred_currency'] = $request->preferred_currency;
                 $teacherSettingData['subject_id'] = $request->subject;
                 $teacherSettingData['category'] = $request->category;
-
+                $teacherSettingData['experience'] = $request->experience;
+                $teacherSettingData['teacher_bio'] = $request->teacher_bio;
                 
                 if ($request->file('id_proof')) {
                     // $name = $request->file('id_proof')->getClientOriginalName();

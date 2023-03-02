@@ -78,4 +78,14 @@ class User extends Authenticatable
             ['value'=>static::TEACHER_STATUS_RESUBMIT, 'name' =>  "Resubmit"],
         ];
     }
+
+    public static function experienceArr()
+    {
+        return [
+            ['name' => "0-2"],
+            ['name' =>  "2-4"],
+            ['name' =>  "4-6"],
+            ['name' =>  "6+"],
+        ];
+    }
 }
