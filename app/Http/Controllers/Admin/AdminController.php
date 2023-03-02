@@ -16,6 +16,9 @@ use Exception;
 use Illuminate\Support\Facades\DB;
 use App\Jobs\WelcomeSubAdmin;
 
+use Laravel\Passport\TokenRepository;
+use Laravel\Passport\RefreshTokenRepository;
+
 class AdminController extends Controller
 {
     public function index(Request $request)
@@ -112,7 +115,7 @@ class AdminController extends Controller
                 'success' => true,
                 'data'    => $data,
                 'message' => 'Success',
-                'teacher_request' => User::teacherRequestStatus(),
+                'teacher_request' => User::allTeacherStatus(),
                 'subscription_status' => Subscription::subscriptionStatus(),
             ];
 
@@ -178,12 +181,26 @@ class AdminController extends Controller
             if($request->user_status != User::IS_ACTIVE && $request->user_status != User::NOT_ACTIVE){
                 return sendError('Invalid Status Request');
             }
+            
             $user = User::find($request->user_id);
+            // dd($user->tokens[0]->id);
             if(!$user){
                 return sendError('Invalid User Request');
             }
             $user->is_active = $request->user_status;
             $user->save();
+
+            if($request->user_status == User::NOT_ACTIVE){
+
+                // $tokenData = DB::table('oauth_access_tokens');
+                // if($user->user_type == User::TEACHER_TYPE){
+                //     $tokenData = $tokenData->where('scopes', '["teacher"]');
+                // }else{
+                //     $tokenData = $tokenData->where('scopes', '["user"]');
+                // }
+                // $tokenData = $tokenData->delete();
+                
+            }
 
             return sendResponse("User Status Updated Successfully.");
 

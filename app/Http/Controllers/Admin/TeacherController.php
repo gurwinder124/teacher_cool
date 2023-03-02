@@ -25,9 +25,12 @@ class TeacherController extends Controller
                 ->leftJoin('subjects', 'subjects.id', '=', 'teacher_settings.subject_id')
                 ->select('users.*','teacher_settings.id_proof','teacher_settings.document_path','teacher_settings.expected_income',
                 'teacher_settings.preferred_currency','subjects.subject_name as subject','teacher_settings.category')
-                ->where('users.requested_for_teacher', 1)
+                ->where('users.user_type', User::TEACHER_TYPE)
                 ->where('users.email_verified_at','!=', null)
-                ->where('users.teacher_status', User::TEACHER_STATUS_PENDING);
+                ->where(function($query) {
+                    $query->where('users.teacher_status', User::TEACHER_STATUS_PENDING)
+                            ->orWhere('users.teacher_status', User::TEACHER_STATUS_RESUBMIT);
+                });
 
             if($keyword && $keyword != ''){
                 $data = $data->where(function($query) use ($keyword){
@@ -46,7 +49,7 @@ class TeacherController extends Controller
             $response = [
                 'success' => true,
                 'data'    => $data,
-                'teacher_status' => User::teacherRequestStatus(),
+                'teacher_request_status' => User::teacherRequestStatus(),
                 'message' => 'Success',
             ];
         
