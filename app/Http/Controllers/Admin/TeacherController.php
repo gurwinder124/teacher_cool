@@ -17,6 +17,7 @@ class TeacherController extends Controller
         try{
             $keyword = $request->keyword;
             $sort = $request->sort;
+            $teacher_status = $request->teacher_status;
             $page_size = ($request->page_size)? $request->page_size : 10;
 
             
@@ -37,6 +38,9 @@ class TeacherController extends Controller
                             $query->where('users.name', 'like', '%'.$keyword.'%')
                             ->orWhere('users.email', 'like', '%'.$keyword.'%');
                         });
+            }
+            if($teacher_status){
+                $data = $data->where('users.teacher_status', $teacher_status);
             }
 
             if($sort == 'asc'){
