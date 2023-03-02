@@ -19,7 +19,7 @@ class BillingInfoController extends Controller
             
             $data = DB::table('billing_infos')
                 ->join('users', 'users.id', '=', 'billing_infos.teacher_id')
-                ->select('billing_infos.*', 'users.name as first_name', 'users.last_name')
+                ->select('billing_infos.*')
                 ->where('billing_infos.teacher_id', '=', $user->id)
                 ->first();
             return sendResponse($data);
@@ -31,6 +31,7 @@ class BillingInfoController extends Controller
     public function addBillingInfo(Request $request){
         try{
             $validator = Validator::make($request->all(), [
+                'account_holder_name' => 'required',
                 'bank_name' => 'required',
                 'account_number' => 'required',
                 'ifsc_code' => 'required',
@@ -43,7 +44,7 @@ class BillingInfoController extends Controller
             $user = Auth::user();
             $billingInfo = BillingInfo::where('teacher_id', $user->id)->first();
             
-
+            $data['account_holder_name'] = $request->account_holder_name;
             $data['bank_name'] = $request->bank_name;
             $data['account_number'] = $request->account_number;
             $data['ifsc_code'] = $request->ifsc_code;
