@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('teacher_id')->unique();
             $table->string('bank_name');
+            $table->string('account_holder_name');
             $table->string('account_number');
             $table->string('ifsc_code');
             $table->string('firm_name')->nullable();
