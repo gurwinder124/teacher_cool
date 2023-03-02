@@ -24,7 +24,7 @@ class UserController extends Controller
             $data['user'] = DB::table('users')
                     ->join('user_details', 'users.id', '=', 'user_details.user_id')
                     ->leftJoin('teacher_settings', 'users.id', '=', 'teacher_settings.user_id')
-                    ->select('user_details.*','users.name as first_name','users.last_name','users.user_type','users.teacher_status','users.email','users.profile_path','users.teacher_id_number', 'teacher_settings.id_proof','teacher_settings.document_path','teacher_settings.working_hours','teacher_settings.expected_income','teacher_settings.category','teacher_settings.subject_id','teacher_settings.preferred_currency','teacher_settings.experience','teacher_settings.teacher_bio')
+                    ->select('user_details.*','users.name as first_name','users.last_name','users.user_type','users.teacher_status','users.email','users.profile_path','users.teacher_id_number', 'teacher_settings.id_proof','teacher_settings.document_path','teacher_settings.working_hours','teacher_settings.expected_income','teacher_settings.category','teacher_settings.subject_id','teacher_settings.preferred_currency','teacher_settings.experience','teacher_settings.experience_letter','teacher_settings.teacher_bio')
                     ->where('users.id', $user->id)
                     ->first();
 
