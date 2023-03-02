@@ -12,8 +12,10 @@ class Content extends Model
     public const CONTENT_CATEGORY_IT = 1;
     public const CONTENT_CATEGORY_NON_IT = 2;
 
-    public const CONTENT_APPROVE = 1;
-    public const CONTENT_DISAPPROVE = 2;
+    public const CONTENT_PENDING = 1;
+    public const CONTENT_APPROVE = 2;
+    public const CONTENT_DISAPPROVE = 3;
+    
     
     public static function getContentCategory()
     {

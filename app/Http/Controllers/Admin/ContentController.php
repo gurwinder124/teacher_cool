@@ -23,7 +23,8 @@ class ContentController extends Controller
         try{
             $keyword = $request->keyword;
             $sort = $request->sort;
-            $uploadBy = $request->uploaded_by_admin;
+            // $uploadBy = $request->uploaded_by_admin;
+            $status = $request->status;
             $page_size = ($request->page_size)? $request->page_size : 10;
 
             $data = DB::table('contents')
@@ -37,8 +38,11 @@ class ContentController extends Controller
             }else{
                 $data = $data->orderByDesc('contents.created_at');
             }
-            if($uploadBy){
-                $data = $data->where('contents.uploaded_by_admin','=',$uploadBy);
+            // if($uploadBy){
+            //     $data = $data->where('contents.uploaded_by_admin','=',$uploadBy);
+            // }
+            if($status == Content::CONTENT_APPROVE || $status == Content::CONTENT_PENDING ||  $status == Content::CONTENT_DISAPPROVE){
+                $data = $data->where('contents.is_approved','=',$status);
             }
             $data = $data->paginate($page_size);
 
@@ -125,14 +129,6 @@ class ContentController extends Controller
     public function uploade(Request $request)
     {
         try{
-            // $validator = Validator::make($request->all(), [
-            //     'file' => 'required|mimes:csv,txt,xlx,xls,pdf,doc,docx'
-            // ]);
-
-            // if ($validator->fails()) {
-            //     return response()->json(['code' => '302', 'error' => $validator->errors()]);
-            // }
-            
             //Turn Off The Throttle API
             //from web route
             // create the file receiver
@@ -141,10 +137,7 @@ class ContentController extends Controller
                 
                 // $content_ids =ContentCategories::get('id')->pluck('id');
                 // $dd($content_ids);
-                // $data=new Form;
-                // $paths=[];
                 $user_obj = auth()->user();
-                // $baseUrl = url('');
 
                 foreach($request->file('file') as $val){
                     $extension =  $val->getClientOriginalExtension();
@@ -156,6 +149,17 @@ class ContentController extends Controller
                 foreach($request->file('file') as $val){
                     $counter = new countword();
                     $wordCount  = $counter->count($val);
+
+                    // $parser = new Parser();
+                    // $pdf = $parser->parseFile($val);
+
+                    // $text = $pdf->getText();
+                    // $text = trim( $text );
+                    // // $text = str_replace( " ", "", $text );
+                    // $wordcount2 = str_word_count( $text);
+                    // print_r( $text);
+                    // echo "<br> wordCount=";
+                    // print_r( $wordCount);
 
                     $description = '';
 
@@ -177,7 +181,7 @@ class ContentController extends Controller
                         $attchObj->path = $path;
                         $attchObj->word_count = $wordCount;
                         $attchObj->uploaded_by_admin = 1;
-                        $attchObj->is_approved = 1;
+                        $attchObj->is_approved = Content::CONTENT_APPROVE;
                         $attchObj->save();
                     }  
                        

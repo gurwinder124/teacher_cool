@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('path');
             $table->string('word_count')->nullable();
             $table->tinyInteger('uploaded_by_admin')->default(2);
-            $table->tinyInteger('is_approved')->default(0);
+            $table->tinyInteger('is_approved')->default(1);
             $table->timestamps();
         });
     }
