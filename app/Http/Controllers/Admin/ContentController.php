@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\DB;
 use Pion\Laravel\ChunkUpload\Exceptions\UploadFailedException;
 use Illuminate\Http\UploadedFile;
 use countword;
+use ZipArchive;
+use Illuminate\Support\Facades\File; 
 
 class ContentController extends Controller
 {
@@ -164,18 +166,28 @@ class ContentController extends Controller
                     $description = '';
 
                     if($files=$val){  
-                        $name=$files->getClientOriginalName();
-                        $filename = pathinfo($name, PATHINFO_FILENAME);
-                        $extension = $files->getClientOriginalExtension();
-                        $input = $filename.'_'.time().'.'.$extension;
-                        //$path = $request->file('file')->storeAs('content',$fileName,'public');
-                        $files->move('storage/app/public/content/',$input);
-                        $path = "/storage/app/public/content/".$input;  
+                        // $name=$files->getClientOriginalName();
+                        // $filename = pathinfo($name, PATHINFO_FILENAME);
+                        // $extension = $files->getClientOriginalExtension();
+                        // $input = $filename.'_'.time().'.'.$extension;
+                        // //$path = $request->file('file')->storeAs('content',$fileName,'public');
+                        // $files->move('storage/app/public/content/',$input);
+                        // $path = "app/public/content/".$input;  
+
+                        
+                        $extension = $val->getClientOriginalExtension();
+                        $originalfileName = $val->getClientOriginalName();
+                        $originalfileName = pathinfo($originalfileName, PATHINFO_FILENAME);
+                        $originalfileName = implode('-',explode(' ', $originalfileName));
+                        $fileName = $originalfileName."-".time().'.'.$extension;
+                        $path = 'app/public/'.$val->storeAs('content',$fileName,'public');
+                        
+
 
                         $attchObj = new Content;
                         $attchObj->user_id =$user_obj->id;
                         $attchObj->content_types_id = array_rand([1,2]);
-                        $attchObj->name = $input;
+                        $attchObj->name = $fileName;
                         $attchObj->description = $description;
                         $attchObj->content_category = array_rand([Content::CONTENT_CATEGORY_IT,Content::CONTENT_CATEGORY_NON_IT]);
                         $attchObj->path = $path;
@@ -222,5 +234,35 @@ class ContentController extends Controller
             return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
         }
 
+    }
+
+    public function bulkExport(Request $request)
+    {
+        try {
+            $zip      = new ZipArchive;
+            $fileName = 'content.zip';
+            $fullPath = 'public/'.$fileName;
+
+            //delete Previous Zip file
+            if (File::exists($fullPath )) {
+                unlink($fullPath );
+            }
+            $data = Content::get(); 
+
+            if ($zip->open(public_path($fileName), ZipArchive::CREATE) === TRUE) {
+                foreach($data as $val){
+                    $path =  storage_path($val->path);
+                    $relativeName = basename($path);
+                    $zip->addFile($path, $relativeName);
+                    
+                }
+                $zip->close();
+                
+            }
+            
+            return response()->json(['status' => 'Success', 'code' => 200, 'path' => $fullPath]);
+        } catch (\Throwable $th) {
+            return response()->json(['status' => 'Error', 'code' => 500, 'message' => $th->getMessage()]);
+        }
     }
 }
