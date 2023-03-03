@@ -18,16 +18,17 @@ class DashboardContentController extends Controller
             $sort = $request->sort;
             $page_size = ($request->page_size)? $request->page_size : 8;
 
-            $data = DB::table('contents as c')->where('c.is_approved','=','1')
-                    ->leftJoin('users as u','u.id', '=', 'c.user_id')
-                    ->select('c.id','c.content_category','c.name','c.is_approved','c.created_at', 'u.name as teacher_name');
+            $data = DB::table('contents')
+                    ->where('contents.is_approved','=', Content::CONTENT_APPROVE)
+                    ->leftJoin('users','users.id', '=', 'contents.user_id')
+                    ->select('contents.id','contents.content_category','contents.name','contents.is_approved','contents.created_at', 'contents.description','users.name as teacher_name');
             if($keyword && $keyword != ''){
-                $data = $data->where('c.name', 'like', '%'.$keyword.'%');
+                $data = $data->where('contents.name', 'like', '%'.$keyword.'%');
             }
             if($sort == 'asc'){
-                $data = $data->orderBy('c.created_at');
+                $data = $data->orderBy('contents.created_at');
             }else{
-                $data = $data->orderByDesc('c.created_at');
+                $data = $data->orderByDesc('contents.created_at');
             }
             
             $data = $data->paginate($page_size);
@@ -38,7 +39,6 @@ class DashboardContentController extends Controller
                 'message' => 'Success',
                 'content_category' => Content::getContentCategory(),
                 'content_type' => ContentType::select('id','name')->get(),
-                'content_status' => Content::getContentStatus(),
             ];
         
             return response()->json($response, 200);
