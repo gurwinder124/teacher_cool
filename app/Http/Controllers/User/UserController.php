@@ -14,6 +14,7 @@ use Exception;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use App\Notifications\SystemNotification;
 
 class UserController extends Controller
 {
@@ -223,6 +224,23 @@ class UserController extends Controller
 
             return sendResponse($user->reffer_code);
 
+        }catch (Exception $e){
+            return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
+        }
+    }
+
+
+    public function notification(Request $request)
+    {
+        try{
+            $user = Auth::user();
+            $notificationData = [];
+            foreach ($user->notifications as $notification) {
+                if($notification->data){
+                    array_push($notificationData, $notification->data);
+                }
+            }
+            return sendResponse($notificationData);
         }catch (Exception $e){
             return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
         }

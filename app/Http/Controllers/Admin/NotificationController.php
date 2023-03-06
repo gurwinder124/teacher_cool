@@ -15,15 +15,20 @@ use Illuminate\Support\Facades\DB;
 
 class NotificationController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         
         try{
+            $page_size = $request->page_size ? $request->page_size : 10;
+
             $data = DB::table('notifications')
                 ->join('users', 'users.id', '=', 'notifications.notifiable_id')
-                ->select('notifications.*', 'users.name as first_name', 'users.last_name as last_name','users.user_type')
+                ->selectRaw('notifications.*, users.name as first_name, users.last_name as last_name,users.user_type,(CASE 
+                WHEN users.user_type = "1" THEN "Teacher" 
+                ELSE "Student" 
+                END) AS user_type_name')
                 ->orderBy('notifications.created_at')
-                ->get();
+                ->paginate($page_size);
 
             if(!$data){
                 return sendError('No record Found');
