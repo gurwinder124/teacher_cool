@@ -47,6 +47,7 @@ Route::prefix('v1')->group(function () {
     Route::post('register', [LoginController::class, 'register']);
     Route::post('forget-password', [ForgetPasswordController::class, 'forgetPassword']);
     Route::post('reset-password', [ForgetPasswordController::class, 'resetPassword']);
+    Route::post('verify-reset-token', [ForgetPasswordController::class, 'verifyResetPassToken']);
     
     Route::post('verify-email', [LoginController::class, 'verifyEmail']);
     Route::get('register-info', [LoginController::class, 'registerInfo']);
@@ -66,7 +67,7 @@ Route::prefix('v1')->group(function () {
         Route::post('/change-password', [UserController::class, 'changePassword']);
 
         // Notifications
-        // Route::get('/notification', [UserController::class, 'notification']);
+        Route::get('/notification', [UserController::class, 'notification']);
 
     });
 

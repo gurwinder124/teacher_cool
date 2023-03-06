@@ -82,4 +82,28 @@ class ForgetPasswordController extends Controller
             return response()->json(['status' => 'error', 'code' => '500', 'message' => $e->getmessage()]);
         }
     }
+
+    public function verifyResetPassToken(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'token' => 'required|string'
+            ]);
+            if ($validator->fails()) {
+                return response()->json(['code' => '302', 'error' => $validator->errors()]);
+            }
+
+            $resetData = DB::table('password_resets')
+                    ->select('email')
+                    ->where('token', $request->token)
+                    ->first();
+            if(!$resetData){
+                return sendError('Invalid Token');
+            }
+            
+            return response()->json(['status' => 'success', 'code' => '200', 'msg' => "Token verified"]);
+        } catch (Exception $e) {
+            return response()->json(['status' => 'error', 'code' => '500', 'message' => $e->getmessage()]);
+        }
+    }
 }
