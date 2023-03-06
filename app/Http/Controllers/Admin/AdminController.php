@@ -190,13 +190,13 @@ class AdminController extends Controller
 
             if($request->user_status == User::NOT_ACTIVE){
 
-                // $tokenData = DB::table('oauth_access_tokens');
-                // if($user->user_type == User::TEACHER_TYPE){
-                //     $tokenData = $tokenData->where('scopes', '["teacher"]');
-                // }else{
-                //     $tokenData = $tokenData->where('scopes', '["user"]');
-                // }
-                // $tokenData = $tokenData->delete();
+                $tokenData = DB::table('oauth_access_tokens');
+                if($user->user_type == User::TEACHER_TYPE){
+                    $tokenData = $tokenData->where('scopes', '["teacher"]');
+                }else{
+                    $tokenData = $tokenData->where('scopes', '["user"]');
+                }
+                $tokenData = $tokenData->delete();
                 
             }
 
