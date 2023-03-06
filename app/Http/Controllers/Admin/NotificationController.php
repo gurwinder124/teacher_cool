@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Notification;
 use Exception;
 use App\Notifications\SystemNotification;
+use App\Notifications\EmailNotification;
 use Illuminate\Support\Facades\DB;
 
 class NotificationController extends Controller
@@ -69,7 +70,6 @@ class NotificationController extends Controller
             }
 
             $userData = $userData->get();
-            // dd($userData);
 
             $data = [
                 'title' => $request->title,
@@ -79,7 +79,7 @@ class NotificationController extends Controller
             if($request->notification_type == NotificationModel::PUSH_NOTIFICATION){
                 Notification::sendNow($userData, new SystemNotification($data));
             }else{
-                dd('email notification');
+                Notification::sendNow($userData, new EmailNotification($data));
             }
             return sendResponse("Notification Sent Successfully");
         }catch (Exception $e){
