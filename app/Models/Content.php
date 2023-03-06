@@ -9,6 +9,7 @@ class Content extends Model
 {
     use HasFactory;
 
+    public const CONTENT_CATEGORY_BOTH = 0;
     public const CONTENT_CATEGORY_IT = 1;
     public const CONTENT_CATEGORY_NON_IT = 2;
 

@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('expected_income')->nullable();
             $table->string('preferred_currency')->nullable();
             $table->integer('subject_id')->nullable();
-            $table->string('category')->nullable();
+            $table->integer('category')->default(0);
             $table->longText('teacher_bio')->nullable();
             $table->timestamps();
         });

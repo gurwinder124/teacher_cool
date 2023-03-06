@@ -42,7 +42,7 @@ class AdminForgetPasswordController extends Controller
                     ]
 
                 );
-                return response()->json(['status' => 'success', 'code' => '200', 'msg' => 'Plaese check your mail to  reset your password']);
+                return response()->json(['status' => 'success', 'code' => '200', 'msg' => 'Please check your mail to reset your password']);
             } else {
                 return response()->json(['status' => 'error', 'code' => '400', 'data' => 'user not found']);
             }

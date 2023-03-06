@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "85bb5a6e714ea7f42e106fffcb353a3c",
+    "content-hash": "8e6937dfbefb0e66c84c43d8bf231bc2",
     "packages": [
         {
             "name": "andhika18/countword",

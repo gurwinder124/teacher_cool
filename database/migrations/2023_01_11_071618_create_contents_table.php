@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('name');
             $table->longText('description')->nullable();
             $table->string('path');
+            $table->string('page_count');
             $table->string('word_count')->nullable();
             $table->tinyInteger('uploaded_by_admin')->default(2);
             $table->tinyInteger('is_approved')->default(1);

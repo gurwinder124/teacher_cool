@@ -13,6 +13,7 @@
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
         "laravelcollective/html": "^6.3",
+        "smalot/pdfparser": "^2.3",
         "twilio/sdk": "^6.44"
     },
     "require-dev": {
