@@ -206,7 +206,7 @@ class ContentController extends Controller
         try {
             $zip      = new ZipArchive;
             $fileName = 'content.zip';
-            $fullPath = 'public/content/'.$fileName;
+            $fullPath = 'public/'.$fileName;
 
             //delete Previous Zip file
             if (File::exists($fullPath )) {
