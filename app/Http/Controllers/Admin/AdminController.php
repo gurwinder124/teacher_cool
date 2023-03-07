@@ -393,7 +393,7 @@ class AdminController extends Controller
 
             if(strcmp($request->get('current_password'), $request->get('new_password')) == 0){
                 // Current password and new password same
-                return sendError("New Password cannot be same as your current password.", [], 400);
+                return sendError("New password cannot be same as your current password.", [], 400);
             }
             
             $user = Auth::user();
@@ -403,7 +403,7 @@ class AdminController extends Controller
             $data->password = Hash::make($request->new_password);
             $data->save();
 
-            return sendResponse($data, 'Password Updated Successfully');
+            return sendResponse($data, 'Password updated successfully');
         } catch (Exception $e) {
             return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
         }

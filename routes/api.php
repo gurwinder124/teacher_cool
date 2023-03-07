@@ -143,6 +143,7 @@ Route::prefix('admin')->group(function (){
         Route::get('news-letter/{id}', [NewsLetterController::class, 'singleNewsLetter']);
         // Route::get('news-letter-history', [NewsLetterController::class, 'newsletterHistory']);
         Route::post('news-letter', [NewsLetterController::class, 'sendNewsletterNotification']);
+        Route::post('news-letter/{id}', [NewsLetterController::class, 'updateNewsLetter']);
 
         // Orders
         Route::get('orders', [AdminOrderController::class, 'index']);

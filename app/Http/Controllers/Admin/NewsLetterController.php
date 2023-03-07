@@ -125,4 +125,51 @@ class NewsLetterController extends Controller
             return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
         }
     }
+
+    public function updateNewsLetter($id, Request $request)
+    {
+        try{
+            if($id <= 0){
+                return sendError('Invalid Request');
+            }
+            
+            $validator = Validator::make($request->all(), [
+                'title' => 'required',
+                'message' => 'required',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json(['code' => '302', 'error' => $validator->errors()]);
+            }
+
+            $newsLetterData = NewsLetter::find($id);
+
+            if(!$newsLetterData){
+                return sendError('Invalid Request');
+            }
+
+            $cover_image = '';
+            
+            if ($request->file('cover_image')) {
+                // $name = $request->file('cover_image')->getClientOriginalName();
+                $extension = $request->file('cover_image')->getClientOriginalExtension();
+                $originalfileName = $request->file('cover_image')->getClientOriginalName();
+                $originalfileName = pathinfo($originalfileName, PATHINFO_FILENAME);
+                $originalfileName = implode('-',explode(' ', $originalfileName));
+                $fileName = $originalfileName."-".time().'.'.$extension;
+                $cover_image = $request->file('cover_image')->storeAs('news-letter',$fileName,'public');
+
+                $newsLetterData->cover_image_path = $cover_image;
+            }
+           
+            $newsLetterData->type = NewsLetter::NEWSLETTER_TYPE_SUBSCRIBED;
+            $newsLetterData->title = $request->title;
+            $newsLetterData->message = $request->message;
+            $newsLetterData->save();
+
+            return sendResponse([], 'NewsLetter updated successfully');
+        }catch (Exception $e){
+            return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
+        }
+    }
 }
