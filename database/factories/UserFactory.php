@@ -24,7 +24,7 @@ class UserFactory extends Factory
             'user_type' => rand(1, 2),
             'email_verified_at' => now(),
             'is_active'=>'1',
-            'password' => Hash::make('mind@123'), // password
+            'password' => Hash::make('Mind@123'), // password
             'created_at'=> date('Y-m-d H:i:s',rand(1662100000,1662113343))
         ];
     }

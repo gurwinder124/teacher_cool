@@ -15,7 +15,7 @@ class UserTableSeeder extends Seeder
      */
     public function run()
     {
-        User::factory()->count(20)->create();
+        User::factory()->count(10)->create();
 
         for($i = 0; $i< 20; $i++){
             DB::table('user_details')->insert([

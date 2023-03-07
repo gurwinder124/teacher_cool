@@ -45,9 +45,9 @@ class EmailNotification extends Notification
     {
         return (new MailMessage)
                     ->line($this->data['title'])
-                    ->line($this->data['message'])
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+                    ->line($this->data['message']);
+                    // ->action('Notification Action', url('/'))
+                    // ->line('Thank you for using our application!');
     }
 
     /**

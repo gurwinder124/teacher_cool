@@ -79,7 +79,7 @@ class NotificationController extends Controller
             if($request->notification_type == NotificationModel::PUSH_NOTIFICATION){
                 Notification::sendNow($userData, new SystemNotification($data));
             }else{
-                Notification::sendNow($userData, new EmailNotification($data));
+                Notification::sendNow($userData, new EmailNotification($data))->afterCommit();
             }
             return sendResponse("Notification Sent Successfully");
         }catch (Exception $e){
