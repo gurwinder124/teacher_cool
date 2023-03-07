@@ -21,14 +21,22 @@ class NotificationController extends Controller
         
         try{
             $page_size = $request->page_size ? $request->page_size : 10;
+            $keyword = $request->keyword;
 
             $data = DB::table('notifications')
                 ->join('users', 'users.id', '=', 'notifications.notifiable_id')
                 ->selectRaw('notifications.*, users.name as first_name, users.last_name as last_name,users.user_type,(CASE 
                 WHEN users.user_type = "1" THEN "Teacher" 
                 ELSE "Student" 
-                END) AS user_type_name')
-                ->orderBy('notifications.created_at')
+                END) AS user_type_name');
+            if($keyword && $keyword != ''){
+                $data = $data->where(function($query) use ($keyword){
+                    $query->where('users.name', 'like', '%'.$keyword.'%')
+                    ->orWhere('users.last_name', 'like', '%'.$keyword.'%')
+                    ->orWhere('notifications.data->title', 'like', '%'.$keyword.'%');
+                });
+            }
+            $data = $data->orderBy('notifications.created_at')
                 ->paginate($page_size);
 
             if(!$data){
