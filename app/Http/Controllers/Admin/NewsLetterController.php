@@ -9,15 +9,26 @@ use Exception;
 use App\Models\User;
 use App\Models\EmailTemplate;
 use App\Models\EmailHistory;
-use App\Jobs\NewsLetter;
+// use App\Jobs\NewsLetterJob;
+use App\Models\NewsLetter;
 
 class NewsLetterController extends Controller
 {
     public function index(Request $request)
     {
         try{
+
+            $keyword = $request->keyword;
+            $page_size = ($request->page_size)? $request->page_size : 10;
             
-            $data = EmailTemplate::where('slug', EmailTemplate::NEWSLETTER_EMAIL)->first();
+            $data = new NewsLetter();
+
+            if($keyword && $keyword != ''){
+                $data = $data->where('title', 'like', '%'.$keyword.'%');
+            }
+
+            $data = $data->orderByDesc('created_at')
+                        ->paginate($page_size);
         
             return sendResponse($data);
             
@@ -26,33 +37,52 @@ class NewsLetterController extends Controller
         }
     }
 
-    public function newsletterHistory(Request $request)
+    public function singleNewsLetter($id)
     {
         try{
-            $start = $request->start;
-            $end = $request->end;
-
-            $data = EmailHistory::where('email_type', EmailTemplate::NEWSLETTER_EMAIL);
-            if($start){
-                $data = $data->where('created_at', '>=', $start);
+            if($id <= 0){
+                return sendError('Invalid Request');
             }
-            if($end){
-                $data = $data->where('created_at', '<=', $end);
-            }
-
-            $data = $data->get();
-        
-            return sendResponse($data);
             
+            $data = NewsLetter::find($id);
+
+            if($data){
+                return sendResponse($data);
+            }
+            return sendError('Invalid Request',[], 404);
         }catch (Exception $e){
             return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
         }
     }
+
+    // public function newsletterHistory(Request $request)
+    // {
+    //     try{
+    //         $start = $request->start;
+    //         $end = $request->end;
+
+    //         $data = EmailHistory::where('email_type', EmailTemplate::NEWSLETTER_EMAIL);
+    //         if($start){
+    //             $data = $data->where('created_at', '>=', $start);
+    //         }
+    //         if($end){
+    //             $data = $data->where('created_at', '<=', $end);
+    //         }
+
+    //         $data = $data->get();
+        
+    //         return sendResponse($data);
+            
+    //     }catch (Exception $e){
+    //         return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
+    //     }
+    // }
 
     public function sendNewsletterNotification(Request $request)
     {
         try{
             $validator = Validator::make($request->all(), [
+                'title' => 'required',
                 'message' => 'required',
             ]);
 
@@ -60,22 +90,35 @@ class NewsLetterController extends Controller
                 return response()->json(['code' => '302', 'error' => $validator->errors()]);
             }
 
-            $users = User::where('is_newsletter_subscriber', '=', 1)
-                        ->select(['email'])->get()->toarray();
-            // dd($users);
-            $data = new EmailHistory;
+            // $users = User::where('is_newsletter_subscriber', '=', 1)
+            //             ->select(['email'])->get()->toarray();
+
+            $cover_image = '';
+            if ($request->file('cover_image')) {
+                // $name = $request->file('cover_image')->getClientOriginalName();
+                $extension = $request->file('cover_image')->getClientOriginalExtension();
+                $originalfileName = $request->file('cover_image')->getClientOriginalName();
+                $originalfileName = pathinfo($originalfileName, PATHINFO_FILENAME);
+                $originalfileName = implode('-',explode(' ', $originalfileName));
+                $fileName = $originalfileName."-".time().'.'.$extension;
+                $cover_image = $request->file('cover_image')->storeAs('news-letter',$fileName,'public');
+            }
+
+            $data = new NewsLetter;
            
-            $data->email_type = EmailTemplate::NEWSLETTER_EMAIL;
+            $data->type = NewsLetter::NEWSLETTER_TYPE_SUBSCRIBED;
+            $data->title = $request->title;
+            $data->cover_image_path = $cover_image;
             $data->message = $request->message;
             $data->save();
 
-            $newsLetterData = [
-                'users' => $users,
-                'body' => $request->message,
-                'subject' => $request->subject,
-            ];
+            // $newsLetterData = [
+            //     'users' => $users,
+            //     'body' => $request->message,
+            //     'subject' => $request->subject,
+            // ];
             
-            dispatch(new NewsLetter($newsLetterData));
+            // dispatch(new NewsLetter($newsLetterData));
 
             return sendResponse([], 'Success');
         }catch (Exception $e){

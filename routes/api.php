@@ -140,7 +140,8 @@ Route::prefix('admin')->group(function (){
 
         // NewsLetter
         Route::get('news-letter', [NewsLetterController::class, 'index']);
-        Route::get('news-letter-history', [NewsLetterController::class, 'newsletterHistory']);
+        Route::get('news-letter/{id}', [NewsLetterController::class, 'singleNewsLetter']);
+        // Route::get('news-letter-history', [NewsLetterController::class, 'newsletterHistory']);
         Route::post('news-letter', [NewsLetterController::class, 'sendNewsletterNotification']);
 
         // Orders

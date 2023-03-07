@@ -11,7 +11,7 @@ use Illuminate\Queue\SerializesModels;
 use App\Mail\SendNewsLetter;
 use Illuminate\Support\Facades\Mail;
 
-class NewsLetter implements ShouldQueue
+class NewsLetterJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
