@@ -26,6 +26,7 @@ return new class extends Migration
             $table->integer('subject_id')->nullable();
             $table->integer('category')->default(0);
             $table->longText('teacher_bio')->nullable();
+            $table->longText('resubmit_data')->nullable();
             $table->timestamps();
         });
     }

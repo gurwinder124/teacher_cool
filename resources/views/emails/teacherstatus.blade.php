@@ -100,7 +100,7 @@
                 <p></p>
                 <p></p>
               <td style="padding:30px;background-color:#f5f5f5;">
-                <h1 style="text-align: center; margin-top:0;font-size:1.953em;line-height:1.3;font-weight:bold;letter-spacing:-0.02em;margin-bottom:10;color:#7D36CC;">Greetings! Teacher Cool</h1>
+                <h1 style="text-align: center; margin-top:0;font-size:1.953em;line-height:1.3;font-weight:bold;letter-spacing:-0.02em;margin-bottom:10;color:#7D36CC;">Greetings!</h1>
                 <p style="text-align: center; margin:0;">Dear {{$receiver_name}},
                 </p>
                 <!-- <p style="text-align: center;">Welcome To Teacher Cool,</p> -->

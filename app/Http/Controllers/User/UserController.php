@@ -25,7 +25,7 @@ class UserController extends Controller
             $data['user'] = DB::table('users')
                     ->join('user_details', 'users.id', '=', 'user_details.user_id')
                     ->leftJoin('teacher_settings', 'users.id', '=', 'teacher_settings.user_id')
-                    ->select('user_details.*','users.name as first_name','users.last_name','users.user_type','users.teacher_status','users.email','users.profile_path','users.teacher_id_number', 'teacher_settings.id_proof','teacher_settings.document_path','teacher_settings.working_hours','teacher_settings.expected_income','teacher_settings.category','teacher_settings.subject_id','teacher_settings.preferred_currency','teacher_settings.experience','teacher_settings.experience_letter','teacher_settings.teacher_bio')
+                    ->select('user_details.*','users.name as first_name','users.last_name','users.user_type','users.teacher_status','users.email','users.profile_path','users.teacher_id_number', 'teacher_settings.id_proof','teacher_settings.document_path','teacher_settings.working_hours','teacher_settings.expected_income','teacher_settings.category','teacher_settings.subject_id','teacher_settings.preferred_currency','teacher_settings.experience','teacher_settings.experience_letter','teacher_settings.teacher_bio','teacher_settings.resubmit_data')
                     ->where('users.id', $user->id)
                     ->first();
 
@@ -65,6 +65,7 @@ class UserController extends Controller
             $userData = User::find($user->id);
 
             $is_resubmit = false;
+            $new_data = [];
 
             if ($request->file('profile_path')) {
                 $extension = $request->file('profile_path')->getClientOriginalExtension();
@@ -76,10 +77,12 @@ class UserController extends Controller
 
             if($request->first_name != $userData->name){
                 $userData->name = $request->first_name;
+                $new_data['first_name'] = $request->first_name;
                 $is_resubmit = true;
             }
             if($request->last_name != $userData->last_name){
                 $userData->last_name = $request->last_name;
+                $new_data['last_name'] = $request->last_name;
                 $is_resubmit = true;
             }
             
@@ -92,6 +95,7 @@ class UserController extends Controller
             
             if($request->contact != $userDetailsData->contact){
                 $data['contact'] = $request->contact;
+                $new_data['contact'] = $request->contact;
                 $is_resubmit = true;
             }
             $data['gender'] = $request->gender;
@@ -151,6 +155,8 @@ class UserController extends Controller
 
                     $teacherSettingData['experience_letter'] = $request->file('experience_letter')->storeAs('teacher',$fileName,'public');
                 }
+
+                $teacherSettingData['resubmit_data'] = json_encode($new_data);
 
                 $teacherSetting = TeacherSetting::where('user_id',$user->id)
                                     ->update($teacherSettingData);

@@ -81,7 +81,8 @@ class AssignmentController extends Controller
         }
     }
 
-    public function updateStatus(Request $request){
+    public function updateStatus(Request $request)
+    {
         try{
             $validator = Validator::make($request->all(), [
                 'id' => 'required',

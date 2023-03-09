@@ -216,7 +216,7 @@ class LoginController extends Controller
             
             $welcomedata=[
                 'to'=> $request->email,
-                'receiver_name'=> $request->name,
+                'receiver_name'=> $request->first_name." ".$request->last_name,
                 'url'=> $url,
                 'data' => 
                 $saveTeacher? "Your Request as Teacher is pending for confirmation. We will revert within 48 hrs.Please verify your email from the link below:  " 
@@ -251,7 +251,7 @@ class LoginController extends Controller
             if($updateData && $data->requested_for_teacher){
                 $teacherEmailData=[
                     'to'=>$data->email,
-                    'receiver_name'=>$data->name,
+                    'receiver_name'=>$data->name." ".$data->last_name,
                     'body' =>"Your Request as Teacher has been Pending for approval. We will revert you within 24hrs." ,
                     'subject' => "Regarding Approval Request"
                 ];
@@ -259,7 +259,7 @@ class LoginController extends Controller
                 $adminEmailData=[
                     'to'=> env('ADMIN_EMAIL_ADDRESS'),
                     'name'=>'Teacher Cool',
-                    'body' =>"New teacher, ".$data->name." has been Register with ".$data->email." email." ,
+                    'body' =>"New teacher, ".$data->name." ".$data->last_name." has been Register with ".$data->email." email." ,
                     'subject' => "Regarding Teacher Approval"
                 ];
                 dispatch(new AdminEmail($adminEmailData))->afterResponse();
