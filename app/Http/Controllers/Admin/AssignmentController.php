@@ -68,8 +68,14 @@ class AssignmentController extends Controller
                 'student.email as student_email','student.name as student_name')
                 ->where('assignments.id', '=', $id)
                 ->first();
-    
-            return sendResponse($data);
+            $response = [
+                'success' => true,
+                'data'    => $data,
+                'message' => 'Success',
+                'all_assignment_status' => Assignment::assignmentStatus(),
+                'category_status' => Content::getContentCategory(),
+            ];
+            // return sendResponse($data);
         }catch (Exception $e){
             return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
         }
