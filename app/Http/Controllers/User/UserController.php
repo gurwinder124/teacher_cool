@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\UserDetails;
 use App\Models\TeacherSetting;
 use App\Models\Subject;
+use App\Models\ContentType;
 use Illuminate\Support\Facades\Auth;
 use Exception;
 use Illuminate\Support\Facades\Validator;
@@ -247,6 +248,51 @@ class UserController extends Controller
                 }
             }
             return sendResponse($notificationData);
+        }catch (Exception $e){
+            return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
+        }
+    }
+
+    public function search(Request $request)
+    {
+        try{
+            $keyword = $request->keyword;
+            $page_size = ($request->page_size)? $request->page_size : 10;
+            $sort = $request->sort;
+
+            if(strtolower($keyword) == 'it'){
+                $keyword = 1;
+            }elseif(strtolower($keyword) == 'nonit' || strtolower($keyword) == 'non-it'){
+                $keyword = 2;
+            }
+            $data = DB::table('contents')
+                    ->leftJoin('users','users.id', '=', 'contents.user_id')
+                    ->select('contents.*', 'users.name as teacher_name');
+            if($keyword && $keyword != ''){
+                $data = $data->where(function($query) use ($keyword){
+                            $query->where('contents.name', 'like', '%'.$keyword.'%')
+                            ->orWhere('contents.description', 'like', '%'.$keyword.'%')
+                            ->orWhere('contents.content_category', $keyword);
+                        });
+            }
+
+            if($sort == 'desc'){
+                $data = $data->orderByDesc('contents.name');
+            }else{
+                $data = $data->orderBy('contents.name');
+            }
+
+            $data = $data->paginate($page_size);
+
+            $response = [
+                'success' => true,
+                'data'    => $data,
+                'message' => 'Success',
+                'content_category' => Content::getContentCategory(),
+                'content_type' => ContentType::select('id','name')->get(),
+            ];
+        
+            return response()->json($response, 200);
         }catch (Exception $e){
             return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
         }

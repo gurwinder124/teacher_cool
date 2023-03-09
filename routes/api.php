@@ -58,6 +58,8 @@ Route::prefix('v1')->group(function () {
     // content
     Route::get('dashboard-content', [DashboardContentController::class, 'index']);
 
+    Route::get('/search', [UserController::class, 'search']);
+
 
     //PROTDECTED ROUTES FOR BOTH TEACHER AND STUDENT
     Route::middleware(['auth:api', 'scope:user,teacher'])->group(function (){

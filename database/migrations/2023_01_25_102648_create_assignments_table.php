@@ -23,6 +23,7 @@ return new class extends Migration
             $table->tinyInteger('category');
             $table->string('title');
             $table->string('keyword');
+            $table->string('word_count');
             $table->string('assingment_path')->nullable();
             $table->longText('assignment_answer')->nullable();
             $table->string('assignment_answer_path')->nullable();

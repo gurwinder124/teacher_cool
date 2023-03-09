@@ -31,7 +31,7 @@ class DashboardContentController extends Controller
                 $data = $data->orderByDesc('contents.created_at');
             }
             
-            $data = $data->paginate($page_size);
+            $data = $data->limit(12)->get();
 
             $response = [
                 'success' => true,
