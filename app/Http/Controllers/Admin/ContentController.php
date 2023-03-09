@@ -150,10 +150,10 @@ class ContentController extends Controller
 
                         $attchObj = new Content;
                         $attchObj->user_id =$user_obj->id;
-                        $attchObj->content_types_id = array_rand([1,2]);
+                        $attchObj->content_types_id = rand(1,2);
                         $attchObj->name = $fileName;
                         $attchObj->description = $description;
-                        $attchObj->content_category = array_rand([Content::CONTENT_CATEGORY_IT,Content::CONTENT_CATEGORY_NON_IT]);
+                        $attchObj->content_category = rand(Content::CONTENT_CATEGORY_IT,Content::CONTENT_CATEGORY_NON_IT);
                         $attchObj->path = $path;
                         $attchObj->page_count = $pageCount;
                         $attchObj->word_count = $wordCount2;
