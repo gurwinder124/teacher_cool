@@ -75,7 +75,7 @@ class AssignmentController extends Controller
                 'all_assignment_status' => Assignment::assignmentStatus(),
                 'category_status' => Content::getContentCategory(),
             ];
-            // return sendResponse($data);
+            return sendResponse($response);
         }catch (Exception $e){
             return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
         }
