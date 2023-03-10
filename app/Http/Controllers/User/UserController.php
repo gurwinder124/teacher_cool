@@ -10,6 +10,7 @@ use App\Models\UserDetails;
 use App\Models\TeacherSetting;
 use App\Models\Subject;
 use App\Models\ContentType;
+use App\Models\Assignment;
 use Illuminate\Support\Facades\Auth;
 use Exception;
 use Illuminate\Support\Facades\Validator;
@@ -172,8 +173,6 @@ class UserController extends Controller
                     }
 
                     // send email to Admin
-
-                    
                     
                 }
                 return sendResponse([], 'Profile Updated Successfully');
@@ -296,6 +295,30 @@ class UserController extends Controller
             ];
         
             return response()->json($response, 200);
+        }catch (Exception $e){
+            return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
+        }
+    }
+
+    public function statsInfo()
+    {
+        try{
+            $assignments = DB::table('assignments')
+                            ->join('users as teacher', 'teacher.id', '=', 'assignments.teacher_id');
+            $totalAssignment =  $assignments->get()->count();
+            $assignmentAnswered = $assignments->where('assignment_status', Assignment::ASSIGNMENT_STATUS_SUBMITTED)
+                                ->get()->count();
+            $assignmentApproved = $assignments->where('assignment_status', Assignment::ASSIGNMENT_STATUS_APPROVED)
+                                ->get()->count();
+
+            $user = Auth::user();
+            $data['name'] =  $user->name;
+            $data['total_earnings'] =  1000;
+            $data['total_assignments'] =  $totalAssignment;
+            $data['assignment_answered'] =  $assignmentAnswered;
+            $data['assignment_approved'] =  $assignmentApproved;
+           
+            return sendResponse($data);
         }catch (Exception $e){
             return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
         }
