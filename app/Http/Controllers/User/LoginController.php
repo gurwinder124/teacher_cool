@@ -105,6 +105,9 @@ class LoginController extends Controller
                 'contact' => 'required',
                 'country' => 'required',
                 'qualification' => 'required',
+                'profile' => 'file|mimes:jpg,png,jpeg',
+                'id_proof' => 'file|mimes:jpg,png,jpeg,pdf',
+                'document_path' => 'file|mimes:jpg,png,jpeg,pdf',
             ]);
             if ($validator->fails()) {
                 return response()->json(['code' => '302', 'error' => $validator->errors()]);
