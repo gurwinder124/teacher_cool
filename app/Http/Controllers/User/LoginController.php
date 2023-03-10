@@ -66,7 +66,7 @@ class LoginController extends Controller
                     }
 
                     if ($user->user_type == User::TEACHER_TYPE) {
-                        if($user->teacher_status == User::TEACHER_STATUS_PENDING || $user->teacher_status == User::TEACHER_STATUS_RESUBMIT){
+                        if($user->teacher_status == User::TEACHER_STATUS_PENDING){
                             $data['profile_status']  = 'pending';
                             return sendResponse($data, 'Your Profile is in Review');
                         }elseif($user->teacher_status == User::TEACHER_STATUS_DISAPPROVED){
