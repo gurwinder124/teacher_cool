@@ -174,9 +174,9 @@ class UserController extends Controller
                     // send email to Admin
 
                     
-                    return sendResponse([], 'Profile Updated Successfully');
+                    
                 }
-                return sendError('Profentional Information Not Updated');
+                return sendResponse([], 'Profile Updated Successfully');
             }
             return sendError('Somthing went Wrong');
         } catch (Exception $e) {
