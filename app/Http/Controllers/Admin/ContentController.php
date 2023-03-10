@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Pion\Laravel\ChunkUpload\Exceptions\UploadFailedException;
 use Illuminate\Http\UploadedFile;
-// use countword;
+use countword;
 use ZipArchive;
 use Illuminate\Support\Facades\File; 
 use Smalot\PdfParser\Parser;
@@ -88,6 +88,18 @@ class ContentController extends Controller
 
         return sendResponse($response, 200);
     }
+
+    public function convertDocToPDF( $docFile){
+        
+        $domPdfPath = base_path('vendor/dompdf/dompdf');
+        \PhpOffice\PhpWord\Settings::setPdfRendererPath($domPdfPath);
+        \PhpOffice\PhpWord\Settings::setPdfRendererName('DomPDF'); 
+        $Content = \PhpOffice\PhpWord\IOFactory::load($docFile); 
+        $PDFWriter = \PhpOffice\PhpWord\IOFactory::createWriter($Content,'PDF');
+        // dd($PDFWriter); 
+        $PDFWriter->save(public_path('new-result.pdf')); 
+        echo 'File has been successfully converted';
+    }
     
     public function uploade(Request $request)
     {
@@ -95,36 +107,42 @@ class ContentController extends Controller
             //Turn Off The Throttle API
             //from web route
             // create the file receiver
-            $allowedExt = ['pdf','docx','doc','txt'];
+            $allowedExt = ['pdf','docx','doc'];
             if($request->file('file')){
                 
-                // $content_ids =ContentCategories::get('id')->pluck('id');
-                // $dd($content_ids);
                 $user_obj = auth()->user();
 
                 // Check File Extention Validation
                 foreach($request->file('file') as $val){
                     $extension =  $val->getClientOriginalExtension();
+                    // print_r($extension); echo "<br>";
                     if(!in_array( $extension, $allowedExt )){
-                        return sendError('Only PDF files are allowed');
+                        return sendError('Only PDF, Doc and Docx files are allowed files are allowed');
                     }
                 }
                     
                 foreach($request->file('file') as $val){
-                    // Get the word count of file
-                    // $counter = new countword();
-                    // $wordCount  = $counter->count($val);
-
-                    // Read Text in File
-                    $parser = new Parser();
-                    $pdf = $parser->parseFile($val);
-                    $text = $pdf->getText();
-                    $pageCount = $pdf->getDetails()['Pages'];
+                    $extension =  $val->getClientOriginalExtension();
+                    $pageCount = rand(1,10);
+                    $wordCount = 0;
+                    $description = '';
+                    if($extension == 'doc' || $extension == 'docx'){
+                        $counter = new countword();
+                        $wordCount  = $counter->count($val);
+                    }else{
+                       // Read Text in PDF File
+                        $parser = new Parser();
+                        $pdf = $parser->parseFile($val);
+                        $text = $pdf->getText();
+                        $pageCount = $pdf->getDetails()['Pages'];
+                        
+                        $description = implode(' ', array_slice(explode(' ', $text), 0, 25))."\n";
+                        $text = trim( $text );
+                        // // $text = str_replace( " ", "", $text );
+                        // Get the word count of file
+                        $wordCount = str_word_count( $text);
+                    }
                     
-                    $description = implode(' ', array_slice(explode(' ', $text), 0, 25))."\n";
-                    $text = trim( $text );
-                    // // $text = str_replace( " ", "", $text );
-                    $wordCount2 = str_word_count( $text);
                     // print_r( $text);
                     // echo "<br> wordCount=";
                     // print_r( $wordCount);
@@ -156,7 +174,7 @@ class ContentController extends Controller
                         $attchObj->content_category = rand(Content::CONTENT_CATEGORY_IT,Content::CONTENT_CATEGORY_NON_IT);
                         $attchObj->path = $path;
                         $attchObj->page_count = $pageCount;
-                        $attchObj->word_count = $wordCount2;
+                        $attchObj->word_count = $wordCount;
                         $attchObj->uploaded_by_admin = 1;
                         $attchObj->is_approved = Content::CONTENT_APPROVE;
                         $attchObj->save();

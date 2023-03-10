@@ -81,12 +81,12 @@ class UserController extends Controller
             }
 
             if($request->first_name != $userData->name){
-                $userData->name = $request->first_name;
+                // $userData->name = $request->first_name;
                 $new_data['first_name'] = $request->first_name;
                 $is_resubmit = true;
             }
             if($request->last_name != $userData->last_name){
-                $userData->last_name = $request->last_name;
+                // $userData->last_name = $request->last_name;
                 $new_data['last_name'] = $request->last_name;
                 $is_resubmit = true;
             }
@@ -100,7 +100,7 @@ class UserController extends Controller
             
             if($request->contact != $userDetailsData->contact){
                 $data['contact'] = $request->contact;
-                $new_data['contact'] = $request->contact;
+                // $new_data['contact'] = $request->contact;
                 $is_resubmit = true;
             }
             $data['gender'] = $request->gender;
