@@ -105,6 +105,19 @@
                 </p>
                 <!-- <p style="text-align: center;">Welcome To  {{ env('APP_NAME', 'Teacher Cool') }},</p> -->
                 <p style="text-align: center;">{{$body}}</p>
+                <p style="text-align: center;margin: 2.5em auto;">
+                  <a class="button" href={{ $url }} style="background: #1670F8; 
+                       text-decoration: none; 
+                       padding: 1em 1.5em;
+                       color: #ffffff; 
+                       border-radius: 48px;
+                       mso-padding-alt:0;
+                       text-underline-color:#1670F8">
+                    <i style="letter-spacing: 25px;mso-font-width:-100%;mso-text-raise:20pt">&nbsp;</i>
+                    <span style="mso-text-raise:10pt;font-weight:bold;">View</span>
+                    <i style="letter-spacing: 25px;mso-font-width:-100%">&nbsp;</i>
+                  </a>
+                </p>
                 <p>
                     <!-- Please verify your email from the link below:  -->
                     </p>

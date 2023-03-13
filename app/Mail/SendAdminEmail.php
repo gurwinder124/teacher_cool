@@ -71,6 +71,7 @@ class SendAdminEmail extends Mailable
         $subject = $this->data['subject'];
         $name = env('MAIL_FROM_NAME');
         $body = $this->data['body'];
+        $url = $this->data['url'];
 
         return $this->view('emails.adminemail')
                     ->from($address, $name)

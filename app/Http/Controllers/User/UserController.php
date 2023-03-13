@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Notifications\SystemNotification;
+use App\Jobs\AdminEmail;
 
 class UserController extends Controller
 {
@@ -232,9 +233,19 @@ class UserController extends Controller
                     if($is_resubmit){
                         $userReq = User::where('id',$user->id)
                             ->update(['teacher_status'=>User::TEACHER_STATUS_RESUBMIT]);
-                    }
 
                     // send email to Admin
+                    $adminEmailData=[
+                        'to'=> env('ADMIN_EMAIL_ADDRESS'),
+                        'name'=>'Teacher Cool',
+                        'body' =>"Teacher, ".$user->name." ".$user->last_name." has resubmit the profile for approval" ,
+                        'url' => env('APP_URL_FRONT').'/viewuser/' . $user->id,
+                        'subject' => "Regarding Teacher Resubmit Profile For Approval"
+                    ];
+                    dispatch(new AdminEmail($adminEmailData))->afterResponse();
+                    }
+
+                    
                     
                 }
                 return sendResponse([], 'Profile Updated Successfully');

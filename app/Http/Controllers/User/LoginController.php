@@ -262,6 +262,7 @@ class LoginController extends Controller
                 $adminEmailData=[
                     'to'=> env('ADMIN_EMAIL_ADDRESS'),
                     'name'=>'Teacher Cool',
+                    'url' => env('APP_URL_FRONT').'/viewuser/' . $data->id,
                     'body' =>"New teacher, ".$data->name." ".$data->last_name." has been Register with ".$data->email." email." ,
                     'subject' => "Regarding Teacher Approval"
                 ];
