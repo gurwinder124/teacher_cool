@@ -58,8 +58,6 @@ class UserController extends Controller
                 'country' => 'required',
                 'qualification' => 'required',
                 // 'profile_path' => 'file|mimes:jpg,png,jpeg',
-                // 'id_proof' => 'file|mimes:jpg,png,jpeg,pdf',
-                // 'document_path' => 'file|mimes:jpg,png,jpeg,pdf',
             ]);
             if ($validator->fails()) {
                 return response()->json(['code' => '302', 'error' => $validator->errors()]);
@@ -80,15 +78,18 @@ class UserController extends Controller
                 $userData->profile_path = $profile_path;
             }
 
-            if($request->first_name != $userData->name){
-                // $userData->name = $request->first_name;
-                $new_data['first_name'] = $request->first_name;
-                $is_resubmit = true;
-            }
-            if($request->last_name != $userData->last_name){
-                // $userData->last_name = $request->last_name;
-                $new_data['last_name'] = $request->last_name;
-                $is_resubmit = true;
+            if($userData->user_type == User::STUDENT_TYPE){
+                $userData->name = $request->first_name;
+                $userData->last_name = $request->last_name;
+            }else{
+                if($request->first_name != $userData->name){
+                    $new_data['first_name'] = $request->first_name;
+                    $is_resubmit = true;
+                }
+                if($request->last_name != $userData->last_name){
+                    $new_data['last_name'] = $request->last_name;
+                    $is_resubmit = true;
+                }
             }
             
             $userData->save();
@@ -97,59 +98,94 @@ class UserController extends Controller
             $userDetailsData = UserDetails::where('user_id',$user->id)
                             ->select('contact')
                             ->first();
-            
-            if($request->contact != $userDetailsData->contact){
+            $data = [];
+            if($userData->user_type == User::STUDENT_TYPE){
                 $data['contact'] = $request->contact;
-                // $new_data['contact'] = $request->contact;
-                $is_resubmit = true;
-            }
-            $data['gender'] = $request->gender;
-            $data['age'] = $request->age;
-            $data['city'] = $request->city;
-            $data['state'] = $request->state;
-            $data['country'] = $request->country;
-            $data['qualification'] = $request->qualification;
-            $data['university'] = $request->university;
+                $data['gender'] = $request->gender;
+                $data['age'] = $request->age;
+                $data['city'] = $request->city;
+                $data['state'] = $request->state;
+                $data['country'] = $request->country;
+                $data['qualification'] = $request->qualification;
+                $data['university'] = $request->university;
 
-            $userDetails = UserDetails::where('user_id',$user->id)
+                $userDetails = UserDetails::where('user_id',$user->id)
                             ->update($data);
 
-            if($userDetails && $userData->user_type == User::STUDENT_TYPE){
-                return sendResponse($userData, 'Profile Updated Successfully');
+                if($userDetails){
+                    return sendResponse($userData, 'Profile Updated Successfully');
+                }
+            }else{
+                if($request->contact != $userDetailsData->contact){
+                    $new_data['contact'] = $request->contact;
+                    $is_resubmit = true;
+                }
+                if($request->qualification != $userDetailsData->qualification){
+                    $new_data['qualification'] = $request->qualification;
+                    $is_resubmit = true;
+                }
+                // if($request->gender != $userDetailsData->gender){
+                //     $new_data['gender'] = $request->gender;
+                //     $is_resubmit = true;
+                // }
+                // if($request->age != $userDetailsData->age){
+                //     $new_data['age'] = $request->age;
+                //     $is_resubmit = true;
+                // }
+                // if($request->city != $userDetailsData->city){
+                //     $new_data['city'] = $request->city;
+                //     $is_resubmit = true;
+                // }
+                // if($request->state != $userDetailsData->state){
+                //     $new_data['state'] = $request->state;
+                //     $is_resubmit = true;
+                // }
+                if($request->country != $userDetailsData->country){
+                    $new_data['country'] = $request->country;
+                    $is_resubmit = true;
+                }
+
+                $data['gender'] = $request->gender;
+                $data['age'] = $request->age;
+                $data['city'] = $request->city;
+                $data['state'] = $request->state;
+                $userDetails = UserDetails::where('user_id',$user->id)
+                            ->update($data);
             }
+            
 
             if($userData->user_type == User::TEACHER_TYPE){
 
-                $teacherSettingData['user_id'] = $user->id;
-                $teacherSettingData['working_hours'] = $request->working_hours;
-                $teacherSettingData['expected_income'] = $request->expected_income;
-                $teacherSettingData['preferred_currency'] = $request->preferred_currency;
-                $teacherSettingData['subject_id'] = $request->subject;
-                $teacherSettingData['category'] = $request->category;
-                $teacherSettingData['experience'] = $request->experience;
+                // $teacherSettingData['user_id'] = $user->id;
+                // $teacherSettingData['working_hours'] = $request->working_hours;
+                // $teacherSettingData['expected_income'] = $request->expected_income;
+                // $teacherSettingData['preferred_currency'] = $request->preferred_currency;
+                // $teacherSettingData['subject_id'] = $request->subject;
+                // $teacherSettingData['category'] = $request->category;
+                // $teacherSettingData['experience'] = $request->experience;
                 $teacherSettingData['teacher_bio'] = $request->teacher_bio;
                 
-                if ($request->file('id_proof')) {
-                    $extension = $request->file('id_proof')->getClientOriginalExtension();
-                    $originalfileName = $request->file('id_proof')->getClientOriginalName();
-                    $originalfileName = pathinfo($originalfileName, PATHINFO_FILENAME);
-                    $originalfileName = implode('-',explode(' ', $originalfileName));
-                    $fileName = $originalfileName."-".time().'.'.$extension;
+                // if ($request->file('id_proof')) {
+                //     $extension = $request->file('id_proof')->getClientOriginalExtension();
+                //     $originalfileName = $request->file('id_proof')->getClientOriginalName();
+                //     $originalfileName = pathinfo($originalfileName, PATHINFO_FILENAME);
+                //     $originalfileName = implode('-',explode(' ', $originalfileName));
+                //     $fileName = $originalfileName."-".time().'.'.$extension;
 
-                    $teacherSettingData['id_proof'] = $request->file('id_proof')->storeAs('teacher',$fileName,'public');
-                    $is_resubmit = true;
-                }
+                //     $teacherSettingData['id_proof'] = $request->file('id_proof')->storeAs('teacher',$fileName,'public');
+                //     $is_resubmit = true;
+                // }
 
-                if ($request->file('document_path')) {
-                    $extension = $request->file('document_path')->getClientOriginalExtension();
-                    $originalfileName = $request->file('document_path')->getClientOriginalName();
-                    $originalfileName = pathinfo($originalfileName, PATHINFO_FILENAME);
-                    $originalfileName = implode('-',explode(' ', $originalfileName));
-                    $fileName = $originalfileName."-".time().'.'.$extension;
+                // if ($request->file('document_path')) {
+                //     $extension = $request->file('document_path')->getClientOriginalExtension();
+                //     $originalfileName = $request->file('document_path')->getClientOriginalName();
+                //     $originalfileName = pathinfo($originalfileName, PATHINFO_FILENAME);
+                //     $originalfileName = implode('-',explode(' ', $originalfileName));
+                //     $fileName = $originalfileName."-".time().'.'.$extension;
 
-                    $teacherSettingData['document_path']  = $request->file('document_path')->storeAs('teacher',$fileName,'public');
-                    $is_resubmit = true;
-                }
+                //     $teacherSettingData['document_path']  = $request->file('document_path')->storeAs('teacher',$fileName,'public');
+                //     $is_resubmit = true;
+                // }
 
                 if ($request->file('experience_letter')) {
                     $extension = $request->file('experience_letter')->getClientOriginalExtension();
@@ -159,6 +195,31 @@ class UserController extends Controller
                     $fileName = $originalfileName."-".time().'.'.$extension;
 
                     $teacherSettingData['experience_letter'] = $request->file('experience_letter')->storeAs('teacher',$fileName,'public');
+                }
+
+                if($request->working_hours != $userDetailsData->working_hours){
+                    $new_data['working_hours'] = $request->working_hours;
+                    $is_resubmit = true;
+                }
+                if($request->expected_income != $userDetailsData->expected_income){
+                    $new_data['expected_income'] = $request->expected_income;
+                    $is_resubmit = true;
+                }
+                if($request->preferred_currency != $userDetailsData->preferred_currency){
+                    $new_data['preferred_currency'] = $request->preferred_currency;
+                    $is_resubmit = true;
+                }
+                if($request->subject_id != $userDetailsData->subject_id){
+                    $new_data['subject_id'] = $request->subject_id;
+                    $is_resubmit = true;
+                }
+                if($request->category != $userDetailsData->category){
+                    $new_data['category'] = $request->category;
+                    $is_resubmit = true;
+                }
+                if($request->experience != $userDetailsData->experience){
+                    $new_data['experience'] = $request->experience;
+                    $is_resubmit = true;
                 }
 
                 $teacherSettingData['resubmit_data'] = json_encode($new_data);
