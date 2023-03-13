@@ -77,6 +77,6 @@ class SendAdminEmail extends Mailable
                     ->from($address, $name)
                     ->replyTo($address, $name)
                     ->subject($subject)
-                    ->with(['body'=>$body]);
+                    ->with(['body'=>$body, 'url'=>$url]);
     }
 }
