@@ -222,6 +222,15 @@ class ContentController extends Controller
     public function bulkExport(Request $request)
     {
         try {
+
+            $validator = Validator::make($request->all(), [
+                'id' => 'required',
+            ]);
+            if ($validator->fails()) {
+                return response()->json(['code' => '302', 'error' => $validator->errors()]);
+            }
+            $ids = $request->id;
+
             $zip      = new ZipArchive;
             $fileName = 'content.zip';
             $fullPath = 'public/'.$fileName;
@@ -230,7 +239,7 @@ class ContentController extends Controller
             if (File::exists($fullPath )) {
                 unlink($fullPath );
             }
-            $data = Content::get(); 
+            $data = Content::whereIn('id', $ids)->get(); 
 
             if ($zip->open(public_path($fileName), ZipArchive::CREATE) === TRUE) {
                 foreach($data as $val){

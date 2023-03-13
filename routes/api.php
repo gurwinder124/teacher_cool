@@ -140,7 +140,7 @@ Route::prefix('admin')->group(function (){
         Route::get('content/{id}', [ContentController::class, 'getContent']);
         Route::post('content', [ContentController::class, 'uploade'])->withoutMiddleware('throttle');
         Route::post('content-request', [ContentController::class, 'contentRequest']);
-        Route::get('content-export', [ContentController::class, 'bulkExport'])->withoutMiddleware('throttle');
+        Route::post('content-export', [ContentController::class, 'bulkExport'])->withoutMiddleware('throttle');
 
         // NewsLetter
         Route::get('news-letter', [NewsLetterController::class, 'index']);
