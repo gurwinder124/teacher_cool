@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Jobs\TeacherStatus;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\UserDetails;
+use App\Models\TeacherSetting;
 use Illuminate\Support\Facades\Validator;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -79,18 +81,76 @@ class TeacherController extends Controller
                 return sendError("Invalid Status");
             }
 
-            $data = User::find($request->id);
-            if(!$data){
+            $user = User::find($request->id);
+            if(!$user){
                 return sendError("Invalid Record");
             }
+            $old_status = $user->teacher_status;
           
-            $data->teacher_status = $request->status;
+            $user->teacher_status = $request->status;
             
             if($request->status == User::TEACHER_STATUS_APPROVED){
-                $data->user_type = User::TEACHER_TYPE;
+                if($old_status == User::TEACHER_STATUS_RESUBMIT){
+
+                    $teacherSetting = TeacherSetting::where('user_id',$user->id)
+                                        ->first();
+                                        
+                    $resubmitData =  json_decode($teacherSetting->resubmit_data);
+
+                    // Save Users Table Data
+                    if(isset($resubmitData->first_name) && $resubmitData->first_name){
+                        $user->name = $resubmitData->first_name;
+                    }
+                    if(isset($resubmitData->last_name) && $resubmitData->last_name){
+                        $user->last_name = $resubmitData->last_name;
+                    }
+                    $userDetailData = [];
+                    // Save User Details Table Data
+                    if(isset($resubmitData->contact) && $resubmitData->contact){
+                        $userDetailData['contact'] = $resubmitData->contact;
+                    }
+                    if(isset($resubmitData->country) && $resubmitData->country){
+                        $userDetailData['country'] = $resubmitData->country;
+                    }
+                    if(isset($resubmitData->qualification) && $resubmitData->qualification){
+                        $userDetailData['qualification'] = $resubmitData->qualification;
+                    }
+                    
+
+                    $result = UserDetails::where('user_id',$user->id)
+                            ->update($userDetailData);
+
+                    // Save Teacher Settings Data
+                    $teacherSettingData = [];
+                    if(isset($resubmitData->working_hours) && $resubmitData->working_hours){
+                        $teacherSettingData['working_hours'] = $resubmitData->working_hours;
+                    }
+                    if(isset($resubmitData->expected_income) && $resubmitData->expected_income){
+                        $teacherSettingData['expected_income'] = $resubmitData->expected_income;
+                    }
+                    if(isset($resubmitData->preferred_currency) && $resubmitData->preferred_currency){
+                        $teacherSettingData['preferred_currency'] = $resubmitData->preferred_currency;
+                    }
+                    if(isset($resubmitData->subject_id) && $resubmitData->subject_id){
+                        $teacherSettingData['subject_id'] = $resubmitData->subject_id;
+                    }
+                    if(isset($resubmitData->category) && $resubmitData->category){
+                        $teacherSettingData['category'] = $resubmitData->category;
+                    }
+                    if(isset($resubmitData->experience) && $resubmitData->experience){
+                        $teacherSettingData['experience'] = $resubmitData->experience;
+                    }
+                    $teacherSettingData['resubmit_data'] = null;
+
+                    $teacherSetting = TeacherSetting::where('user_id',$user->id)
+                                        ->update($teacherSettingData);
+
+                
+                }
+                // $data->user_type = User::TEACHER_TYPE;
                 $emailData=[
-                    'to'=>$data->email,
-                    'receiver_name'=>$data->name,
+                    'to'=>$user->email,
+                    'receiver_name'=>$user->name,
                     'login_url'=> env('APP_URL_FRONT').'/teacher/login',
                     'body' =>"Your Request as Teacher has been approved. Please login with your credentials." ,
                     'subject' => "Regarding Approval"
@@ -98,19 +158,19 @@ class TeacherController extends Controller
                 
             }else{
                 $emailData=[
-                    'to'=>$data->email,
-                    'receiver_name'=>$data->name,
+                    'to'=>$user->email,
+                    'receiver_name'=>$user->name,
                     'login_url'=> false,
                     'body' =>"Unfortunately your request has been disapproved." ,
                     'subject' => "Regarding Disapproval"
                 ];
             }
-            $data->save();
+            $user->save();
 
             //Send email Notification Pending
             dispatch(new TeacherStatus($emailData))->afterResponse();
 
-            return sendResponse($data, 'Updated Successfully');
+            return sendResponse($user, 'Updated Successfully');
         } catch (Exception $e) {
             return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
         }

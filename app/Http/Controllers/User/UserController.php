@@ -149,6 +149,7 @@ class UserController extends Controller
                 $data['age'] = $request->age;
                 $data['city'] = $request->city;
                 $data['state'] = $request->state;
+                $data['university'] = $request->university;
                 $userDetails = UserDetails::where('user_id',$user->id)
                             ->update($data);
             }
