@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignId('content_types_id');
             $table->integer('content_category');
             $table->string('name');
+            $table->string('keyword');
             $table->longText('description')->nullable();
             $table->string('path');
             $table->string('page_count');

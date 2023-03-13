@@ -365,8 +365,10 @@ class UserController extends Controller
     public function statsInfo()
     {
         try{
+            $user = Auth::user();
             $assignments = DB::table('assignments')
-                            ->join('users as teacher', 'teacher.id', '=', 'assignments.teacher_id');
+                            ->join('users as teacher', 'teacher.id', '=', 'assignments.teacher_id')
+                            ->where('teacher.id', $user->id);
             $totalAssignment =  $assignments->get()->count();
             $assignmentAnswered = $assignments->where('assignment_status', Assignment::ASSIGNMENT_STATUS_SUBMITTED)
                                 ->get()->count();

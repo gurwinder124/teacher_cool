@@ -8,6 +8,7 @@ use App\Models\Admin;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\Subscription;
+use App\Models\Assignment;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -24,11 +25,23 @@ class AdminController extends Controller
     public function index(Request $request)
     {
         try{
-            $user['teachers'] = User::where('user_type', User::TEACHER_TYPE)->count();
-            $user['students'] = User::where('user_type', User::STUDENT_TYPE)->count();
-            $user['orders'] = Order::where('is_paid', Order::ORDER_PAYMENT_PAID)->count();
-            $user['earning'] = 0; // Code Pending
-            return sendResponse($user);
+            $assignments = DB::table('assignments')
+                            ->join('users as teacher', 'teacher.id', '=', 'assignments.teacher_id');
+            $totalAssignment =  $assignments->get()->count();
+            $assignmentAnswered = $assignments->where('assignment_status', Assignment::ASSIGNMENT_STATUS_SUBMITTED)
+                                ->get()->count();
+            $assignmentApproved = $assignments->where('assignment_status', Assignment::ASSIGNMENT_STATUS_APPROVED)
+                                ->get()->count();
+
+            $data['teachers'] = User::where('user_type', User::TEACHER_TYPE)->count();
+            $data['students'] = User::where('user_type', User::STUDENT_TYPE)->count();
+            $data['orders'] = Order::where('is_paid', Order::ORDER_PAYMENT_PAID)->count();
+            $data['earning'] = 0; // Code Pending
+            $data['total_assignments'] =  $totalAssignment;
+            $data['assignment_answered'] =  $assignmentAnswered;
+            $data['assignment_approved'] =  $assignmentApproved;
+
+            return sendResponse($data);
         }catch (Exception $e){
             return response()->json(['status' => 'error', 'code' => '500', 'meassage' => $e->getmessage()]);
         }
